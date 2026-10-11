@@ -22,66 +22,24 @@ export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const role = token ? readRole(token) : null;
 
-  const authRoutes = [
-    "/login",
-    "/register",
-    "/verify-otp",
-    "/forgot-password",
-    "/reset-password",
-  ];
+  const isLoginPage = pathname === "/login" || pathname.startsWith("/login/");
 
-  const isAuthRoute = authRoutes.some(
-    (route) => pathname === route || pathname.startsWith(`${route}/`),
-  );
-
-  const isProducerRoute =
-    pathname.startsWith("/producer") || pathname.startsWith("/onboarding/producer");
-
-  const isDriverRoute =
-    pathname.startsWith("/driver") || pathname.startsWith("/onboarding/driver");
-
-  const isBuyerProtectedRoute = [
-    "/checkout",
-    "/orders",
-    "/messages",
-    "/payment",
-  ].some((route) => pathname === route || pathname.startsWith(`${route}/`));
-
-  // 1. Unauthenticated (Guest) User Handling
-  if (!token || !role) {
-    // If guest attempts to access Producer, Driver, or protected Buyer routes (or after logout), redirect to home page
-    if (isProducerRoute || isDriverRoute || isBuyerProtectedRoute) {
-      return NextResponse.redirect(new URL("/", req.url));
+  // 1. Unauthenticated or non-admin users
+  if (!token || role !== "ADMIN") {
+    if (isLoginPage) {
+      return NextResponse.next();
     }
-    // Guest can freely access public storefront (/, /products, /cart) and auth routes
-    return NextResponse.next();
+    // Redirect unauthenticated / non-admin users to login
+    const loginUrl = new URL("/login", req.url);
+    if (pathname !== "/") {
+      loginUrl.searchParams.set("redirect", pathname);
+    }
+    return NextResponse.redirect(loginUrl);
   }
 
-  // 2. Authenticated PRODUCER: Strictly isolated to Producer Dashboard & Onboarding
-  if (role === "PRODUCER" || role === "ADMIN") {
-    if (!isProducerRoute) {
-      return NextResponse.redirect(new URL("/producer/dashboard", req.url));
-    }
-    return NextResponse.next();
-  }
-
-  // 3. Authenticated DRIVER: Strictly isolated to Driver Dashboard & Onboarding
-  if (role === "DRIVER") {
-    if (!isDriverRoute) {
-      return NextResponse.redirect(new URL("/driver/dashboard", req.url));
-    }
-    return NextResponse.next();
-  }
-
-  // 4. Authenticated BUYER: Storefront & Buyer features only; no Producer/Driver or Auth routes
-  if (role === "BUYER") {
-    if (isAuthRoute) {
-      return NextResponse.redirect(new URL("/", req.url));
-    }
-    if (isProducerRoute || isDriverRoute) {
-      return NextResponse.redirect(new URL("/", req.url));
-    }
-    return NextResponse.next();
+  // 2. Authenticated Admin visiting /login -> redirect to dashboard
+  if (isLoginPage) {
+    return NextResponse.redirect(new URL("/", req.url));
   }
 
   return NextResponse.next();
@@ -89,6 +47,6 @@ export function middleware(req: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)",
+    "/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|avif|ico)$).*)",
   ],
 };

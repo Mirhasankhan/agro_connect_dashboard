@@ -5,8 +5,14 @@ export const baseApi = createApi({
   reducerPath: "baseApi",
   baseQuery: fetchBaseQuery({
     baseUrl: process.env.NEXT_PUBLIC_BASE_URL || "https://agro.connect.smtsigma.com/api/v1",
-    prepareHeaders: (headers) => {
+    prepareHeaders: (headers, { endpoint }) => {
       const { token } = JWTDecode();
+
+      // If endpoint is public product catalog or requested skip auth, do not attach admin token
+      if (headers.get("x-skip-auth") === "true" || endpoint === "getAllProducts") {
+        headers.delete("x-skip-auth");
+        return headers;
+      }
 
       if (token) headers.set("Authorization", `Bearer ${token}`);
       return headers;
@@ -23,6 +29,9 @@ export const baseApi = createApi({
     "Payment",
     "Feedback",
     "Conversation",
+    "Producer",
+    "Driver",
+    "Admin",
   ],
   endpoints: () => ({}),
 });

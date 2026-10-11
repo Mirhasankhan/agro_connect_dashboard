@@ -20,67 +20,19 @@ export default function AuthRoleGuard({
       Cookies.get("accessToken") ||
       (typeof document !== "undefined" && document.cookie.includes("token"));
 
-    // 1. If not authenticated, or no user, or no token (e.g. after logout)
-    if (!isAuthenticated || !user || !token) {
-      // Guest checks
-      const isProducerRoute =
-        pathname.startsWith("/producer") || pathname.startsWith("/onboarding/producer");
-      const isDriverRoute =
-        pathname.startsWith("/driver") || pathname.startsWith("/onboarding/driver");
-      const isBuyerProtectedRoute = [
-        "/checkout",
-        "/orders",
-        "/messages",
-        "/payment",
-      ].some((route) => pathname === route || pathname.startsWith(`${route}/`));
+    const isLoginPage = pathname === "/login" || pathname.startsWith("/login");
 
-      if (isProducerRoute || isDriverRoute || isBuyerProtectedRoute) {
-        router.replace("/");
+    // 1. If not authenticated, or not ADMIN role
+    if (!isAuthenticated || !user || !token || user.role !== "ADMIN") {
+      if (!isLoginPage) {
+        router.replace("/login");
       }
       return;
     }
 
-    const role = user.role;
-
-    // Strict PRODUCER isolation: Only /producer/* and /onboarding/producer allowed
-    if (role === "PRODUCER") {
-      const isAllowed =
-        pathname.startsWith("/producer") || pathname.startsWith("/onboarding/producer");
-      if (!isAllowed) {
-        if (!token) {
-          router.replace("/");
-          return;
-        }
-        router.replace("/producer/dashboard");
-      }
-      return;
-    }
-
-    // Strict DRIVER isolation: Only /driver/* and /onboarding/driver allowed
-    if (role === "DRIVER") {
-      const isAllowed =
-        pathname.startsWith("/driver") || pathname.startsWith("/onboarding/driver");
-      if (!isAllowed) {
-        if (!token) {
-          router.replace("/");
-          return;
-        }
-        router.replace("/driver/dashboard");
-      }
-      return;
-    }
-
-    // Strict BUYER isolation: Cannot access /producer/*, /driver/*, or /login, /register, etc.
-    if (role === "BUYER") {
-      const isForbidden =
-        pathname.startsWith("/producer") ||
-        pathname.startsWith("/driver") ||
-        pathname.startsWith("/login") ||
-        pathname.startsWith("/register");
-      if (isForbidden) {
-        router.replace("/");
-      }
-      return;
+    // 2. If authenticated ADMIN visits login page
+    if (user.role === "ADMIN" && isLoginPage) {
+      router.replace("/");
     }
   }, [pathname, user, isAuthenticated, router]);
 

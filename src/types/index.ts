@@ -376,6 +376,7 @@ export interface TPaginationMeta {
   limit: number;
   total: number;
   totalPage: number;
+  totalPages?: number;
 }
 
 export type TEarningChartType = "monthly" | "weekly";

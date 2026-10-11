@@ -1,601 +1,438 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { motion } from "framer-motion";
+import DashboardLayout from "@/components/dashboard/DashboardLayout";
+import StatsCard from "@/components/dashboard/StatsCard";
 import {
+  ShoppingBag,
+  Truck,
+  UserCheck,
+  Grid,
+  AlertCircle,
   ArrowRight,
   ShieldCheck,
-  TrendingDown,
-  Truck,
-  Leaf,
-  Users,
-  Sprout,
   CheckCircle2,
-  Search,
-  Package,
   ChevronRight,
+  TrendingUp,
 } from "lucide-react";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
-import ProductCard from "@/components/product/ProductCard";
-import CategoriesSection from "@/components/home/CategoriesSection";
-import HowItWorksSection from "@/components/home/HowItWorksSection";
-import BulkPricingBanner from "@/components/home/BulkPricingBanner";
-import RegionalHubsSection from "@/components/home/RegionalHubsSection";
-import TrustGuaranteesSection from "@/components/home/TrustGuaranteesSection";
-import TestimonialsSection from "@/components/home/TestimonialsSection";
-import FaqSection from "@/components/home/FaqSection";
-import HarvestNewsletterSection from "@/components/home/HarvestNewsletterSection";
-import { useGetAllProductsQuery } from "@/redux/features/product/productApi";
-import { useGetAllCategoriesQuery } from "@/redux/features/category/categoryApi";
+import {
+  useGetAllOrdersQuery,
+  useGetAllProducersQuery,
+  useGetAllDriversQuery,
+  useGetAllBuyersQuery,
+  useGetAllCategoriesQuery,
+} from "@/redux/features/admin/adminApi";
+import { format } from "date-fns";
 
-export default function HomePage() {
-  const router = useRouter();
-  const [heroSearch, setHeroSearch] = useState("");
-
-  const { data: productsData, isLoading: isLoadingProducts } = useGetAllProductsQuery({
-    limit: 8,
-    sort: "createdAt",
-    order: "desc",
+export default function AdminOverviewDashboard() {
+  // Fetch real metrics from backend
+  const { data: ordersData, isLoading: isLoadingOrders } = useGetAllOrdersQuery({ limit: 5 });
+  const { data: pendingProducersData, isLoading: isLoadingProducers } = useGetAllProducersQuery({
+    verificationStatus: "Pending",
+    limit: 5,
   });
-
+  const { data: pendingDriversData, isLoading: isLoadingDrivers } = useGetAllDriversQuery({
+    verificationStatus: "Pending",
+    limit: 5,
+  });
+  const { data: buyersData } = useGetAllBuyersQuery({ limit: 1 });
   const { data: categoriesData, isLoading: isLoadingCategories } = useGetAllCategoriesQuery();
-  const categories = categoriesData?.data?.categories?.filter((c) => c.isActive !== false) || [];
 
-  const products = productsData?.data?.products || [];
+  const totalOrders = ordersData?.data?.meta?.total ?? 0;
+  const pendingProducersCount = pendingProducersData?.data?.meta?.total ?? 0;
+  const pendingDriversCount = pendingDriversData?.data?.meta?.total ?? 0;
+  const totalBuyers = buyersData?.data?.meta?.total ?? 0;
+  const totalCategories = categoriesData?.data?.categories?.length ?? 0;
 
-  const handleHeroSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (heroSearch.trim()) {
-      router.push(`/products?search=${encodeURIComponent(heroSearch.trim())}`);
-    } else {
-      router.push("/products");
-    }
-  };
+  const recentOrders = ordersData?.data?.orders || [];
+  const pendingProducers = pendingProducersData?.data?.producers || [];
+  const pendingDrivers = pendingDriversData?.data?.drivers || [];
 
   return (
-    <div className="min-h-screen bg-white text-slate-900 flex flex-col selection:bg-emerald-500 selection:text-white">
-      <Navbar />
+    <DashboardLayout>
+      {/* 1. Welcome Banner */}
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#041d0f] via-[#06331a] to-[#041d0f] p-6 sm:p-8 text-white shadow-lg border border-emerald-950">
+        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div className="space-y-2 max-w-2xl">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 text-xs font-semibold">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              AgroConnect Operations Control
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
+              Administrative Command Center
+            </h1>
+            <p className="text-emerald-100/80 text-xs sm:text-sm leading-relaxed">
+              Real-time platform throughput across Ivory Coast. Verify producer farms, inspect driver credentials, and assign deliveries.
+            </p>
+          </div>
 
-      {/* HERO SECTION - Lush dark forest emerald gradient with harvest produce background */}
-      <section className="relative overflow-hidden pt-16 pb-24 md:pt-24 md:pb-32 bg-[#041d0f] border-b border-emerald-950/80">
-        {/* Photographic background with dark emerald gradient & radial glow overlays */}
-        <div className="absolute inset-0 z-0 pointer-events-none">
-          <Image
-            src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=2000&q=80"
-            alt="Agricultural produce background"
-            fill
-            priority
-            unoptimized
-            className="object-cover object-center opacity-25 mix-blend-luminosity scale-105"
-          />
-          {/* Deep dark green gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-br from-[#03190d]/95 via-[#07361b]/80 to-[#021308]/95" />
-          {/* Center-left emerald radial spotlight */}
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_42%_42%,rgba(20,130,65,0.45)_0%,rgba(6,36,19,0.88)_58%,rgba(2,18,9,0.98)_100%)]" />
-          {/* Subtle ambient glow orbs */}
-          <div className="absolute top-1/4 left-1/3 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] bg-emerald-500/15 rounded-full blur-3xl" />
-          <div className="absolute bottom-1/4 right-1/4 w-[420px] h-[420px] bg-emerald-400/10 rounded-full blur-3xl" />
+          <div className="flex flex-wrap items-center gap-3">
+            <Link
+              href="/orders"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-sm transition-all hover:shadow active:scale-95"
+            >
+              <ShoppingBag className="w-4 h-4" />
+              <span>Review Orders</span>
+            </Link>
+            <Link
+              href="/users/producers"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/20 text-xs font-semibold backdrop-blur-md transition-all active:scale-95"
+            >
+              <UserCheck className="w-4 h-4 text-emerald-300" />
+              <span>Pending Approvals</span>
+            </Link>
+          </div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="max-w-3xl space-y-6">
-            {/* Pill badge */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4 }}
-              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#0a3a20]/75 border border-emerald-400/30 backdrop-blur-md shadow-sm"
-            >
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="text-xs font-medium text-emerald-100 tracking-wide">
-                Agricultural platform number 1 in Ivory Coast
+        {/* Ambient background glow */}
+        <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/4 w-96 h-96 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none" />
+      </div>
+
+      {/* 2. Key Metrics Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        <StatsCard
+          title="Total Orders"
+          value={isLoadingOrders ? "..." : totalOrders}
+          change="+12% this week"
+          isPositive={true}
+          icon={ShoppingBag}
+          badge="Live"
+          badgeColor="emerald"
+        />
+
+        <StatsCard
+          title="Pending Producers"
+          value={isLoadingProducers ? "..." : pendingProducersCount}
+          subtitle="Verification required"
+          icon={UserCheck}
+          badge={pendingProducersCount > 0 ? "Action needed" : "All clear"}
+          badgeColor={pendingProducersCount > 0 ? "amber" : "emerald"}
+        />
+
+        <StatsCard
+          title="Pending Drivers"
+          value={isLoadingDrivers ? "..." : pendingDriversCount}
+          subtitle="License & vehicle review"
+          icon={Truck}
+          badge={pendingDriversCount > 0 ? "Reviewing" : "Cleared"}
+          badgeColor={pendingDriversCount > 0 ? "blue" : "emerald"}
+        />
+
+        <StatsCard
+          title="Active Categories"
+          value={isLoadingCategories ? "..." : totalCategories}
+          subtitle={`${totalBuyers} Registered Buyers`}
+          icon={Grid}
+          badge="Organized"
+          badgeColor="slate"
+        />
+      </div>
+
+      {/* 3. Operational Queues & Priority Action Cards */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Left: Pending Producer & Driver Verification Queue (2 cols) */}
+        <div className="lg:col-span-2 space-y-6">
+          {/* Pending Verifications Widget */}
+          <div className="rounded-2xl bg-white p-6 border border-slate-200/90 shadow-sm space-y-5">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                  <ShieldCheck className="w-5 h-5 text-emerald-600" />
+                  <span>Pending Partner Verifications</span>
+                </h2>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Producers and fleet drivers awaiting account validation and document checks.
+                </p>
+              </div>
+
+              <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">
+                {pendingProducersCount + pendingDriversCount} Pending
               </span>
-            </motion.div>
+            </div>
 
-            {/* Headline */}
-            <motion.h1
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.45, delay: 0.05 }}
-              className="font-serif text-5xl sm:text-6xl md:text-7xl font-extrabold tracking-tight leading-[1.08] text-white"
-            >
-              From fields <br />
-              to{" "}
-              <span className="bg-gradient-to-r from-amber-300 via-yellow-300 to-amber-200 bg-clip-text text-transparent italic">
-                tables
-              </span>
-            </motion.h1>
+            {/* Producers sub-list */}
+            <div className="space-y-3">
+              <div className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                Farmers & Producers Awaiting Approval
+              </div>
 
-            {/* Subheading */}
-            <motion.p
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.45, delay: 0.1 }}
-              className="text-base sm:text-lg text-white/80 leading-relaxed font-sans max-w-2xl font-normal"
-            >
-              Connect directly with{" "}
-              <strong className="text-white font-bold">certified local producers</strong>, place
-              your orders and receive your deliveries quickly anywhere in Ivory Coast.
-            </motion.p>
+              {pendingProducers.length === 0 ? (
+                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/70 text-center text-xs text-slate-500">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-600 mx-auto mb-1" />
+                  No pending producer approvals at this time.
+                </div>
+              ) : (
+                <div className="divide-y divide-slate-100 border border-slate-200/80 rounded-xl overflow-hidden">
+                  {pendingProducers.slice(0, 3).map((producer) => (
+                    <div
+                      key={producer.id}
+                      className="p-3.5 sm:p-4 flex items-center justify-between gap-4 bg-white hover:bg-slate-50/80 transition-colors"
+                    >
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className="w-9 h-9 rounded-full bg-emerald-100 text-emerald-800 font-bold flex items-center justify-center text-xs shrink-0">
+                          {producer.fullName?.charAt(0) || "P"}
+                        </div>
+                        <div className="min-w-0">
+                          <div className="text-sm font-semibold text-slate-900 truncate">
+                            {producer.fullName}
+                          </div>
+                          <div className="text-xs text-slate-500 truncate">
+                            {producer.producerProfile?.farmName || "Farm Name"} •{" "}
+                            {producer.producerProfile?.farmLocation || "Ivory Coast"}
+                          </div>
+                        </div>
+                      </div>
 
-            {/* Call to Action Buttons */}
-            <motion.div
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.45, delay: 0.15 }}
-              className="flex flex-wrap items-center gap-4 pt-2"
-            >
+                      <Link
+                        href="/users/producers"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-semibold transition-colors shrink-0"
+                      >
+                        <span>Review</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </Link>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Drivers sub-list */}
+            <div className="space-y-3 pt-2">
+              <div className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                Transport Drivers Awaiting Approval
+              </div>
+
+              {pendingDrivers.length === 0 ? (
+                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/70 text-center text-xs text-slate-500">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-600 mx-auto mb-1" />
+                  No pending driver approvals at this time.
+                </div>
+              ) : (
+                <div className="divide-y divide-slate-100 border border-slate-200/80 rounded-xl overflow-hidden">
+                  {pendingDrivers.slice(0, 3).map((driver) => (
+                    <div
+                      key={driver.id}
+                      className="p-3.5 sm:p-4 flex items-center justify-between gap-4 bg-white hover:bg-slate-50/80 transition-colors"
+                    >
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className="w-9 h-9 rounded-full bg-sky-100 text-sky-800 font-bold flex items-center justify-center text-xs shrink-0">
+                          <Truck className="w-4 h-4 text-sky-700" />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="text-sm font-semibold text-slate-900 truncate">
+                            {driver.fullName}
+                          </div>
+                          <div className="text-xs text-slate-500 truncate">
+                            Vehicle: {driver.driverProfile?.vehicleType || "Fleet"} • Reg:{" "}
+                            {driver.driverProfile?.registrationNumber || "N/A"}
+                          </div>
+                        </div>
+                      </div>
+
+                      <Link
+                        href="/users/drivers"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-sky-50 hover:bg-sky-100 text-sky-700 text-xs font-semibold transition-colors shrink-0"
+                      >
+                        <span>Review</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </Link>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Recent Orders Overview */}
+          <div className="rounded-2xl bg-white p-6 border border-slate-200/90 shadow-sm space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-base font-bold text-slate-900">Recent Platform Orders</h2>
+                <p className="text-xs text-slate-500">
+                  Orders requiring hub intake and driver assignment.
+                </p>
+              </div>
+
               <Link
-                href="/register"
-                className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-white font-semibold text-sm flex items-center gap-2 shadow-lg shadow-emerald-950/50 transition-all hover:scale-105 active:scale-95"
+                href="/orders"
+                className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 hover:text-emerald-700 transition-colors"
               >
-                Start for free
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-              <Link
-                href="/login"
-                className="px-6 py-3.5 rounded-xl bg-[#09351d]/50 hover:bg-[#0c4425]/60 text-white font-semibold text-sm border border-emerald-400/30 backdrop-blur-md shadow-sm transition-all hover:border-emerald-300/50"
-              >
-                Log in
-              </Link>
-              <Link
-                href="/products"
-                className="px-5 py-3.5 rounded-xl text-emerald-200/80 hover:text-white font-medium text-sm flex items-center gap-1.5 transition-colors"
-              >
-                Explore marketplace
+                <span>View All Orders</span>
                 <ChevronRight className="w-4 h-4" />
               </Link>
-            </motion.div>
+            </div>
 
-            {/* Hero Quick Search Bar */}
-            <motion.form
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.45, delay: 0.2 }}
-              onSubmit={handleHeroSearch}
-              className="mt-8 pt-4 flex flex-col sm:flex-row items-center gap-3 max-w-xl"
-            >
-              <div className="relative w-full">
-                <input
-                  type="text"
-                  placeholder="What harvest are you looking for? (e.g. Igname, Banane, Riz)"
-                  value={heroSearch}
-                  onChange={(e) => setHeroSearch(e.target.value)}
-                  className="w-full bg-white/95 border border-emerald-400/30 rounded-2xl py-3.5 pl-11 pr-4 text-sm text-slate-900 placeholder-slate-500 focus:outline-none focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/25 shadow-lg shadow-black/20 transition-all"
-                />
-                <Search className="w-5 h-5 text-slate-500 absolute left-3.5 top-3.5" />
+            {recentOrders.length === 0 ? (
+              <div className="p-8 text-center text-xs text-slate-400 bg-slate-50 rounded-xl border border-slate-100">
+                No orders recorded yet.
               </div>
-              <button
-                type="submit"
-                className="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-white font-semibold text-sm whitespace-nowrap shadow-md transition-all"
-              >
-                Search
-              </button>
-            </motion.form>
-
-            {/* Quick Category Pills */}
-            {categories.length > 0 && (
-              <div className="flex flex-wrap items-center gap-2 pt-2">
-                <span className="text-xs text-emerald-200/70 mr-1 font-medium">Quick Jump:</span>
-                {categories.slice(0, 6).map((cat) => (
-                  <button
-                    key={cat.id}
-                    type="button"
-                    onClick={() => router.push(`/products?categoryId=${cat.id}`)}
-                    className="px-3 py-1 rounded-full bg-white/10 hover:bg-emerald-500/25 border border-white/15 text-xs text-white/90 hover:text-white transition-colors backdrop-blur-sm"
-                  >
-                    {cat.name}
-                  </button>
-                ))}
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs">
+                  <thead className="bg-slate-50 text-slate-600 border-b border-slate-200">
+                    <tr>
+                      <th className="py-2.5 px-3 font-semibold">Order ID</th>
+                      <th className="py-2.5 px-3 font-semibold">Buyer</th>
+                      <th className="py-2.5 px-3 font-semibold">Amount</th>
+                      <th className="py-2.5 px-3 font-semibold">City</th>
+                      <th className="py-2.5 px-3 font-semibold">Date</th>
+                      <th className="py-2.5 px-3 font-semibold text-right">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {recentOrders.map((order) => (
+                      <tr key={order.id} className="hover:bg-slate-50/60 transition-colors">
+                        <td className="py-3 px-3 font-mono font-semibold text-slate-900">
+                          #{order.orderId?.slice(-6) || order.id?.slice(-6)}
+                        </td>
+                        <td className="py-3 px-3 text-slate-700">
+                          {order.customer?.fullName || "Buyer"}
+                        </td>
+                        <td className="py-3 px-3 font-semibold text-slate-900">
+                          {(order.totalAmount || 0).toLocaleString()} XOF
+                        </td>
+                        <td className="py-3 px-3 text-slate-500">
+                          {order.shippingAddress?.city || "Abidjan"}
+                        </td>
+                        <td className="py-3 px-3 text-slate-400">
+                          {order.createdAt
+                            ? format(new Date(order.createdAt), "MMM dd, yyyy")
+                            : "N/A"}
+                        </td>
+                        <td className="py-3 px-3 text-right">
+                          <Link
+                            href="/orders"
+                            className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-600 hover:text-emerald-700"
+                          >
+                            <span>Manage</span>
+                            <ArrowRight className="w-3 h-3" />
+                          </Link>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             )}
           </div>
         </div>
-      </section>
 
-      {/* METRICS & TRUST TICKER */}
-      <section className="border-b border-slate-200 bg-slate-50 py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.35 }}
-              className="space-y-1"
-            >
-              <p className="font-serif text-3xl sm:text-4xl font-bold text-emerald-600">500+</p>
-              <p className="text-xs sm:text-sm text-slate-600 font-medium">Certified Local Producers</p>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.35, delay: 0.08 }}
-              className="space-y-1"
-            >
-              <p className="font-serif text-3xl sm:text-4xl font-bold text-emerald-600">12,500+</p>
-              <p className="text-xs sm:text-sm text-slate-600 font-medium">Tons Delivered Safely</p>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.35, delay: 0.16 }}
-              className="space-y-1"
-            >
-              <p className="font-serif text-3xl sm:text-4xl font-bold text-emerald-600">0%</p>
-              <p className="text-xs sm:text-sm text-slate-600 font-medium">Middlemen Exploitation</p>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.35, delay: 0.24 }}
-              className="space-y-1"
-            >
-              <p className="font-serif text-3xl sm:text-4xl font-bold text-emerald-600">24/48h</p>
-              <p className="text-xs sm:text-sm text-slate-600 font-medium">Express Agro-Logistics</p>
-            </motion.div>
-          </div>
-        </div>
-      </section>
+        {/* Right: Operational Shortcuts & System Status (1 col) */}
+        <div className="space-y-6">
+          {/* Quick Management Shortcuts */}
+          <div className="rounded-2xl bg-white p-6 border border-slate-200/90 shadow-sm space-y-4">
+            <h2 className="text-base font-bold text-slate-900">Administrative Hub</h2>
+            <p className="text-xs text-slate-500">Quick routing to operational modules.</p>
 
-      {/* SECTION 1: CATEGORIES SECTION (Icon-size category images with minimal animations) */}
-      <CategoriesSection categories={categories} isLoading={isLoadingCategories} />
-
-      {/* SECTION 2: FEATURED HARVESTS / MARKETPLACE PREVIEW */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
-            <div>
-              <div className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-emerald-700 font-bold mb-2">
-                <Leaf className="w-3.5 h-3.5 text-emerald-600" />
-                Fresh From The Soil
-              </div>
-              <h2 className="font-serif text-3xl sm:text-4xl font-bold text-slate-900">
-                Featured Harvests Today
-              </h2>
-              <p className="text-sm text-slate-600 mt-1 max-w-xl">
-                Directly harvested crops with transparent wholesale tiered pricing. Buy by the bag,
-                crate, or ton.
-              </p>
-            </div>
-
-            <Link
-              href="/products"
-              className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-600 hover:text-emerald-700 transition-colors"
-            >
-              Browse All Products
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-
-          {/* Product Grid */}
-          {isLoadingProducts ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-                <div
-                  key={i}
-                  className="h-80 bg-slate-100 rounded-2xl border border-slate-200 animate-pulse"
-                />
-              ))}
-            </div>
-          ) : products.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {products.map((prod) => (
-                <ProductCard key={prod.id} product={prod} />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-16 px-4 bg-slate-50 border border-slate-200 rounded-3xl">
-              <Package className="w-12 h-12 text-slate-400 mx-auto mb-3" />
-              <h3 className="font-serif text-xl font-bold text-slate-900">
-                Fresh Harvests Arriving Soon
-              </h3>
-              <p className="text-sm text-slate-600 max-w-md mx-auto mt-2">
-                Producers are currently harvesting crops in Bouaké, Korhogo, and Yamoussoukro.
-                Check back shortly or register your farm today!
-              </p>
-              <div className="mt-6 flex justify-center gap-4">
-                <Link href="/products" className="btn-primary text-xs py-2.5 px-6">
-                  Visit Marketplace
-                </Link>
-              </div>
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* SECTION 3: WHOLESALE BULK TIER PRICING BANNER */}
-      <BulkPricingBanner />
-
-      {/* SECTION 4: HOW AGRO CONNECT WORKS (4-Step process with dual persona toggle) */}
-      <HowItWorksSection />
-
-      {/* SECTION 5: REGIONAL HUBS SPOTLIGHT (Bouaké, Korhogo, Yamoussoukro, San Pédro) */}
-      <RegionalHubsSection />
-
-      {/* SECTION 6: PLATFORM BENEFITS - WHY AGRO CONNECT */}
-      <section id="benefits" className="py-20 bg-slate-50 border-t border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-16">
-            <span className="text-xs uppercase tracking-widest text-emerald-700 font-bold">
-              The Agricultural Revolution
-            </span>
-            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-slate-900 mt-2">
-              Why Choose Agro Connect?
-            </h2>
-            <p className="text-sm text-slate-600 mt-3">
-              We bridge the gap between rural Ivorian farmers, professional transport fleets, and
-              buyers with cutting-edge technology and verified fair trade.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Benefit 1 */}
-            <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.35 }}
-              whileHover={{ y: -4 }}
-              className="p-8 rounded-3xl bg-white border border-slate-200/90 shadow-sm hover:shadow-md transition-all duration-300 space-y-4"
-            >
-              <div className="w-14 h-14 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600">
-                <ShieldCheck className="w-7 h-7" />
-              </div>
-              <h3 className="font-serif text-xl font-bold text-slate-900">
-                100% Certified Direct Sourcing
-              </h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                Every producer undergoes rigorous validation of their identity, land certificates,
-                and farm photos. You buy genuine, traceable Ivorian produce straight from the source.
-              </p>
-            </motion.div>
-
-            {/* Benefit 2 */}
-            <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.35, delay: 0.08 }}
-              whileHover={{ y: -4 }}
-              className="p-8 rounded-3xl bg-white border border-slate-200/90 shadow-sm hover:shadow-md transition-all duration-300 space-y-4"
-            >
-              <div className="w-14 h-14 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600">
-                <TrendingDown className="w-7 h-7" />
-              </div>
-              <h3 className="font-serif text-xl font-bold text-slate-900">
-                Dynamic Bulk Tier Pricing
-              </h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                Whether you need 5 kg for your home or 50 tons for a hotel chain, our automatic
-                tiered pricing rewards volume with substantial, instant discounts.
-              </p>
-            </motion.div>
-
-            {/* Benefit 3 */}
-            <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.35, delay: 0.16 }}
-              whileHover={{ y: -4 }}
-              className="p-8 rounded-3xl bg-white border border-slate-200/90 shadow-sm hover:shadow-md transition-all duration-300 space-y-4"
-            >
-              <div className="w-14 h-14 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600">
-                <Truck className="w-7 h-7" />
-              </div>
-              <h3 className="font-serif text-xl font-bold text-slate-900">
-                OTP-Protected Agro Logistics
-              </h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                Dedicated registered drivers pick up products directly from farm hubs. Orders are
-                confirmed upon arrival using an encrypted 6-digit OTP code before funds are released.
-              </p>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* SECTION 7: TRUST GUARANTEES PILLARS */}
-      <TrustGuaranteesSection />
-
-      {/* SECTION 8: FOR WHOM SECTION */}
-      <section id="for-whom" className="py-20 bg-white border-t border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-16">
-            <span className="text-xs uppercase tracking-widest text-emerald-700 font-bold">
-              Tailored Ecosystem
-            </span>
-            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-slate-900 mt-2">
-              Built For Everyone in the Supply Chain
-            </h2>
-            <p className="text-sm text-slate-600 mt-3">
-              Discover how Agro Connect empowers producers, transporters, and buyers across Côte
-              d&apos;Ivoire.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Buyer Card */}
-            <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.35 }}
-              whileHover={{ y: -4 }}
-              className="p-7 rounded-3xl bg-slate-50 border border-slate-200/90 space-y-4 flex flex-col justify-between"
-            >
-              <div>
-                <div className="w-12 h-12 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-emerald-600 mb-4 shadow-sm">
-                  <Users className="w-6 h-6" />
+            <div className="grid grid-cols-1 gap-2 pt-1">
+              <Link
+                href="/categories"
+                className="flex items-center justify-between p-3 rounded-xl border border-slate-200/80 hover:border-emerald-500 hover:bg-emerald-50/40 transition-all group"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-emerald-100 text-emerald-800">
+                    <Grid className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <div className="text-xs font-bold text-slate-900 group-hover:text-emerald-700">
+                      Categories
+                    </div>
+                    <div className="text-[11px] text-slate-400">Organize produce types</div>
+                  </div>
                 </div>
-                <h3 className="font-serif text-xl font-bold text-slate-900">For Buyers & Businesses</h3>
-                <p className="text-xs text-slate-600 mt-2 leading-relaxed">
-                  Access freshest produce at unbeatable farm prices. Pay securely via Stripe with
-                  guaranteed doorstep delivery in Abidjan and major cities.
-                </p>
-                <ul className="mt-4 space-y-2 text-xs text-slate-700">
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                    Verified farm freshness guarantee
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                    Volume discounts on bulk purchase
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                    Real-time delivery status & receipts
-                  </li>
-                </ul>
-              </div>
+                <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-emerald-600 group-hover:translate-x-0.5 transition-transform" />
+              </Link>
 
               <Link
                 href="/products"
-                className="btn-primary w-full text-xs py-2.5 text-center mt-6"
+                className="flex items-center justify-between p-3 rounded-xl border border-slate-200/80 hover:border-emerald-500 hover:bg-emerald-50/40 transition-all group"
               >
-                Start Buying Now
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-emerald-100 text-emerald-800">
+                    <ShoppingBag className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <div className="text-xs font-bold text-slate-900 group-hover:text-emerald-700">
+                      Product Catalog
+                    </div>
+                    <div className="text-[11px] text-slate-400">Inventory & pricing tiers</div>
+                  </div>
+                </div>
+                <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-emerald-600 group-hover:translate-x-0.5 transition-transform" />
               </Link>
-            </motion.div>
 
-            {/* Producer Card */}
-            <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.35, delay: 0.08 }}
-              whileHover={{ y: -4 }}
-              className="p-7 rounded-3xl bg-white border-2 border-emerald-600 shadow-md space-y-4 flex flex-col justify-between relative"
-            >
-              <span className="absolute -top-3 right-6 px-3 py-1 rounded-full bg-emerald-600 text-white text-[10px] font-extrabold uppercase tracking-wider shadow-sm">
-                High Demand
+              <Link
+                href="/reports"
+                className="flex items-center justify-between p-3 rounded-xl border border-slate-200/80 hover:border-emerald-500 hover:bg-emerald-50/40 transition-all group"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-rose-100 text-rose-800">
+                    <AlertCircle className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <div className="text-xs font-bold text-slate-900 group-hover:text-rose-700">
+                      Disputes & Reports
+                    </div>
+                    <div className="text-[11px] text-slate-400">Produce quality feedback</div>
+                  </div>
+                </div>
+                <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-rose-600 group-hover:translate-x-0.5 transition-transform" />
+              </Link>
+
+              <Link
+                href="/analytics"
+                className="flex items-center justify-between p-3 rounded-xl border border-slate-200/80 hover:border-emerald-500 hover:bg-emerald-50/40 transition-all group"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-sky-100 text-sky-800">
+                    <TrendingUp className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <div className="text-xs font-bold text-slate-900 group-hover:text-sky-700">
+                      Analytics
+                    </div>
+                    <div className="text-[11px] text-slate-400">Trade volume & charts</div>
+                  </div>
+                </div>
+                <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-sky-600 group-hover:translate-x-0.5 transition-transform" />
+              </Link>
+            </div>
+          </div>
+
+          {/* Platform Health Card */}
+          <div className="rounded-2xl bg-slate-900 text-white p-6 border border-slate-800 shadow-md space-y-4">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold text-emerald-400 uppercase tracking-wider">
+                System Status
               </span>
-              <div>
-                <div className="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600 mb-4">
-                  <Sprout className="w-6 h-6" />
-                </div>
-                <h3 className="font-serif text-xl font-bold text-slate-900">
-                  For Farmers & Producers
-                </h3>
-                <p className="text-xs text-slate-600 mt-2 leading-relaxed">
-                  Sell directly to thousands of buyers without intermediaries taking your profit.
-                  Configure bulk discount tiers and track earnings seamlessly.
-                </p>
-                <ul className="mt-4 space-y-2 text-xs text-slate-700">
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                    Set your own unit & bulk tier prices
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                    Automatic escrow payout release
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                    Dedicated farmer dashboard
-                  </li>
-                </ul>
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+            </div>
+
+            <div>
+              <div className="text-lg font-bold">Ivory Coast Regional Hub</div>
+              <p className="text-xs text-slate-400 mt-0.5">
+                Connecting Yamoussoukro, Abidjan, and San-Pédro agricultural corridors.
+              </p>
+            </div>
+
+            <div className="space-y-2 pt-2 border-t border-slate-800 text-xs text-slate-300">
+              <div className="flex justify-between">
+                <span>Database Sync</span>
+                <span className="text-emerald-400 font-semibold">MongoDB Atlas OK</span>
               </div>
-
-              <Link
-                href="/register"
-                className="btn-primary w-full text-xs py-2.5 text-center mt-6"
-              >
-                Join as a Producer
-              </Link>
-            </motion.div>
-
-            {/* Driver Card */}
-            <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.35, delay: 0.16 }}
-              whileHover={{ y: -4 }}
-              className="p-7 rounded-3xl bg-slate-50 border border-slate-200/90 space-y-4 flex flex-col justify-between"
-            >
-              <div>
-                <div className="w-12 h-12 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-emerald-600 mb-4 shadow-sm">
-                  <Truck className="w-6 h-6" />
-                </div>
-                <h3 className="font-serif text-xl font-bold text-slate-900">
-                  For Drivers & Transporters
-                </h3>
-                <p className="text-xs text-slate-600 mt-2 leading-relaxed">
-                  Earn competitive income moving fresh crops from regional hubs to urban tables.
-                  Bikes, vans, pickups, and trucks are all welcome.
-                </p>
-                <ul className="mt-4 space-y-2 text-xs text-slate-700">
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                    Flexible delivery scheduling
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                    Instant OTP completion verification
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                    Transparent per-delivery earnings
-                  </li>
-                </ul>
+              <div className="flex justify-between">
+                <span>Cloudinary Files</span>
+                <span className="text-emerald-400 font-semibold">Active</span>
               </div>
-
-              <Link
-                href="/register"
-                className="btn-secondary w-full text-xs py-2.5 text-center mt-6"
-              >
-                Register as a Driver
-              </Link>
-            </motion.div>
+              <div className="flex justify-between">
+                <span>Auth Encryption</span>
+                <span className="text-emerald-400 font-semibold">JWT SHA-256</span>
+              </div>
+            </div>
           </div>
         </div>
-      </section>
-
-      {/* SECTION 9: VERIFIED TESTIMONIALS */}
-      <TestimonialsSection />
-
-      {/* SECTION 10: FREQUENTLY ASKED QUESTIONS */}
-      <FaqSection />
-
-      {/* SECTION 11: WEEKLY HARVEST NEWSLETTER & COMMODITY ALERTS */}
-      <HarvestNewsletterSection />
-
-      {/* CALL TO ACTION BANNER */}
-      <section className="py-20 bg-slate-900 text-white border-t border-slate-800">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
-          <h2 className="font-serif text-4xl sm:text-5xl font-extrabold text-white">
-            Ready to experience fresh harvests direct from the source?
-          </h2>
-          <p className="text-base text-slate-300 max-w-2xl mx-auto leading-relaxed">
-            Join thousands of satisfied buyers, cooperative producers, and logistics drivers
-            transforming agriculture in Ivory Coast today.
-          </p>
-          <div className="flex flex-wrap justify-center gap-4 pt-4">
-            <Link
-              href="/register"
-              className="px-8 py-3.5 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm shadow-md transition-all hover:scale-105 active:scale-95"
-            >
-              Get Started for Free
-            </Link>
-            <Link
-              href="/products"
-              className="px-8 py-3.5 rounded-full bg-slate-800 hover:bg-slate-700 text-white font-semibold text-sm border border-slate-700 transition-all"
-            >
-              Browse Marketplace
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      <Footer />
-    </div>
+      </div>
+    </DashboardLayout>
   );
 }

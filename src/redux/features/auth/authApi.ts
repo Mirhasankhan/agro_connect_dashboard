@@ -113,6 +113,18 @@ const authApi = baseApi.injectEndpoints({
       }),
     }),
 
+    adminLogin: builder.mutation<
+      TApiResponse<{ accessToken: string; role: UserRole; user?: TUser }>,
+      { email: string; password: string }
+    >({
+      query: (credentials) => ({
+        url: "/auth/admin-login",
+        method: "POST",
+        body: credentials,
+      }),
+      invalidatesTags: ["User"],
+    }),
+
     changePassword: builder.mutation<
       TApiResponse<null>,
       { oldPassword: string; newPassword: string }
@@ -130,6 +142,7 @@ export const {
   useRegisterMutation,
   useVerifyRegistrationMutation,
   useLoginMutation,
+  useAdminLoginMutation,
   useGetProfileQuery,
   useUpdateProfileMutation,
   useCreateProducerProfileMutation,

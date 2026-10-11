@@ -24,9 +24,9 @@ const serifFont = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Agro Connect - From Fields to Tables",
+  title: "AgroConnect - Admin Dashboard",
   description:
-    "Agricultural platform in Ivory Coast connecting certified local producers directly with buyers and reliable delivery.",
+    "Centralized administrative control center for AgroConnect agricultural commerce platform.",
 };
 
 export default function RootLayout({
