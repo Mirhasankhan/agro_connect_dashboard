@@ -10,7 +10,12 @@ import {
   TCategory,
   OrderStatus,
   PaymentStatus,
+  TAdminProducerEarning,
+  TAdminDriverEarning,
+  TEarningQueryParams,
 } from "@/types";
+
+export type { TAdminProducerEarning, TAdminDriverEarning, TEarningQueryParams };
 
 export interface ProducerQueryParams {
   search?: string;
@@ -475,6 +480,31 @@ export const adminApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Order", "Driver"],
     }),
+
+    // EARNINGS
+    getAllProducerEarnings: builder.query<
+      TApiResponse<{ earnings: TAdminProducerEarning[]; meta: TPaginationMeta }>,
+      TEarningQueryParams | void
+    >({
+      query: (params) => ({
+        url: "/admin/all-producer-earnings",
+        method: "GET",
+        params: params || {},
+      }),
+      providesTags: ["Producer", "Admin"],
+    }),
+
+    getAllDriverEarnings: builder.query<
+      TApiResponse<{ earnings: TAdminDriverEarning[]; meta: TPaginationMeta }>,
+      TEarningQueryParams | void
+    >({
+      query: (params) => ({
+        url: "/admin/all-driver-earnings",
+        method: "GET",
+        params: params || {},
+      }),
+      providesTags: ["Driver", "Admin"],
+    }),
   }),
 });
 
@@ -493,4 +523,6 @@ export const {
   useGetAllOrdersQuery,
   useGetOrderDetailsQuery,
   useAssignDriverMutation,
+  useGetAllProducerEarningsQuery,
+  useGetAllDriverEarningsQuery,
 } = adminApi;

@@ -421,6 +421,64 @@ export interface TDriverEarning {
   };
 }
 
+export interface TAdminProducerEarning {
+  id: string;
+  amount: number;
+  isTransferred: boolean;
+  paidAt?: string | null;
+  createdAt: string;
+  producer?: {
+    id: string;
+    fullName: string;
+    profileImage?: string | null;
+    producerProfile?: {
+      farmName?: string;
+    } | null;
+  };
+  orderItem?: {
+    productName: string;
+    sellingUnit: string;
+    quantity: number;
+    subtotal: number;
+  };
+}
+
+export interface TAdminDriverEarning {
+  id: string;
+  amount: number;
+  isTransferred: boolean;
+  paidAt?: string | null;
+  createdAt: string;
+  driver?: {
+    id: string;
+    fullName: string;
+    email: string;
+    profileImage?: string | null;
+    driverProfile?: {
+      vehicleType?: string;
+    } | null;
+  };
+  order?: {
+    orderId: string;
+    totalAmount?: number;
+    items?: {
+      productName: string;
+      sellingUnit: string;
+      quantity: number;
+      subtotal: number;
+      unitPrice: number;
+    }[];
+  };
+}
+
+export interface TEarningQueryParams {
+  search?: string;
+  isTransferred?: "true" | "false";
+  order?: "asc" | "desc";
+  page?: number | string;
+  limit?: number | string;
+}
+
 export interface TStripeAccountStatus {
   hasStripeAccount: boolean;
   stripeAccountId: string | null;
