@@ -17,8 +17,7 @@ import {
   Clock,
   Eye,
   Check,
-  X,
-  Truck,
+  X,  
   RefreshCw,
   ChevronLeft,
   ChevronRight,
@@ -74,11 +73,7 @@ export default function DriverManagementPage() {
       <div className="space-y-6">
         {/* Header Bar */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-sky-50 text-sky-800 text-xs font-semibold border border-sky-200 mb-1">
-              <Truck className="w-3.5 h-3.5 text-sky-600" />
-              Logistics & Delivery Fleet
-            </div>
+          <div>          
             <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
               Driver Management
             </h1>

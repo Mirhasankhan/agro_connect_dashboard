@@ -99,12 +99,7 @@ export default function Header({ onMobileOpen }: HeaderProps) {
         </div>
 
         {/* Right: Status Pill, Notifications & Admin Info */}
-        <div className="flex items-center gap-3 shrink-0">
-          {/* System Status Indicator */}
-          <div className="hidden md:inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-medium">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span>API Online</span>
-          </div>
+        <div className="flex items-center gap-3 shrink-0">       
 
           {/* Quick Notifications Button */}
           <button

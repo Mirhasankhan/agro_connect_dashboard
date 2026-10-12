@@ -13,8 +13,7 @@ import {
   Truck,
   Clock,
   CheckCircle2,
-  Search,
-  RefreshCw,
+  Search,  
   ChevronLeft,
   ChevronRight,
   Eye,
@@ -45,7 +44,7 @@ export default function DriverEarningsPage() {
     limit,
   };
 
-  const { data, isLoading, isFetching, refetch } = useGetAllDriverEarningsQuery(queryParams);
+  const { data, isLoading } = useGetAllDriverEarningsQuery(queryParams);
 
   const earnings = data?.data?.earnings || [];
   const meta = data?.data?.meta;
@@ -70,11 +69,7 @@ export default function DriverEarningsPage() {
       <div className="space-y-6">
         {/* Header Bar */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-sky-50 text-sky-800 text-xs font-semibold border border-sky-200 mb-1">
-              <Wallet className="w-3.5 h-3.5 text-sky-600" />
-              Fleet Logistics & Route Compensation Ledger
-            </div>
+          <div>       
             <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
               Driver Earnings & Payouts
             </h1>
@@ -82,21 +77,7 @@ export default function DriverEarningsPage() {
               Delivery fees, completed dispatch compensations, and automated account settlements for certified logistics drivers.
             </p>
           </div>
-
-          <div className="flex items-center gap-2">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-sky-50 text-sky-700 text-xs font-bold border border-sky-200/80">
-              <span className="w-2 h-2 rounded-full bg-sky-500 animate-pulse" />
-              <span>Fleet Ledger Active</span>
-            </div>
-            <button
-              onClick={() => refetch()}
-              disabled={isFetching}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-white border border-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-50 hover:border-slate-300 shadow-sm transition-all disabled:opacity-50"
-            >
-              <RefreshCw className={`w-3.5 h-3.5 text-slate-500 ${isFetching ? "animate-spin" : ""}`} />
-              <span>Sync</span>
-            </button>
-          </div>
+     
         </div>
 
         {/* Metrics Grid */}

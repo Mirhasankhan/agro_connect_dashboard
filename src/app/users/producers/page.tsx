@@ -16,8 +16,7 @@ import {
   XCircle,
   Clock,
   Eye,
-  Check,
-  X,
+  Check, 
   Sprout,
   Building,
   RefreshCw,
@@ -74,11 +73,7 @@ export default function ProducerManagementPage() {
       <div className="space-y-6">
         {/* Header Bar */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 text-xs font-semibold border border-emerald-200 mb-1">
-              <Sprout className="w-3.5 h-3.5 text-emerald-600" />
-              Agricultural Supply Chain
-            </div>
+          <div>           
             <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
               Producer Management
             </h1>
@@ -274,23 +269,11 @@ export default function ProducerManagementPage() {
                                     setApprovalDefaultAction("accept");
                                     setApprovalOpen(true);
                                   }}
-                                  title="Approve Producer"
+                                  title="Take Action"
                                   className="p-1.5 rounded-lg text-emerald-600 hover:bg-emerald-50 transition-colors"
                                 >
                                   <Check className="w-4 h-4" />
-                                </button>
-
-                                <button
-                                  onClick={() => {
-                                    setSelectedProducer(producer);
-                                    setApprovalDefaultAction("reject");
-                                    setApprovalOpen(true);
-                                  }}
-                                  title="Reject Producer"
-                                  className="p-1.5 rounded-lg text-rose-600 hover:bg-rose-50 transition-colors"
-                                >
-                                  <X className="w-4 h-4" />
-                                </button>
+                                </button>                             
                               </>
                             )}
                           </div>

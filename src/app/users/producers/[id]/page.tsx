@@ -417,7 +417,7 @@ export default function ProducerDetailsPage() {
             }`}
           >
             <Package className="w-4 h-4" />
-            <span>Products Catalog ({products.length})</span>
+            <span>Products ({products.length})</span>
           </button>
 
           <button
@@ -429,7 +429,7 @@ export default function ProducerDetailsPage() {
             }`}
           >
             <DollarSign className="w-4 h-4" />
-            <span>Earnings Ledger ({earnings.length})</span>
+            <span>Earnings ({earnings.length})</span>
           </button>
         </div>
 

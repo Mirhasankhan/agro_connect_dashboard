@@ -47,7 +47,7 @@ export default function StatsCard({
         </div>
       </div>
 
-      <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+      <div className=" border-slate-100 flex items-center justify-between text-xs">
         {change && (
           <div
             className={`inline-flex items-center gap-1 font-semibold ${

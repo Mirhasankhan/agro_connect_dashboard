@@ -20,7 +20,6 @@ import {
   useGetAllOrdersQuery,
   useGetAllProducersQuery,
   useGetAllDriversQuery,
-  useGetAllBuyersQuery,
   useGetAllCategoriesQuery,
 } from "@/redux/features/admin/adminApi";
 import { format } from "date-fns";
@@ -36,13 +35,12 @@ export default function AdminOverviewDashboard() {
     verificationStatus: "Pending",
     limit: 5,
   });
-  const { data: buyersData } = useGetAllBuyersQuery({ limit: 1 });
+ 
   const { data: categoriesData, isLoading: isLoadingCategories } = useGetAllCategoriesQuery();
 
   const totalOrders = ordersData?.data?.meta?.total ?? 0;
   const pendingProducersCount = pendingProducersData?.data?.meta?.total ?? 0;
   const pendingDriversCount = pendingDriversData?.data?.meta?.total ?? 0;
-  const totalBuyers = buyersData?.data?.meta?.total ?? 0;
   const totalCategories = categoriesData?.data?.categories?.length ?? 0;
 
   const recentOrders = ordersData?.data?.orders || [];
@@ -57,38 +55,30 @@ export default function AdminOverviewDashboard() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         <StatsCard
           title="Total Orders"
-          value={isLoadingOrders ? "..." : totalOrders}
-          change="+12% this week"
+          value={isLoadingOrders ? "..." : totalOrders}       
           isPositive={true}
-          icon={ShoppingBag}
-          badge="Live"
+          icon={ShoppingBag}       
           badgeColor="emerald"
         />
 
         <StatsCard
           title="Pending Producers"
-          value={isLoadingProducers ? "..." : pendingProducersCount}
-          subtitle="Verification required"
-          icon={UserCheck}
-          badge={pendingProducersCount > 0 ? "Action needed" : "All clear"}
+          value={isLoadingProducers ? "..." : pendingProducersCount}   
+          icon={UserCheck}  
           badgeColor={pendingProducersCount > 0 ? "amber" : "emerald"}
         />
 
         <StatsCard
           title="Pending Drivers"
-          value={isLoadingDrivers ? "..." : pendingDriversCount}
-          subtitle="License & vehicle review"
-          icon={Truck}
-          badge={pendingDriversCount > 0 ? "Reviewing" : "Cleared"}
+          value={isLoadingDrivers ? "..." : pendingDriversCount}      
+          icon={Truck}  
           badgeColor={pendingDriversCount > 0 ? "blue" : "emerald"}
         />
 
         <StatsCard
           title="Active Categories"
-          value={isLoadingCategories ? "..." : totalCategories}
-          subtitle={`${totalBuyers} Registered Buyers`}
-          icon={Grid}
-          badge="Organized"
+          value={isLoadingCategories ? "..." : totalCategories}       
+          icon={Grid}     
           badgeColor="slate"
         />
       </div>
@@ -117,7 +107,7 @@ export default function AdminOverviewDashboard() {
 
             {/* Producers sub-list */}
             <div className="space-y-3">
-              <div className="text-xs font-bold uppercase tracking-wider text-slate-400">
+              <div className="text-xs font-bold tracking-wider text-slate-400">
                 Farmers & Producers Awaiting Approval
               </div>
 
@@ -163,7 +153,7 @@ export default function AdminOverviewDashboard() {
 
             {/* Drivers sub-list */}
             <div className="space-y-3 pt-2">
-              <div className="text-xs font-bold uppercase tracking-wider text-slate-400">
+              <div className="text-xs font-bold tracking-wider text-slate-400">
                 Transport Drivers Awaiting Approval
               </div>
 
@@ -363,38 +353,7 @@ export default function AdminOverviewDashboard() {
               </Link>
             </div>
           </div>
-
-          {/* Platform Health Card */}
-          <div className="rounded-2xl bg-slate-900 text-white p-6 border border-slate-800 shadow-md space-y-4">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-emerald-400 uppercase tracking-wider">
-                System Status
-              </span>
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
-            </div>
-
-            <div>
-              <div className="text-lg font-bold">Ivory Coast Regional Hub</div>
-              <p className="text-xs text-slate-400 mt-0.5">
-                Connecting Yamoussoukro, Abidjan, and San-Pédro agricultural corridors.
-              </p>
-            </div>
-
-            <div className="space-y-2 pt-2 border-t border-slate-800 text-xs text-slate-300">
-              <div className="flex justify-between">
-                <span>Database Sync</span>
-                <span className="text-emerald-400 font-semibold">MongoDB Atlas OK</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Cloudinary Files</span>
-                <span className="text-emerald-400 font-semibold">Active</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Auth Encryption</span>
-                <span className="text-emerald-400 font-semibold">JWT SHA-256</span>
-              </div>
-            </div>
-          </div>
+        
         </div>
       </div>
     </DashboardLayout>

@@ -102,11 +102,7 @@ export default function OrdersManagementPage() {
       <div className="space-y-6">
         {/* Header Bar */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 text-xs font-semibold border border-emerald-200 mb-1">
-              <ShoppingBag className="w-3.5 h-3.5 text-emerald-600" />
-              Platform Commerce Operations
-            </div>
+          <div>        
             <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
               Orders & Delivery Dispatch
             </h1>
