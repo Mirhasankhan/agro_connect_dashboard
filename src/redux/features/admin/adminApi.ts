@@ -211,6 +211,10 @@ export interface TAdminOrder {
   createdAt: string;
   status?: OrderStatus;
   paymentStatus?: string;
+  deliveries?: Array<{
+    id: string;
+    status: string;
+  }>;
   _count?: {
     items: number;
   };

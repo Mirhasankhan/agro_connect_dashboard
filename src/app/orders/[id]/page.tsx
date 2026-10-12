@@ -192,7 +192,7 @@ export default function OrderDetailsPage() {
             </button>
 
             {/* If order is Active and driver not yet assigned */}
-            {(!activeDelivery || !driver) && (
+            {order?.status === "Active" && (!activeDelivery || !driver) && (
               <button
                 onClick={() => setAssignModalOpen(true)}
                 className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-sm shadow-emerald-600/20 transition-all active:scale-95"
@@ -400,17 +400,25 @@ export default function OrderDetailsPage() {
             ) : (
               <div className="p-8 text-center text-xs text-slate-500 space-y-3">
                 <Truck className="w-8 h-8 text-slate-300 mx-auto" />
-                <div className="font-bold text-slate-800">No Carrier Assigned Yet</div>
+                <div className="font-bold text-slate-800">
+                  {order?.status === "Delivered"
+                    ? "Order Delivered"
+                    : "No Carrier Assigned Yet"}
+                </div>
                 <p className="text-slate-400 max-w-xs mx-auto">
-                  This order is ready for dispatch. Assign a verified fleet driver to transport packages from hub to customer.
+                  {order?.status === "Delivered"
+                    ? "This order has been fulfilled and delivered to the customer."
+                    : "This order is ready for dispatch. Assign a verified fleet driver to transport packages from hub to customer."}
                 </p>
-                <button
-                  onClick={() => setAssignModalOpen(true)}
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-sm shadow-emerald-600/20 transition-all active:scale-95"
-                >
-                  <Truck className="w-3.5 h-3.5" />
-                  <span>Assign Fleet Driver</span>
-                </button>
+                {order?.status === "Active" && (
+                  <button
+                    onClick={() => setAssignModalOpen(true)}
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-sm shadow-emerald-600/20 transition-all active:scale-95"
+                  >
+                    <Truck className="w-3.5 h-3.5" />
+                    <span>Assign Fleet Driver</span>
+                  </button>
+                )}
               </div>
             )}
           </div>

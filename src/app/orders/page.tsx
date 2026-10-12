@@ -21,6 +21,9 @@ import {
   CheckCircle2,
   DollarSign,
   Eye,
+  Clock,
+  XCircle,
+  RotateCcw,
 } from "lucide-react";
 import { format } from "date-fns";
 
@@ -46,6 +49,53 @@ export default function OrdersManagementPage() {
   const meta = data?.data?.meta;
 
   const totalVolume = orders.reduce((acc, order) => acc + (order.totalAmount || 0), 0);
+
+  const renderOrderStatusBadge = (status?: OrderStatus | string) => {
+    switch (status) {
+      case "Delivered":
+        return (
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+            <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+            <span>Delivered</span>
+          </span>
+        );
+      case "Shipped":
+        return (
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-sky-50 text-sky-700 border border-sky-200">
+            <Truck className="w-3 h-3 text-sky-600" />
+            <span>In Transit</span>
+          </span>
+        );
+      case "Active":
+        return (
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-200">
+            <Clock className="w-3 h-3 text-indigo-600" />
+            <span>Active</span>
+          </span>
+        );
+      case "Cancelled":
+        return (
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-rose-50 text-rose-700 border border-rose-200">
+            <XCircle className="w-3 h-3 text-rose-600" />
+            <span>Cancelled</span>
+          </span>
+        );
+      case "Refunded":
+        return (
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-purple-50 text-purple-700 border border-purple-200">
+            <RotateCcw className="w-3 h-3 text-purple-600" />
+            <span>Refunded</span>
+          </span>
+        );
+      default:
+        return (
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
+            <Clock className="w-3 h-3 text-amber-600" />
+            <span>{status || "Pending"}</span>
+          </span>
+        );
+    }
+  };
 
   return (
     <DashboardLayout>
@@ -185,97 +235,111 @@ export default function OrdersManagementPage() {
                     <th className="py-3.5 px-4">Destination Address</th>
                     <th className="py-3.5 px-4">Items</th>
                     <th className="py-3.5 px-4">Total Amount</th>
+                    <th className="py-3.5 px-4">Status</th>
                     <th className="py-3.5 px-4">Created Date</th>
                     <th className="py-3.5 px-4 text-right">Dispatch Action</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
-                  {orders.map((order) => (
-                    <tr key={order.id} className="hover:bg-slate-50/70 transition-colors">
-                      {/* Order ID */}
-                      <td className="py-3.5 px-4 font-mono font-bold text-slate-900">
-                        <Link
-                          href={`/orders/${order.id}`}
-                          className="bg-slate-100 hover:bg-slate-200 px-2 py-1 rounded text-slate-800 border border-slate-200 transition-colors inline-block"
-                        >
-                          #{order.orderId?.slice(-8) || order.id?.slice(-8)}
-                        </Link>
-                      </td>
+                  {orders.map((order) => {
+                    const hasDriver = Boolean(order.deliveries && order.deliveries.length > 0);
+                    const canAssign = order.status === "Active" && !hasDriver;
 
-                      {/* Buyer */}
-                      <td className="py-3.5 px-4">
-                        <Link
-                          href={`/orders/${order.id}`}
-                          className="flex items-center gap-2.5 group"
-                        >
-                          <div className="w-8 h-8 rounded-full bg-slate-900 text-emerald-400 font-bold flex items-center justify-center text-xs shrink-0 group-hover:ring-2 group-hover:ring-emerald-500 transition-all">
-                            {order.customer?.fullName?.charAt(0) || "B"}
-                          </div>
-                          <div className="min-w-0">
-                            <div className="font-bold text-slate-900 group-hover:text-emerald-700 transition-colors truncate">
-                              {order.customer?.fullName || "Buyer Customer"}
-                            </div>
-                            <div className="text-[10px] text-emerald-600 font-medium">
-                              Paid Account
-                            </div>
-                          </div>
-                        </Link>
-                      </td>
-
-                      {/* Destination */}
-                      <td className="py-3.5 px-4 text-slate-700">
-                        <div className="font-medium flex items-center gap-1">
-                          <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                          <span>{order.shippingAddress?.city || "Abidjan"}</span>
-                        </div>
-                        <div className="text-[11px] text-slate-400 truncate max-w-[200px]">
-                          {order.shippingAddress?.addressLine || "Address on record"}
-                        </div>
-                      </td>
-
-                      {/* Items */}
-                      <td className="py-3.5 px-4 font-medium text-slate-800">
-                        {order._count?.items ?? 1} items
-                      </td>
-
-                      {/* Amount */}
-                      <td className="py-3.5 px-4 font-bold text-emerald-700">
-                        {(order.totalAmount || 0).toLocaleString()} XOF
-                      </td>
-
-                      {/* Date */}
-                      <td className="py-3.5 px-4 text-slate-500 whitespace-nowrap">
-                        {order.createdAt
-                          ? format(new Date(order.createdAt), "MMM dd, yyyy")
-                          : "N/A"}
-                      </td>
-
-                      {/* Action */}
-                      <td className="py-3.5 px-4 text-right">
-                        <div className="inline-flex items-center gap-1.5 justify-end">
+                    return (
+                      <tr key={order.id} className="hover:bg-slate-50/70 transition-colors">
+                        {/* Order ID */}
+                        <td className="py-3.5 px-4 font-mono font-bold text-slate-900">
                           <Link
                             href={`/orders/${order.id}`}
-                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs shadow-sm transition-colors"
-                            title="Inspect Order Details & Items"
+                            className="bg-slate-100 hover:bg-slate-200 px-2 py-1 rounded text-slate-800 border border-slate-200 transition-colors inline-block"
                           >
-                            <Eye className="w-3.5 h-3.5 text-slate-500" />
-                            <span>Details</span>
+                            #{order.orderId?.slice(-8) || order.id?.slice(-8)}
                           </Link>
+                        </td>
 
-                          <button
-                            onClick={() => {
-                              setSelectedOrder(order);
-                              setDispatchModalOpen(true);
-                            }}
-                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-sm shadow-emerald-600/20 transition-all active:scale-95"
+                        {/* Buyer */}
+                        <td className="py-3.5 px-4">
+                          <Link
+                            href={`/orders/${order.id}`}
+                            className="flex items-center gap-2.5 group"
                           >
-                            <Truck className="w-3.5 h-3.5" />
-                            <span>Assign</span>
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                            <div className="w-8 h-8 rounded-full bg-slate-900 text-emerald-400 font-bold flex items-center justify-center text-xs shrink-0 group-hover:ring-2 group-hover:ring-emerald-500 transition-all">
+                              {order.customer?.fullName?.charAt(0) || "B"}
+                            </div>
+                            <div className="min-w-0">
+                              <div className="font-bold text-slate-900 group-hover:text-emerald-700 transition-colors truncate">
+                                {order.customer?.fullName || "Buyer Customer"}
+                              </div>
+                              <div className="text-[10px] text-emerald-600 font-medium">
+                                Paid Account
+                              </div>
+                            </div>
+                          </Link>
+                        </td>
+
+                        {/* Destination */}
+                        <td className="py-3.5 px-4 text-slate-700">
+                          <div className="font-medium flex items-center gap-1">
+                            <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                            <span>{order.shippingAddress?.city || "Abidjan"}</span>
+                          </div>
+                          <div className="text-[11px] text-slate-400 truncate max-w-[200px]">
+                            {order.shippingAddress?.addressLine || "Address on record"}
+                          </div>
+                        </td>
+
+                        {/* Items */}
+                        <td className="py-3.5 px-4 font-medium text-slate-800">
+                          {order._count?.items ?? 1} items
+                        </td>
+
+                        {/* Amount */}
+                        <td className="py-3.5 px-4 font-bold text-emerald-700">
+                          {(order.totalAmount || 0).toLocaleString()} XOF
+                        </td>
+
+                        {/* Status */}
+                        <td className="py-3.5 px-4 whitespace-nowrap">
+                          {renderOrderStatusBadge(order.status)}
+                        </td>
+
+                        {/* Date */}
+                        <td className="py-3.5 px-4 text-slate-500 whitespace-nowrap">
+                          {order.createdAt
+                            ? format(new Date(order.createdAt), "MMM dd, yyyy")
+                            : "N/A"}
+                        </td>
+
+                        {/* Action */}
+                        <td className="py-3.5 px-4 text-right">
+                          <div className="inline-flex items-center gap-1.5 justify-end">
+                            <Link
+                              href={`/orders/${order.id}`}
+                              className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs shadow-sm transition-colors"
+                              title="Inspect Order Details & Items"
+                            >
+                              <Eye className="w-3.5 h-3.5 text-slate-500" />
+                              <span>Details</span>
+                            </Link>
+
+                            {canAssign && (
+                              <button
+                                onClick={() => {
+                                  setSelectedOrder(order);
+                                  setDispatchModalOpen(true);
+                                }}
+                                className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-sm shadow-emerald-600/20 transition-all active:scale-95"
+                                title="Assign Delivery Driver"
+                              >
+                                <Truck className="w-3.5 h-3.5" />
+                                <span>Assign</span>
+                              </button>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>

@@ -50,10 +50,16 @@ export default function AssignDriverModal({
   // Filter for available drivers
   const availableDrivers = allDrivers.filter((d) => d.driverProfile?.isAvailable);
   const busyDrivers = allDrivers.filter((d) => !d.driverProfile?.isAvailable);
+  const isDelivered = order.status === "Delivered";
 
   const handleAssign = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+
+    if (isDelivered) {
+      setError("This order has already been delivered to the customer and cannot be assigned to a driver.");
+      return;
+    }
 
     if (!selectedDriverId) {
       setError("Please select a verified driver from the available fleet.");
@@ -257,6 +263,17 @@ export default function AssignDriverModal({
             </div>
           )}
 
+          {/* Order Delivered Banner */}
+          {isDelivered && (
+            <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs flex items-start gap-2.5">
+              <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+              <div>
+                <span className="font-bold block">Order Already Delivered</span>
+                <span>This order has already been fulfilled and delivered to the buyer. Driver dispatch is disabled.</span>
+              </div>
+            </div>
+          )}
+
           {/* Error Banner */}
           {error && (
             <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-start gap-2.5">
@@ -281,7 +298,7 @@ export default function AssignDriverModal({
 
             <button
               type="submit"
-              disabled={isAssigning || !selectedDriverId || availableDrivers.length === 0}
+              disabled={isAssigning || isDelivered || !selectedDriverId || availableDrivers.length === 0}
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-sm transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed shadow-emerald-600/20"
             >
               {isAssigning && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
