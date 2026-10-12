@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import ApprovalModal from "@/components/users/ApprovalModal";
-import UserDetailsModal from "@/components/users/UserDetailsModal";
 import {
   useGetAllProducersQuery,
   useAcceptRejectProducerMutation,
@@ -33,9 +33,8 @@ export default function ProducerManagementPage() {
   const [typeFilter, setTypeFilter] = useState<ProducerType | "ALL">("ALL");
   const [page, setPage] = useState(1);
 
-  // Selected producer for details or approval
+  // Selected producer for approval
   const [selectedProducer, setSelectedProducer] = useState<TProducerUser | null>(null);
-  const [detailsOpen, setDetailsOpen] = useState(false);
   const [approvalOpen, setApprovalOpen] = useState(false);
   const [approvalDefaultAction, setApprovalDefaultAction] = useState<"accept" | "reject">("accept");
 
@@ -187,19 +186,22 @@ export default function ProducerManagementPage() {
                       <tr key={producer.id} className="hover:bg-slate-50/70 transition-colors">
                         {/* Producer Name & Email */}
                         <td className="py-3.5 px-4">
-                          <div className="flex items-center gap-3">
-                            <div className="w-9 h-9 rounded-full bg-emerald-100 text-emerald-800 font-bold flex items-center justify-center text-xs shrink-0">
+                          <Link
+                            href={`/users/producers/${producer.id}`}
+                            className="flex items-center gap-3 group"
+                          >
+                            <div className="w-9 h-9 rounded-full bg-emerald-100 text-emerald-800 font-bold flex items-center justify-center text-xs shrink-0 group-hover:bg-emerald-200 transition-colors">
                               {producer.fullName?.charAt(0) || "P"}
                             </div>
                             <div className="min-w-0">
-                              <div className="font-bold text-slate-900 truncate">
+                              <div className="font-bold text-slate-900 group-hover:text-emerald-700 transition-colors truncate">
                                 {producer.fullName}
                               </div>
                               <div className="text-[11px] text-slate-500 truncate">
                                 {producer.email}
                               </div>
                             </div>
-                          </div>
+                          </Link>
                         </td>
 
                         {/* Farm & Location */}
@@ -254,17 +256,14 @@ export default function ProducerManagementPage() {
                         {/* Actions */}
                         <td className="py-3.5 px-4 text-right">
                           <div className="inline-flex items-center gap-1.5">
-                            {/* Inspect Details Button */}
-                            <button
-                              onClick={() => {
-                                setSelectedProducer(producer);
-                                setDetailsOpen(true);
-                              }}
-                              title="Inspect Farm Details & Certificates"
-                              className="p-1.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors"
+                            {/* Dedicated Details Page Button */}
+                            <Link
+                              href={`/users/producers/${producer.id}`}
+                              title="Inspect Full Producer Details & Documents"
+                              className="p-1.5 rounded-lg text-slate-600 hover:text-emerald-700 hover:bg-emerald-50 transition-colors"
                             >
                               <Eye className="w-4 h-4" />
-                            </button>
+                            </Link>
 
                             {/* If Pending: Quick Approve / Reject triggers */}
                             {status === "Pending" && (
@@ -333,21 +332,6 @@ export default function ProducerManagementPage() {
           )}
         </div>
       </div>
-
-      {/* Details & Certificates Modal */}
-      {selectedProducer && (
-        <UserDetailsModal
-          isOpen={detailsOpen}
-          onClose={() => setDetailsOpen(false)}
-          title="Producer Details"
-          user={selectedProducer}
-          userType="producer"
-          onApproveAction={() => {
-            setApprovalDefaultAction("accept");
-            setApprovalOpen(true);
-          }}
-        />
-      )}
 
       {/* Approval / Rejection Modal */}
       {selectedProducer && (

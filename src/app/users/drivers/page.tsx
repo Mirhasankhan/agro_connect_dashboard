@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import ApprovalModal from "@/components/users/ApprovalModal";
-import UserDetailsModal from "@/components/users/UserDetailsModal";
 import {
   useGetAllDriversQuery,
   useAcceptRejectDriverMutation,
@@ -35,7 +35,6 @@ export default function DriverManagementPage() {
 
   // Selected driver
   const [selectedDriver, setSelectedDriver] = useState<TDriverUser | null>(null);
-  const [detailsOpen, setDetailsOpen] = useState(false);
   const [approvalOpen, setApprovalOpen] = useState(false);
   const [approvalDefaultAction, setApprovalDefaultAction] = useState<"accept" | "reject">("accept");
 
@@ -192,19 +191,22 @@ export default function DriverManagementPage() {
                       <tr key={driver.id} className="hover:bg-slate-50/70 transition-colors">
                         {/* Driver */}
                         <td className="py-3.5 px-4">
-                          <div className="flex items-center gap-3">
-                            <div className="w-9 h-9 rounded-full bg-sky-100 text-sky-800 font-bold flex items-center justify-center text-xs shrink-0">
+                          <Link
+                            href={`/users/drivers/${driver.id}`}
+                            className="flex items-center gap-3 group"
+                          >
+                            <div className="w-9 h-9 rounded-full bg-sky-100 text-sky-800 font-bold flex items-center justify-center text-xs shrink-0 group-hover:bg-sky-200 transition-colors">
                               {driver.fullName?.charAt(0) || "D"}
                             </div>
                             <div className="min-w-0">
-                              <div className="font-bold text-slate-900 truncate">
+                              <div className="font-bold text-slate-900 group-hover:text-sky-700 transition-colors truncate">
                                 {driver.fullName}
                               </div>
                               <div className="text-[11px] text-slate-500 truncate">
                                 {driver.email}
                               </div>
                             </div>
-                          </div>
+                          </Link>
                         </td>
 
                         {/* Vehicle Type */}
@@ -260,17 +262,14 @@ export default function DriverManagementPage() {
                         {/* Actions */}
                         <td className="py-3.5 px-4 text-right">
                           <div className="inline-flex items-center gap-1.5">
-                            {/* Inspect Details Button */}
-                            <button
-                              onClick={() => {
-                                setSelectedDriver(driver);
-                                setDetailsOpen(true);
-                              }}
-                              title="Inspect Driver Documents & License"
-                              className="p-1.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors"
+                            {/* Dedicated Details Page Button */}
+                            <Link
+                              href={`/users/drivers/${driver.id}`}
+                              title="Inspect Driver Documents & Fleet Records"
+                              className="p-1.5 rounded-lg text-slate-600 hover:text-sky-700 hover:bg-sky-50 transition-colors"
                             >
                               <Eye className="w-4 h-4" />
-                            </button>
+                            </Link>
 
                             {/* Pending Quick Actions */}
                             {status === "Pending" && (
@@ -338,21 +337,6 @@ export default function DriverManagementPage() {
           )}
         </div>
       </div>
-
-      {/* Details Modal */}
-      {selectedDriver && (
-        <UserDetailsModal
-          isOpen={detailsOpen}
-          onClose={() => setDetailsOpen(false)}
-          title="Driver License & Fleet Details"
-          user={selectedDriver}
-          userType="driver"
-          onApproveAction={() => {
-            setApprovalDefaultAction("accept");
-            setApprovalOpen(true);
-          }}
-        />
-      )}
 
       {/* Approval Modal */}
       {selectedDriver && (

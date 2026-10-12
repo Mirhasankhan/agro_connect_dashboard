@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import AssignDriverModal from "@/components/orders/AssignDriverModal";
 import {
@@ -19,6 +20,7 @@ import {
   ShieldCheck,
   CheckCircle2,
   DollarSign,
+  Eye,
 } from "lucide-react";
 import { format } from "date-fns";
 
@@ -192,26 +194,32 @@ export default function OrdersManagementPage() {
                     <tr key={order.id} className="hover:bg-slate-50/70 transition-colors">
                       {/* Order ID */}
                       <td className="py-3.5 px-4 font-mono font-bold text-slate-900">
-                        <span className="bg-slate-100 px-2 py-1 rounded text-slate-800 border border-slate-200">
+                        <Link
+                          href={`/orders/${order.id}`}
+                          className="bg-slate-100 hover:bg-slate-200 px-2 py-1 rounded text-slate-800 border border-slate-200 transition-colors inline-block"
+                        >
                           #{order.orderId?.slice(-8) || order.id?.slice(-8)}
-                        </span>
+                        </Link>
                       </td>
 
                       {/* Buyer */}
                       <td className="py-3.5 px-4">
-                        <div className="flex items-center gap-2.5">
-                          <div className="w-8 h-8 rounded-full bg-slate-900 text-emerald-400 font-bold flex items-center justify-center text-xs shrink-0">
+                        <Link
+                          href={`/orders/${order.id}`}
+                          className="flex items-center gap-2.5 group"
+                        >
+                          <div className="w-8 h-8 rounded-full bg-slate-900 text-emerald-400 font-bold flex items-center justify-center text-xs shrink-0 group-hover:ring-2 group-hover:ring-emerald-500 transition-all">
                             {order.customer?.fullName?.charAt(0) || "B"}
                           </div>
                           <div className="min-w-0">
-                            <div className="font-bold text-slate-900 truncate">
+                            <div className="font-bold text-slate-900 group-hover:text-emerald-700 transition-colors truncate">
                               {order.customer?.fullName || "Buyer Customer"}
                             </div>
                             <div className="text-[10px] text-emerald-600 font-medium">
                               Paid Account
                             </div>
                           </div>
-                        </div>
+                        </Link>
                       </td>
 
                       {/* Destination */}
@@ -244,16 +252,27 @@ export default function OrdersManagementPage() {
 
                       {/* Action */}
                       <td className="py-3.5 px-4 text-right">
-                        <button
-                          onClick={() => {
-                            setSelectedOrder(order);
-                            setDispatchModalOpen(true);
-                          }}
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-sm shadow-emerald-600/20 transition-all active:scale-95"
-                        >
-                          <Truck className="w-3.5 h-3.5" />
-                          <span>Assign Driver</span>
-                        </button>
+                        <div className="inline-flex items-center gap-1.5 justify-end">
+                          <Link
+                            href={`/orders/${order.id}`}
+                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs shadow-sm transition-colors"
+                            title="Inspect Order Details & Items"
+                          >
+                            <Eye className="w-3.5 h-3.5 text-slate-500" />
+                            <span>Details</span>
+                          </Link>
+
+                          <button
+                            onClick={() => {
+                              setSelectedOrder(order);
+                              setDispatchModalOpen(true);
+                            }}
+                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-sm shadow-emerald-600/20 transition-all active:scale-95"
+                          >
+                            <Truck className="w-3.5 h-3.5" />
+                            <span>Assign</span>
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}

@@ -1,11 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
-import UserDetailsModal from "@/components/users/UserDetailsModal";
 import {
   useGetAllBuyersQuery,
-  TBuyerUser,
 } from "@/redux/features/admin/adminApi";
 import {
   Search,
@@ -22,10 +21,6 @@ import {
 export default function BuyerManagementPage() {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
-
-  // Selected buyer
-  const [selectedBuyer, setSelectedBuyer] = useState<TBuyerUser | null>(null);
-  const [detailsOpen, setDetailsOpen] = useState(false);
 
   // Query params
   const queryParams = {
@@ -126,19 +121,22 @@ export default function BuyerManagementPage() {
                       <tr key={buyer.id} className="hover:bg-slate-50/70 transition-colors">
                         {/* Buyer Info */}
                         <td className="py-3.5 px-4">
-                          <div className="flex items-center gap-3">
-                            <div className="w-9 h-9 rounded-full bg-slate-900 text-emerald-400 font-bold flex items-center justify-center text-xs shrink-0">
+                          <Link
+                            href={`/users/buyers/${buyer.id}`}
+                            className="flex items-center gap-3 group"
+                          >
+                            <div className="w-9 h-9 rounded-full bg-slate-900 text-emerald-400 font-bold flex items-center justify-center text-xs shrink-0 group-hover:ring-2 group-hover:ring-emerald-500 transition-all">
                               {buyer.fullName?.charAt(0) || "B"}
                             </div>
                             <div className="min-w-0">
-                              <div className="font-bold text-slate-900 truncate">
+                              <div className="font-bold text-slate-900 group-hover:text-emerald-700 transition-colors truncate">
                                 {buyer.fullName}
                               </div>
                               <div className="text-[11px] text-slate-500 truncate">
                                 {buyer.email}
                               </div>
                             </div>
-                          </div>
+                          </Link>
                         </td>
 
                         {/* Location */}
@@ -175,17 +173,14 @@ export default function BuyerManagementPage() {
 
                         {/* Actions */}
                         <td className="py-3.5 px-4 text-right">
-                          <button
-                            onClick={() => {
-                              setSelectedBuyer(buyer);
-                              setDetailsOpen(true);
-                            }}
-                            title="View Buyer Profile"
-                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors text-xs font-semibold"
+                          <Link
+                            href={`/users/buyers/${buyer.id}`}
+                            title="View Dedicated Buyer Profile"
+                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-slate-600 hover:text-emerald-700 hover:bg-emerald-50 transition-colors text-xs font-semibold"
                           >
                             <Eye className="w-3.5 h-3.5" />
                             <span>View</span>
-                          </button>
+                          </Link>
                         </td>
                       </tr>
                     );
@@ -223,17 +218,6 @@ export default function BuyerManagementPage() {
           )}
         </div>
       </div>
-
-      {/* Details Modal */}
-      {selectedBuyer && (
-        <UserDetailsModal
-          isOpen={detailsOpen}
-          onClose={() => setDetailsOpen(false)}
-          title="Buyer Profile & Order Overview"
-          user={selectedBuyer}
-          userType="buyer"
-        />
-      )}
     </DashboardLayout>
   );
 }

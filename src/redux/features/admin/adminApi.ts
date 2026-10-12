@@ -9,6 +9,7 @@ import {
   DriverVehicleType,
   TCategory,
   OrderStatus,
+  PaymentStatus,
 } from "@/types";
 
 export interface ProducerQueryParams {
@@ -44,6 +45,56 @@ export interface OrderQueryParams {
   limit?: number | string;
 }
 
+export interface TProducerProduct {
+  id: string;
+  name: string;
+  imageUrls: string[];
+  availableQuantity: number;
+  avgRating: number;
+  totalReviews: number;
+  pricePerUnit: number;
+  sellingUnit: string;
+  sold: number;
+  description: string;
+  category?: {
+    name: string;
+  };
+  _count?: {
+    orderItems: number;
+  };
+  pricingTiers?: {
+    quantity: number;
+    pricePerUnit: number;
+  }[];
+  orderItems?: {
+    quantity: number;
+    subtotal: number;
+    unitPrice: number;
+    status: string;
+  }[];
+  reviews?: {
+    rating: number;
+    comment: string;
+    createdAt: string;
+    buyer?: {
+      fullName: string;
+      profileImage?: string | null;
+    };
+  }[];
+}
+
+export interface TProducerEarningItem {
+  amount: number;
+  isTransferred: boolean;
+  paidAt?: string | null;
+  createdAt: string;
+  orderItem?: {
+    productName: string;
+    sellingUnit: string;
+    quantity: number;
+  };
+}
+
 export interface TProducerUser {
   id: string;
   fullName: string;
@@ -53,9 +104,49 @@ export interface TProducerUser {
   address?: string | null;
   city?: string | null;
   region?: string | null;
-  producerProfile?: TProducerProfile | null;
-  products?: any[];
-  producerEarnings?: any[];
+  producerProfile?: (TProducerProfile & {
+    experienceYears?: number;
+    registrationNumber?: string;
+    taxId?: string;
+    nationalId?: string;
+    bio?: string;
+    certificateUrls?: string[];
+  }) | null;
+  products?: TProducerProduct[];
+  producerEarnings?: TProducerEarningItem[];
+}
+
+export interface TDriverDeliveryItem {
+  id: string;
+  status: string;
+  order?: {
+    orderId: string;
+    totalAmount: number;
+    shippingAddress?: {
+      addressLine: string;
+      city: string;
+      postCode: string;
+      instruction?: string | null;
+    };
+    items?: {
+      productName: string;
+      sellingUnit: string;
+      quantity: number;
+      subtotal: number;
+      unitPrice: number;
+    }[];
+  };
+}
+
+export interface TDriverEarningItem {
+  amount: number;
+  isTransferred: boolean;
+  paidAt?: string | null;
+  createdAt: string;
+  order?: {
+    orderId: string;
+    deliveryCharge: number;
+  };
 }
 
 export interface TDriverUser {
@@ -68,9 +159,26 @@ export interface TDriverUser {
   city?: string | null;
   region?: string | null;
   status?: string;
-  driverProfile?: TDriverProfile | null;
-  deliveries?: any[];
-  driverEarnings?: any[];
+  driverProfile?: (TDriverProfile & {
+    drivingLicenseNumber?: string;
+    licenseUrls?: string[];
+  }) | null;
+  deliveries?: TDriverDeliveryItem[];
+  driverEarnings?: TDriverEarningItem[];
+}
+
+export interface TBuyerOrderItem {
+  id: string;
+  status: string;
+  totalAmount: number;
+  createdAt: string;
+  items?: {
+    productName: string;
+    sellingUnit: string;
+    quantity: number;
+    subtotal: number;
+    unitPrice: number;
+  }[];
 }
 
 export interface TBuyerUser {
@@ -83,8 +191,13 @@ export interface TBuyerUser {
   city?: string | null;
   region?: string | null;
   status?: string;
-  shippingAddresses?: any[];
-  orders?: any[];
+  shippingAddresses?: {
+    addressLine: string;
+    city: string;
+    postCode: string;
+    instruction?: string | null;
+  }[];
+  orders?: TBuyerOrderItem[];
   _count?: {
     orders?: number;
   };
@@ -94,8 +207,10 @@ export interface TAdminOrder {
   id: string;
   orderId: string;
   totalAmount: number;
+  deliveryCharge?: number;
   createdAt: string;
   status?: OrderStatus;
+  paymentStatus?: string;
   _count?: {
     items: number;
   };
@@ -106,6 +221,104 @@ export interface TAdminOrder {
   shippingAddress?: {
     addressLine: string;
     city: string;
+  };
+}
+
+export interface TAdminOrderDetail {
+  id: string;
+  orderId: string;
+  totalAmount: number;
+  deliveryCharge: number;
+  status: OrderStatus;
+  paymentStatus: PaymentStatus;
+  stripePaymentIntentId?: string | null;
+  cancelReason?: string | null;
+  createdAt: string;
+  updatedAt: string;
+  customer?: {
+    id: string;
+    fullName: string;
+    email: string;
+    phoneNumber?: string | null;
+    profileImage?: string | null;
+    city?: string | null;
+    address?: string | null;
+    region?: string | null;
+  };
+  shippingAddress?: {
+    id: string;
+    addressLine: string;
+    city: string;
+    postCode: string;
+    instruction?: string | null;
+  };
+  deliveries?: {
+    id: string;
+    status: string;
+    latitude?: number | null;
+    longitude?: number | null;
+    createdAt: string;
+    updatedAt: string;
+    driver?: {
+      id: string;
+      fullName: string;
+      email: string;
+      phoneNumber?: string | null;
+      profileImage?: string | null;
+      driverProfile?: {
+        vehicleType: string;
+        registrationNumber: string;
+        drivingLicenseUrl?: string;
+        isAvailable: boolean;
+      };
+    };
+  }[];
+  items: {
+    id: string;
+    productName: string;
+    sellingUnit: string;
+    quantity: number;
+    unitPrice: number;
+    subtotal: number;
+    status: string;
+    cancelReason?: string | null;
+    isReviewed: boolean;
+    createdAt: string;
+    product?: {
+      id: string;
+      name: string;
+      imageUrls: string[];
+      description?: string;
+      category?: {
+        name: string;
+      };
+      producer?: {
+        id: string;
+        fullName: string;
+        email: string;
+        phoneNumber?: string | null;
+        profileImage?: string | null;
+        producerProfile?: {
+          farmName?: string;
+          farmSize?: number;
+          producerType?: string;
+        };
+      };
+    };
+    producerEarning?: {
+      amount: number;
+      isTransferred: boolean;
+      paidAt?: string | null;
+    };
+    review?: {
+      rating: number;
+      comment: string;
+    };
+  }[];
+  driverEarning?: {
+    amount: number;
+    isTransferred: boolean;
+    paidAt?: string | null;
   };
 }
 
@@ -242,6 +455,14 @@ export const adminApi = baseApi.injectEndpoints({
       providesTags: ["Order"],
     }),
 
+    getOrderDetails: builder.query<TApiResponse<{ order: TAdminOrderDetail }>, string>({
+      query: (id) => ({
+        url: `/admin/order-details/${id}`,
+        method: "GET",
+      }),
+      providesTags: (result, error, id) => [{ type: "Order", id }],
+    }),
+
     assignDriver: builder.mutation<TApiResponse<null>, AssignDriverPayload>({
       query: (payload) => ({
         url: "/admin/assign-driver",
@@ -266,5 +487,6 @@ export const {
   useCreateCategoryMutation,
   useToggleCategoryStatusMutation,
   useGetAllOrdersQuery,
+  useGetOrderDetailsQuery,
   useAssignDriverMutation,
 } = adminApi;
