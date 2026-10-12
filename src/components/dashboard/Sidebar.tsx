@@ -131,13 +131,13 @@ export default function Sidebar({ mobileOpen = false, onMobileClose }: SidebarPr
       {/* Brand Header */}
       <div className="p-5 border-b border-slate-800 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-3 group">
-          <div className="bg-white px-2.5 py-1.5 rounded-lg shadow-sm flex items-center justify-center">
+          <div className="  shadow-sm flex items-center justify-center">
             <Image
               src={logoImg}
               alt="AgroConnect"
               width={120}
               height={32}
-              className="h-6 w-auto object-contain"
+              className="h-12 w-auto object-contain"
               priority
             />
           </div>

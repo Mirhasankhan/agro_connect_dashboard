@@ -50,44 +50,8 @@ export default function AdminOverviewDashboard() {
   const pendingDrivers = pendingDriversData?.data?.drivers || [];
 
   return (
-    <DashboardLayout>
-      {/* 1. Welcome Banner */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#041d0f] via-[#06331a] to-[#041d0f] p-6 sm:p-8 text-white shadow-lg border border-emerald-950">
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="space-y-2 max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 text-xs font-semibold">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              AgroConnect Operations Control
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-              Administrative Command Center
-            </h1>
-            <p className="text-emerald-100/80 text-xs sm:text-sm leading-relaxed">
-              Real-time platform throughput across Ivory Coast. Verify producer farms, inspect driver credentials, and assign deliveries.
-            </p>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-3">
-            <Link
-              href="/orders"
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-sm transition-all hover:shadow active:scale-95"
-            >
-              <ShoppingBag className="w-4 h-4" />
-              <span>Review Orders</span>
-            </Link>
-            <Link
-              href="/users/producers"
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/20 text-xs font-semibold backdrop-blur-md transition-all active:scale-95"
-            >
-              <UserCheck className="w-4 h-4 text-emerald-300" />
-              <span>Pending Approvals</span>
-            </Link>
-          </div>
-        </div>
-
-        {/* Ambient background glow */}
-        <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/4 w-96 h-96 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none" />
-      </div>
+    <DashboardLayout>    
+    
 
       {/* 2. Key Metrics Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">

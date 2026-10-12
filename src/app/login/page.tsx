@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Eye, EyeOff, Loader2, Mail, Lock, ShieldCheck, ArrowRight, Sprout, CheckCircle2 } from "lucide-react";
+import { Eye, EyeOff, Loader2, Mail, Lock, ArrowRight, Sprout } from "lucide-react";
 import { toast } from "react-toastify";
 import logoImg from "@/assets/logo.png";
 import loginpageBg from "@/assets/loginpage.avif";
@@ -96,26 +96,10 @@ export default function AdminLoginPage() {
           <div className="absolute inset-0 bg-gradient-to-t from-[#021308]/95 via-[#041d0f]/75 to-[#021308]/50" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(16,185,129,0.35)_0%,transparent_60%)]" />
         </div>
-
-        {/* Top Branding Pill */}
-        <div className="relative z-10 flex items-center justify-between">
-          <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white shadow-lg">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-xs font-semibold tracking-wider uppercase">
-              AgroConnect Admin HQ
-            </span>
-          </div>
-          <span className="text-xs font-medium text-emerald-200/80 bg-emerald-950/60 px-3 py-1.5 rounded-full border border-emerald-500/20">
-            v1.0 • Secure Portal
-          </span>
-        </div>
+   
 
         {/* Center / Bottom Content */}
-        <div className="relative z-10 space-y-6 max-w-xl my-auto pt-16">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 text-xs font-medium">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-            Verified Administrative Gateway
-          </div>
+        <div className="relative z-10 space-y-6 max-w-xl my-auto pt-16">        
 
           <h1 className="text-3xl xl:text-4xl 2xl:text-5xl font-bold text-white tracking-tight leading-tight">
             Connecting Harvests to Modern Markets with{" "}
@@ -128,22 +112,7 @@ export default function AdminLoginPage() {
             Centralized operations hub for managing agricultural producers, verified transport drivers,
             order dispatches, quality standards, and market categories across Ivory Coast.
           </p>
-
-          {/* Quick Stats Highlights */}
-          <div className="grid grid-cols-3 gap-3 pt-4">
-            <div className="p-3.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 text-white">
-              <div className="text-2xl font-bold text-emerald-300">100%</div>
-              <div className="text-xs text-emerald-100/70 font-medium mt-0.5">Direct Farm Origin</div>
-            </div>
-            <div className="p-3.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 text-white">
-              <div className="text-2xl font-bold text-emerald-300">Real-Time</div>
-              <div className="text-xs text-emerald-100/70 font-medium mt-0.5">Driver Dispatch</div>
-            </div>
-            <div className="p-3.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 text-white">
-              <div className="text-2xl font-bold text-emerald-300">Tier-1</div>
-              <div className="text-xs text-emerald-100/70 font-medium mt-0.5">Producer Verification</div>
-            </div>
-          </div>
+   
         </div>
 
         {/* Bottom Trust Footer */}
@@ -168,15 +137,11 @@ export default function AdminLoginPage() {
                 width={170}
                 height={50}
                 priority
-                className="h-10 w-auto object-contain mx-auto sm:mx-0"
+                className="h-24 w-auto object-contain mx-auto sm:mx-0"
               />
             </div>
 
-            <div>
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-xs font-semibold border border-emerald-200 mb-2">
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                Administrative Access Only
-              </div>
+            <div>            
               <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">
                 Sign in to Dashboard
               </h2>
@@ -198,8 +163,8 @@ export default function AdminLoginPage() {
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             {/* Email Field */}
             <div className="space-y-1.5">
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700">
-                Admin Email
+              <label className="block text-xs font-semibold tracking-wider text-slate-700">
+                Email Address
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
@@ -225,7 +190,7 @@ export default function AdminLoginPage() {
             {/* Password Field */}
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700">
+                <label className="block text-xs font-semibold tracking-wider text-slate-700">
                   Password
                 </label>
               </div>
@@ -258,11 +223,7 @@ export default function AdminLoginPage() {
               )}
             </div>
 
-            {/* Security Indicator */}
-            <div className="rounded-lg bg-slate-50 border border-slate-200 p-3 flex items-center gap-2.5 text-xs text-slate-600">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-              <span>Session protected with JWT authorization and role verification.</span>
-            </div>
+         
 
             {/* Submit Button */}
             <button
@@ -273,11 +234,11 @@ export default function AdminLoginPage() {
               {isLoading ? (
                 <>
                   <Loader2 className="w-4 h-4 animate-spin" />
-                  <span>Authenticating Admin...</span>
+                  <span>Authenticating...</span>
                 </>
               ) : (
                 <>
-                  <span>Sign In to Dashboard</span>
+                  <span>Sign In</span>
                   <ArrowRight className="w-4 h-4" />
                 </>
               )}
