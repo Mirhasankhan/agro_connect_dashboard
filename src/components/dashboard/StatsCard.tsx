@@ -34,7 +34,7 @@ export default function StatsCard({
     <div className="relative rounded-2xl bg-white p-5 border border-slate-200/90 shadow-sm hover:shadow-md transition-all duration-200 group">
       <div className="flex items-start justify-between">
         <div className="space-y-1">
-          <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+          <span className="text-xs font-semibold  tracking-wider text-slate-500">
             {title}
           </span>
           <div className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
@@ -50,9 +50,8 @@ export default function StatsCard({
       <div className=" border-slate-100 flex items-center justify-between text-xs">
         {change && (
           <div
-            className={`inline-flex items-center gap-1 font-semibold ${
-              isPositive ? "text-emerald-600" : "text-rose-600"
-            }`}
+            className={`inline-flex items-center gap-1 font-semibold ${isPositive ? "text-emerald-600" : "text-rose-600"
+              }`}
           >
             {isPositive ? (
               <TrendingUp className="w-3.5 h-3.5" />

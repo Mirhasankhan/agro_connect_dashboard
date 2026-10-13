@@ -209,7 +209,7 @@ export default function OrderDetailsPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-center justify-between">
             <div>
-              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+              <span className="text-[11px] font-bold  tracking-wider text-slate-400 block">
                 Total Order Amount
               </span>
               <span className="text-2xl font-bold text-emerald-700">
@@ -226,7 +226,7 @@ export default function OrderDetailsPage() {
 
           <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-center justify-between">
             <div>
-              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+              <span className="text-[11px] font-bold  tracking-wider text-slate-400 block">
                 Payment Verification
               </span>
               <span className="text-sm font-bold text-emerald-700 flex items-center gap-1 mt-1">
@@ -244,7 +244,7 @@ export default function OrderDetailsPage() {
 
           <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-center justify-between">
             <div>
-              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+              <span className="text-[11px] font-bold  tracking-wider text-slate-400 block">
                 Delivery Surcharge
               </span>
               <span className="text-2xl font-bold text-slate-900">
@@ -261,7 +261,7 @@ export default function OrderDetailsPage() {
 
           <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-center justify-between">
             <div>
-              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+              <span className="text-[11px] font-bold  tracking-wider text-slate-400 block">
                 Order Placement Date
               </span>
               <span className="text-sm font-bold text-slate-900 block mt-1">
@@ -313,7 +313,7 @@ export default function OrderDetailsPage() {
             </div>
 
             <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-100 text-xs space-y-1.5">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">
+              <span className="text-[10px] font-bold  tracking-wider text-slate-400 block mb-1">
                 Delivery Address on Record
               </span>
               <div className="flex items-start gap-2 text-slate-800">
@@ -376,7 +376,7 @@ export default function OrderDetailsPage() {
 
                 <div className="grid grid-cols-2 gap-3 text-xs">
                   <div className="p-3 rounded-xl bg-slate-50 border border-slate-100">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">
+                    <span className="text-[10px] font-bold  tracking-wider text-slate-400 block mb-0.5">
                       Vehicle Type
                     </span>
                     <span className="font-semibold text-slate-900">
@@ -384,7 +384,7 @@ export default function OrderDetailsPage() {
                     </span>
                   </div>
                   <div className="p-3 rounded-xl bg-slate-50 border border-slate-100">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">
+                    <span className="text-[10px] font-bold  tracking-wider text-slate-400 block mb-0.5">
                       Plate / Registration
                     </span>
                     <span className="font-semibold text-slate-900 font-mono">
@@ -441,7 +441,7 @@ export default function OrderDetailsPage() {
 
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 text-slate-600 border-b border-slate-200 font-semibold uppercase tracking-wider text-[11px]">
+              <thead className="bg-slate-50 text-slate-600 border-b border-slate-200 font-semibold  tracking-wider text-[11px]">
                 <tr>
                   <th className="py-3 px-4">Item Product</th>
                   <th className="py-3 px-4">Origin Farm / Producer</th>

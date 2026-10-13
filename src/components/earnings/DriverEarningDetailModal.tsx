@@ -64,7 +64,7 @@ export default function DriverEarningDetailModal({
           {/* Status & Amount Highlight */}
           <div className="p-4 rounded-2xl bg-sky-50/70 border border-sky-100 flex items-center justify-between">
             <div>
-              <span className="text-xs font-semibold text-sky-800 uppercase tracking-wider block">
+              <span className="text-xs font-semibold text-sky-800  tracking-wider block">
                 Delivery Route Fee
               </span>
               <span className="text-2xl font-black text-sky-955">
@@ -90,7 +90,7 @@ export default function DriverEarningDetailModal({
           {/* Driver Profile Section */}
           <div className="p-4 rounded-2xl border border-slate-200 bg-slate-50/50 space-y-3">
             <div className="flex items-center justify-between">
-              <div className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+              <div className="text-xs font-bold  tracking-wider text-slate-500 flex items-center gap-1.5">
                 <Truck className="w-3.5 h-3.5 text-sky-600" />
                 Fleet Driver Profile
               </div>
@@ -144,7 +144,7 @@ export default function DriverEarningDetailModal({
           {/* Dispatched Order Details */}
           <div className="p-4 rounded-2xl border border-slate-200 bg-white space-y-3">
             <div className="flex items-center justify-between">
-              <div className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+              <div className="text-xs font-bold  tracking-wider text-slate-500 flex items-center gap-1.5">
                 <ShoppingBag className="w-3.5 h-3.5 text-sky-600" />
                 Dispatched Shipment Order
               </div>
@@ -170,7 +170,7 @@ export default function DriverEarningDetailModal({
 
             {earning.order?.items && earning.order.items.length > 0 && (
               <div className="space-y-1.5 pt-1">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+                <span className="text-[11px] font-bold  tracking-wider text-slate-400 block">
                   Delivered Items ({earning.order.items.length})
                 </span>
                 <div className="divide-y divide-slate-100 max-h-36 overflow-y-auto rounded-xl border border-slate-100 bg-slate-50/50">
@@ -196,7 +196,7 @@ export default function DriverEarningDetailModal({
 
           {/* Ledger Timestamps */}
           <div className="p-4 rounded-2xl border border-slate-200 bg-slate-50/50 space-y-2 text-xs">
-            <div className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5 mb-2">
+            <div className="text-xs font-bold  tracking-wider text-slate-500 flex items-center gap-1.5 mb-2">
               <Calendar className="w-3.5 h-3.5 text-slate-400" />
               Settlement Timestamps
             </div>

@@ -332,7 +332,7 @@ export default function ProducerDetailsPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-center justify-between">
             <div>
-              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+              <span className="text-[11px] font-bold  tracking-wider text-slate-400 block">
                 Total Products Listed
               </span>
               <span className="text-2xl font-bold text-slate-900">{products.length}</span>
@@ -347,7 +347,7 @@ export default function ProducerDetailsPage() {
 
           <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-center justify-between">
             <div>
-              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+              <span className="text-[11px] font-bold  tracking-wider text-slate-400 block">
                 Total Units Sold
               </span>
               <span className="text-2xl font-bold text-slate-900">{totalSold}</span>
@@ -362,7 +362,7 @@ export default function ProducerDetailsPage() {
 
           <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-center justify-between">
             <div>
-              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+              <span className="text-[11px] font-bold  tracking-wider text-slate-400 block">
                 Total Earnings
               </span>
               <span className="text-2xl font-bold text-slate-900">
@@ -379,7 +379,7 @@ export default function ProducerDetailsPage() {
 
           <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-center justify-between">
             <div>
-              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+              <span className="text-[11px] font-bold  tracking-wider text-slate-400 block">
                 Transferred Payouts
               </span>
               <span className="text-2xl font-bold text-emerald-700">
@@ -399,11 +399,10 @@ export default function ProducerDetailsPage() {
         <div className="flex items-center gap-2 border-b border-slate-200 text-xs font-semibold">
           <button
             onClick={() => setActiveTab("overview")}
-            className={`pb-3 px-3 transition-colors relative flex items-center gap-2 ${
-              activeTab === "overview"
+            className={`pb-3 px-3 transition-colors relative flex items-center gap-2 ${activeTab === "overview"
                 ? "text-emerald-700 border-b-2 border-emerald-600 font-bold"
                 : "text-slate-500 hover:text-slate-900"
-            }`}
+              }`}
           >
             <ShieldCheck className="w-4 h-4" />
             <span>Farm Accreditation & Legal Docs</span>
@@ -411,11 +410,10 @@ export default function ProducerDetailsPage() {
 
           <button
             onClick={() => setActiveTab("products")}
-            className={`pb-3 px-3 transition-colors relative flex items-center gap-2 ${
-              activeTab === "products"
+            className={`pb-3 px-3 transition-colors relative flex items-center gap-2 ${activeTab === "products"
                 ? "text-emerald-700 border-b-2 border-emerald-600 font-bold"
                 : "text-slate-500 hover:text-slate-900"
-            }`}
+              }`}
           >
             <Package className="w-4 h-4" />
             <span>Products ({products.length})</span>
@@ -423,11 +421,10 @@ export default function ProducerDetailsPage() {
 
           <button
             onClick={() => setActiveTab("earnings")}
-            className={`pb-3 px-3 transition-colors relative flex items-center gap-2 ${
-              activeTab === "earnings"
+            className={`pb-3 px-3 transition-colors relative flex items-center gap-2 ${activeTab === "earnings"
                 ? "text-emerald-700 border-b-2 border-emerald-600 font-bold"
                 : "text-slate-500 hover:text-slate-900"
-            }`}
+              }`}
           >
             <DollarSign className="w-4 h-4" />
             <span>Earnings ({earnings.length})</span>
@@ -447,7 +444,7 @@ export default function ProducerDetailsPage() {
 
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-xs">
                   <div className="p-3 rounded-xl bg-slate-50 border border-slate-100">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">
+                    <span className="text-[10px] font-bold  tracking-wider text-slate-400 block mb-1">
                       Farm Name
                     </span>
                     <span className="font-semibold text-slate-900">
@@ -456,7 +453,7 @@ export default function ProducerDetailsPage() {
                   </div>
 
                   <div className="p-3 rounded-xl bg-slate-50 border border-slate-100">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">
+                    <span className="text-[10px] font-bold  tracking-wider text-slate-400 block mb-1">
                       Land Area / Size
                     </span>
                     <span className="font-semibold text-slate-900">
@@ -465,7 +462,7 @@ export default function ProducerDetailsPage() {
                   </div>
 
                   <div className="p-3 rounded-xl bg-slate-50 border border-slate-100">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">
+                    <span className="text-[10px] font-bold  tracking-wider text-slate-400 block mb-1">
                       Producer Type
                     </span>
                     <span className="font-semibold text-slate-900">
@@ -474,7 +471,7 @@ export default function ProducerDetailsPage() {
                   </div>
 
                   <div className="p-3 rounded-xl bg-slate-50 border border-slate-100">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">
+                    <span className="text-[10px] font-bold  tracking-wider text-slate-400 block mb-1">
                       Years of Experience
                     </span>
                     <span className="font-semibold text-slate-900">
@@ -483,7 +480,7 @@ export default function ProducerDetailsPage() {
                   </div>
 
                   <div className="p-3 rounded-xl bg-slate-50 border border-slate-100">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">
+                    <span className="text-[10px] font-bold  tracking-wider text-slate-400 block mb-1">
                       Farm Location / Region
                     </span>
                     <span className="font-semibold text-slate-900 truncate block">
@@ -492,7 +489,7 @@ export default function ProducerDetailsPage() {
                   </div>
 
                   <div className="p-3 rounded-xl bg-slate-50 border border-slate-100">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">
+                    <span className="text-[10px] font-bold  tracking-wider text-slate-400 block mb-1">
                       National ID / Identity
                     </span>
                     <span className="font-semibold text-slate-900 font-mono">
@@ -503,7 +500,7 @@ export default function ProducerDetailsPage() {
 
                 {profile?.bio && (
                   <div className="pt-2">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1.5">
+                    <span className="text-[10px] font-bold  tracking-wider text-slate-400 block mb-1.5">
                       Farm Background & Bio
                     </span>
                     <p className="text-xs text-slate-600 leading-relaxed p-3.5 rounded-xl bg-slate-50 border border-slate-100">
@@ -523,21 +520,21 @@ export default function ProducerDetailsPage() {
 
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-xs">
                     <div className="p-3 rounded-xl bg-slate-50 border border-slate-100">
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">
+                      <span className="text-[10px] font-bold  tracking-wider text-slate-400 block mb-1">
                         Corporate Name
                       </span>
                       <span className="font-semibold text-slate-900">{profile.companyName || "N/A"}</span>
                     </div>
 
                     <div className="p-3 rounded-xl bg-slate-50 border border-slate-100">
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">
+                      <span className="text-[10px] font-bold  tracking-wider text-slate-400 block mb-1">
                         RCCM Number
                       </span>
                       <span className="font-semibold text-slate-900 font-mono">{profile.rccmNo || "N/A"}</span>
                     </div>
 
                     <div className="p-3 rounded-xl bg-slate-50 border border-slate-100">
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">
+                      <span className="text-[10px] font-bold  tracking-wider text-slate-400 block mb-1">
                         SIREN / Tax ID
                       </span>
                       <span className="font-semibold text-slate-900 font-mono">
@@ -573,7 +570,7 @@ export default function ProducerDetailsPage() {
                   {/* Additional certificateUrls */}
                   {profile?.certificateUrls && profile.certificateUrls.length > 0 && (
                     <div className="pt-2 border-t border-slate-100 space-y-2">
-                      <span className="text-[11px] font-bold text-slate-400 block uppercase tracking-wider">
+                      <span className="text-[11px] font-bold text-slate-400 block  tracking-wider">
                         Additional Certificates ({profile.certificateUrls.length})
                       </span>
                       {profile.certificateUrls.map((certUrl, index) =>
@@ -666,7 +663,7 @@ export default function ProducerDetailsPage() {
                         {/* Bulk Pricing Tiers */}
                         {product.pricingTiers && product.pricingTiers.length > 0 && (
                           <div className="pt-2 border-t border-slate-100">
-                            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">
+                            <span className="text-[10px] font-bold  tracking-wider text-slate-400 block mb-1">
                               Wholesale Tiers
                             </span>
                             <div className="flex flex-wrap gap-1.5">
@@ -685,7 +682,7 @@ export default function ProducerDetailsPage() {
                         {/* Recent Reviews Sample */}
                         {product.reviews && product.reviews.length > 0 && (
                           <div className="pt-2 border-t border-slate-100">
-                            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">
+                            <span className="text-[10px] font-bold  tracking-wider text-slate-400 block mb-1">
                               Recent Customer Feedback
                             </span>
                             <div className="space-y-1.5">
@@ -748,7 +745,7 @@ export default function ProducerDetailsPage() {
               ) : (
                 <div className="overflow-x-auto">
                   <table className="w-full text-left text-xs">
-                    <thead className="bg-slate-50 text-slate-600 border-b border-slate-200 font-semibold uppercase tracking-wider text-[11px]">
+                    <thead className="bg-slate-50 text-slate-600 border-b border-slate-200 font-semibold  tracking-wider text-[11px]">
                       <tr>
                         <th className="py-3 px-4">Date</th>
                         <th className="py-3 px-4">Item Product</th>

@@ -127,13 +127,13 @@ export default function AssignDriverModal({
         <form onSubmit={handleAssign} className="p-6 space-y-5 text-xs text-slate-700">
           {/* Order Details Brief */}
           <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
-            <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+            <div className="text-[11px] font-bold  tracking-wider text-slate-400">
               Dispatch Order Summary
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               <div>
-                <span className="text-slate-400 text-[10px] uppercase font-bold block">
+                <span className="text-slate-400 text-[10px]  font-bold block">
                   Buyer
                 </span>
                 <span className="font-semibold text-slate-900 truncate block">
@@ -141,7 +141,7 @@ export default function AssignDriverModal({
                 </span>
               </div>
               <div>
-                <span className="text-slate-400 text-[10px] uppercase font-bold block">
+                <span className="text-slate-400 text-[10px]  font-bold block">
                   Total Amount
                 </span>
                 <span className="font-bold text-emerald-700">
@@ -149,7 +149,7 @@ export default function AssignDriverModal({
                 </span>
               </div>
               <div>
-                <span className="text-slate-400 text-[10px] uppercase font-bold block">
+                <span className="text-slate-400 text-[10px]  font-bold block">
                   Item Count
                 </span>
                 <span className="font-semibold text-slate-900">

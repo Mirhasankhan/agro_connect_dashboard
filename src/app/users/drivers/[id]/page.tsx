@@ -333,7 +333,7 @@ export default function DriverDetailsPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-center justify-between">
             <div>
-              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+              <span className="text-[11px] font-bold  tracking-wider text-slate-400 block">
                 Total Deliveries
               </span>
               <span className="text-2xl font-bold text-slate-900">{deliveries.length}</span>
@@ -348,7 +348,7 @@ export default function DriverDetailsPage() {
 
           <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-center justify-between">
             <div>
-              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+              <span className="text-[11px] font-bold  tracking-wider text-slate-400 block">
                 Active Trips
               </span>
               <span className="text-2xl font-bold text-emerald-700">{activeDeliveries}</span>
@@ -363,7 +363,7 @@ export default function DriverDetailsPage() {
 
           <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-center justify-between">
             <div>
-              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+              <span className="text-[11px] font-bold  tracking-wider text-slate-400 block">
                 Delivery Earnings
               </span>
               <span className="text-2xl font-bold text-slate-900">
@@ -380,7 +380,7 @@ export default function DriverDetailsPage() {
 
           <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-center justify-between">
             <div>
-              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+              <span className="text-[11px] font-bold  tracking-wider text-slate-400 block">
                 Transferred Payouts
               </span>
               <span className="text-2xl font-bold text-emerald-700">
@@ -400,11 +400,10 @@ export default function DriverDetailsPage() {
         <div className="flex items-center gap-2 border-b border-slate-200 text-xs font-semibold">
           <button
             onClick={() => setActiveTab("fleet")}
-            className={`pb-3 px-3 transition-colors relative flex items-center gap-2 ${
-              activeTab === "fleet"
+            className={`pb-3 px-3 transition-colors relative flex items-center gap-2 ${activeTab === "fleet"
                 ? "text-sky-700 border-b-2 border-sky-600 font-bold"
                 : "text-slate-500 hover:text-slate-900"
-            }`}
+              }`}
           >
             <ShieldCheck className="w-4 h-4" />
             <span>Vehicle Specifications & Credentials</span>
@@ -412,11 +411,10 @@ export default function DriverDetailsPage() {
 
           <button
             onClick={() => setActiveTab("deliveries")}
-            className={`pb-3 px-3 transition-colors relative flex items-center gap-2 ${
-              activeTab === "deliveries"
+            className={`pb-3 px-3 transition-colors relative flex items-center gap-2 ${activeTab === "deliveries"
                 ? "text-sky-700 border-b-2 border-sky-600 font-bold"
                 : "text-slate-500 hover:text-slate-900"
-            }`}
+              }`}
           >
             <Package className="w-4 h-4" />
             <span>Assigned Deliveries ({deliveries.length})</span>
@@ -424,11 +422,10 @@ export default function DriverDetailsPage() {
 
           <button
             onClick={() => setActiveTab("earnings")}
-            className={`pb-3 px-3 transition-colors relative flex items-center gap-2 ${
-              activeTab === "earnings"
+            className={`pb-3 px-3 transition-colors relative flex items-center gap-2 ${activeTab === "earnings"
                 ? "text-sky-700 border-b-2 border-sky-600 font-bold"
                 : "text-slate-500 hover:text-slate-900"
-            }`}
+              }`}
           >
             <DollarSign className="w-4 h-4" />
             <span>Driver Payout Ledger ({earnings.length})</span>
@@ -447,7 +444,7 @@ export default function DriverDetailsPage() {
 
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-xs">
                   <div className="p-3 rounded-xl bg-slate-50 border border-slate-100">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">
+                    <span className="text-[10px] font-bold  tracking-wider text-slate-400 block mb-1">
                       Vehicle Type
                     </span>
                     <span className="font-semibold text-slate-900">
@@ -456,7 +453,7 @@ export default function DriverDetailsPage() {
                   </div>
 
                   <div className="p-3 rounded-xl bg-slate-50 border border-slate-100">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">
+                    <span className="text-[10px] font-bold  tracking-wider text-slate-400 block mb-1">
                       Registration / Plate
                     </span>
                     <span className="font-semibold text-slate-900 font-mono">
@@ -465,7 +462,7 @@ export default function DriverDetailsPage() {
                   </div>
 
                   <div className="p-3 rounded-xl bg-slate-50 border border-slate-100">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">
+                    <span className="text-[10px] font-bold  tracking-wider text-slate-400 block mb-1">
                       Driver License No.
                     </span>
                     <span className="font-semibold text-slate-900 font-mono">
@@ -474,7 +471,7 @@ export default function DriverDetailsPage() {
                   </div>
 
                   <div className="p-3 rounded-xl bg-slate-50 border border-slate-100">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">
+                    <span className="text-[10px] font-bold  tracking-wider text-slate-400 block mb-1">
                       Operating Region
                     </span>
                     <span className="font-semibold text-slate-900 truncate block">
@@ -483,7 +480,7 @@ export default function DriverDetailsPage() {
                   </div>
 
                   <div className="p-3 rounded-xl bg-slate-50 border border-slate-100">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">
+                    <span className="text-[10px] font-bold  tracking-wider text-slate-400 block mb-1">
                       Account Status
                     </span>
                     <span className="font-semibold text-slate-900">
@@ -492,7 +489,7 @@ export default function DriverDetailsPage() {
                   </div>
 
                   <div className="p-3 rounded-xl bg-slate-50 border border-slate-100">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">
+                    <span className="text-[10px] font-bold  tracking-wider text-slate-400 block mb-1">
                       Dispatch Availability
                     </span>
                     <span className="font-semibold text-slate-900">
@@ -526,7 +523,7 @@ export default function DriverDetailsPage() {
                   {/* Additional licenseUrls */}
                   {profile?.licenseUrls && profile.licenseUrls.length > 0 && (
                     <div className="pt-2 border-t border-slate-100 space-y-2">
-                      <span className="text-[11px] font-bold text-slate-400 block uppercase tracking-wider">
+                      <span className="text-[11px] font-bold text-slate-400 block  tracking-wider">
                         Additional Permits ({profile.licenseUrls.length})
                       </span>
                       {profile.licenseUrls.map((licenseUrl, index) =>
@@ -610,7 +607,7 @@ export default function DriverDetailsPage() {
                     {/* Cargo manifest items in this delivery */}
                     {delivery.order?.items && delivery.order.items.length > 0 && (
                       <div className="bg-slate-50/80 p-3.5 rounded-xl text-xs space-y-2">
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
+                        <span className="text-[10px] font-bold  tracking-wider text-slate-400 block">
                           Cargo Items in Delivery ({delivery.order.items.length})
                         </span>
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
@@ -669,7 +666,7 @@ export default function DriverDetailsPage() {
               ) : (
                 <div className="overflow-x-auto">
                   <table className="w-full text-left text-xs">
-                    <thead className="bg-slate-50 text-slate-600 border-b border-slate-200 font-semibold uppercase tracking-wider text-[11px]">
+                    <thead className="bg-slate-50 text-slate-600 border-b border-slate-200 font-semibold  tracking-wider text-[11px]">
                       <tr>
                         <th className="py-3 px-4">Date</th>
                         <th className="py-3 px-4">Order Reference</th>

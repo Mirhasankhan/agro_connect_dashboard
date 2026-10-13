@@ -160,19 +160,19 @@ export default function AnalyticsPage() {
 
             <div className="grid grid-cols-3 gap-4 text-xs pt-2">
               <div className="p-3 rounded-xl bg-slate-50 border border-slate-100">
-                <span className="text-slate-400 block text-[10px] uppercase font-bold">
+                <span className="text-slate-400 block text-[10px]  font-bold">
                   Peak Month
                 </span>
                 <span className="font-bold text-slate-900">October (৳5.1M)</span>
               </div>
               <div className="p-3 rounded-xl bg-slate-50 border border-slate-100">
-                <span className="text-slate-400 block text-[10px] uppercase font-bold">
+                <span className="text-slate-400 block text-[10px]  font-bold">
                   Avg Monthly GMV
                 </span>
                 <span className="font-bold text-slate-900">৳3.5M</span>
               </div>
               <div className="p-3 rounded-xl bg-slate-50 border border-slate-100">
-                <span className="text-slate-400 block text-[10px] uppercase font-bold">
+                <span className="text-slate-400 block text-[10px]  font-bold">
                   Stripe Payment Success
                 </span>
                 <span className="font-bold text-emerald-700">99.8%</span>
@@ -229,7 +229,7 @@ export default function AnalyticsPage() {
                   </span>
                 </div>
                 <div className="text-xs text-slate-500">{flow.orders} dispatched</div>
-                <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                <div className="text-[10px] font-bold  tracking-wider text-slate-400">
                   Node Role: {flow.status}
                 </div>
               </div>

@@ -13,7 +13,7 @@ import {
   Truck,
   Clock,
   CheckCircle2,
-  Search,  
+  Search,
   ChevronLeft,
   ChevronRight,
   Eye,
@@ -70,7 +70,7 @@ export default function DriverEarningsPage() {
       <div className="space-y-6">
         {/* Header Bar */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>       
+          <div>
             <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
               Driver Earnings & Payouts
             </h1>
@@ -78,13 +78,13 @@ export default function DriverEarningsPage() {
               Delivery fees, completed dispatch compensations, and automated account settlements for certified logistics drivers.
             </p>
           </div>
-     
+
         </div>
 
         {/* Metrics Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-sm space-y-2">
-            <div className="flex items-center justify-between text-xs font-semibold text-slate-400 uppercase tracking-wider">
+            <div className="flex items-center justify-between text-xs font-semibold text-slate-400  tracking-wider">
               <span>Gross Delivery Fees</span>
               <Truck className="w-4 h-4 text-sky-600" />
             </div>
@@ -99,7 +99,7 @@ export default function DriverEarningsPage() {
           </div>
 
           <div className="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-sm space-y-2">
-            <div className="flex items-center justify-between text-xs font-semibold text-slate-400 uppercase tracking-wider">
+            <div className="flex items-center justify-between text-xs font-semibold text-slate-400  tracking-wider">
               <span>Settled Transfers</span>
               <CheckCircle2 className="w-4 h-4 text-emerald-600" />
             </div>
@@ -113,7 +113,7 @@ export default function DriverEarningsPage() {
           </div>
 
           <div className="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-sm space-y-2">
-            <div className="flex items-center justify-between text-xs font-semibold text-slate-400 uppercase tracking-wider">
+            <div className="flex items-center justify-between text-xs font-semibold text-slate-400  tracking-wider">
               <span>Pending Transfers</span>
               <Clock className="w-4 h-4 text-amber-500" />
             </div>
@@ -127,7 +127,7 @@ export default function DriverEarningsPage() {
           </div>
 
           <div className="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-sm space-y-2">
-            <div className="flex items-center justify-between text-xs font-semibold text-slate-400 uppercase tracking-wider">
+            <div className="flex items-center justify-between text-xs font-semibold text-slate-400  tracking-wider">
               <span>Active Fleet Drivers</span>
               <Wallet className="w-4 h-4 text-indigo-600" />
             </div>
@@ -175,11 +175,10 @@ export default function DriverEarningsPage() {
                     setStatusFilter("ALL");
                     setPage(1);
                   }}
-                  className={`px-3 py-1 rounded-lg font-bold transition-all ${
-                    statusFilter === "ALL"
+                  className={`px-3 py-1 rounded-lg font-bold transition-all ${statusFilter === "ALL"
                       ? "bg-white text-slate-900 shadow-sm"
                       : "text-slate-600 hover:text-slate-900"
-                  }`}
+                    }`}
                 >
                   All
                 </button>
@@ -188,11 +187,10 @@ export default function DriverEarningsPage() {
                     setStatusFilter("true");
                     setPage(1);
                   }}
-                  className={`px-3 py-1 rounded-lg font-bold transition-all flex items-center gap-1 ${
-                    statusFilter === "true"
+                  className={`px-3 py-1 rounded-lg font-bold transition-all flex items-center gap-1 ${statusFilter === "true"
                       ? "bg-white text-emerald-700 shadow-sm"
                       : "text-slate-600 hover:text-emerald-700"
-                  }`}
+                    }`}
                 >
                   <CheckCircle2 className="w-3 h-3 text-emerald-600" />
                   <span>Settled</span>
@@ -202,11 +200,10 @@ export default function DriverEarningsPage() {
                     setStatusFilter("false");
                     setPage(1);
                   }}
-                  className={`px-3 py-1 rounded-lg font-bold transition-all flex items-center gap-1 ${
-                    statusFilter === "false"
+                  className={`px-3 py-1 rounded-lg font-bold transition-all flex items-center gap-1 ${statusFilter === "false"
                       ? "bg-white text-amber-700 shadow-sm"
                       : "text-slate-600 hover:text-amber-700"
-                  }`}
+                    }`}
                 >
                   <Clock className="w-3 h-3 text-amber-600" />
                   <span>Pending</span>
@@ -244,7 +241,7 @@ export default function DriverEarningsPage() {
         <div className="rounded-2xl bg-white border border-slate-200/90 shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50/80 text-slate-600 border-b border-slate-200 font-semibold uppercase tracking-wider text-[11px]">
+              <thead className="bg-slate-50/80 text-slate-600 border-b border-slate-200 font-semibold  tracking-wider text-[11px]">
                 <tr>
                   <th className="py-3.5 px-4">Date & Time</th>
                   <th className="py-3.5 px-4">Driver Profile</th>

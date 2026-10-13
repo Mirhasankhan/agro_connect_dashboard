@@ -61,7 +61,7 @@ export default function ProductsCatalogPage() {
       <div className="space-y-6">
         {/* Header Bar */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>          
+          <div>
             <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
               Product Catalog
             </h1>
@@ -156,7 +156,7 @@ export default function ProductsCatalogPage() {
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="bg-slate-50 text-slate-600 border-b border-slate-200 font-semibold uppercase tracking-wider text-[11px]">
+                <thead className="bg-slate-50 text-slate-600 border-b border-slate-200 font-semibold  tracking-wider text-[11px]">
                   <tr>
                     <th className="py-3.5 px-4">Produce</th>
                     <th className="py-3.5 px-4">Farm / Producer</th>
@@ -220,11 +220,10 @@ export default function ProductsCatalogPage() {
                         {/* Stock */}
                         <td className="py-3.5 px-4">
                           <span
-                            className={`font-semibold ${
-                              (prod.availableQuantity || 0) > 10
+                            className={`font-semibold ${(prod.availableQuantity || 0) > 10
                                 ? "text-emerald-700"
                                 : "text-amber-600"
-                            }`}
+                              }`}
                           >
                             {(prod.availableQuantity || 0).toLocaleString()} {prod.sellingUnit}
                           </span>
@@ -329,7 +328,7 @@ export default function ProductsCatalogPage() {
                   {/* Image Gallery */}
                   {detailedProduct.imageUrls && detailedProduct.imageUrls.length > 0 && (
                     <div className="space-y-2">
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
+                      <span className="text-[10px] font-bold  tracking-wider text-slate-400 block">
                         Product Photography
                       </span>
                       <div className="grid grid-cols-3 gap-3">
@@ -352,7 +351,7 @@ export default function ProductsCatalogPage() {
                   {/* Pricing & Stock Details */}
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-4 rounded-xl bg-slate-50 border border-slate-200">
                     <div>
-                      <span className="text-[10px] font-bold uppercase text-slate-400 block">
+                      <span className="text-[10px] font-bold  text-slate-400 block">
                         Base Price
                       </span>
                       <span className="font-bold text-emerald-700 text-sm">
@@ -360,7 +359,7 @@ export default function ProductsCatalogPage() {
                       </span>
                     </div>
                     <div>
-                      <span className="text-[10px] font-bold uppercase text-slate-400 block">
+                      <span className="text-[10px] font-bold  text-slate-400 block">
                         Selling Unit
                       </span>
                       <span className="font-semibold text-slate-800">
@@ -368,7 +367,7 @@ export default function ProductsCatalogPage() {
                       </span>
                     </div>
                     <div>
-                      <span className="text-[10px] font-bold uppercase text-slate-400 block">
+                      <span className="text-[10px] font-bold  text-slate-400 block">
                         Stock Available
                       </span>
                       <span className="font-semibold text-slate-800">
@@ -376,7 +375,7 @@ export default function ProductsCatalogPage() {
                       </span>
                     </div>
                     <div>
-                      <span className="text-[10px] font-bold uppercase text-slate-400 block">
+                      <span className="text-[10px] font-bold  text-slate-400 block">
                         Quantity Sold
                       </span>
                       <span className="font-semibold text-slate-800">
@@ -387,7 +386,7 @@ export default function ProductsCatalogPage() {
 
                   {/* Description */}
                   <div className="space-y-1.5">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
+                    <span className="text-[10px] font-bold  tracking-wider text-slate-400 block">
                       Description & Agricultural Notes
                     </span>
                     <p className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 leading-relaxed text-slate-700">
@@ -398,7 +397,7 @@ export default function ProductsCatalogPage() {
                   {/* Pricing Tiers if available */}
                   {detailedProduct.pricingTiers && detailedProduct.pricingTiers.length > 0 && (
                     <div className="space-y-2">
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+                      <span className="text-[10px] font-bold  tracking-wider text-slate-400 flex items-center gap-1.5">
                         <Tag className="w-3.5 h-3.5 text-emerald-600" />
                         <span>Bulk Pricing Tiers</span>
                       </span>

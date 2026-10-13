@@ -34,8 +34,8 @@ export default function UserDetailsModal({
     userType === "producer"
       ? user.producerProfile
       : userType === "driver"
-      ? user.driverProfile
-      : null;
+        ? user.driverProfile
+        : null;
 
   const verificationStatus = profile?.verificationStatus || "Pending";
 
@@ -126,25 +126,25 @@ export default function UserDetailsModal({
           {/* General Information Grid */}
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 p-4 rounded-xl bg-slate-50 border border-slate-200/80">
             <div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">
+              <span className="text-[10px] font-bold  tracking-wider text-slate-400 block mb-0.5">
                 Full Name
               </span>
               <span className="font-semibold text-slate-900">{user.fullName}</span>
             </div>
             <div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">
+              <span className="text-[10px] font-bold  tracking-wider text-slate-400 block mb-0.5">
                 Email
               </span>
               <span className="font-medium text-slate-800 truncate block">{user.email}</span>
             </div>
             <div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">
+              <span className="text-[10px] font-bold  tracking-wider text-slate-400 block mb-0.5">
                 Phone
               </span>
               <span className="font-medium text-slate-800">{user.phoneNumber || "Not listed"}</span>
             </div>
             <div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">
+              <span className="text-[10px] font-bold  tracking-wider text-slate-400 block mb-0.5">
                 City / Region
               </span>
               <span className="font-medium text-slate-800">
@@ -152,13 +152,13 @@ export default function UserDetailsModal({
               </span>
             </div>
             <div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">
+              <span className="text-[10px] font-bold  tracking-wider text-slate-400 block mb-0.5">
                 Address
               </span>
               <span className="font-medium text-slate-800 truncate block">{user.address || "N/A"}</span>
             </div>
             <div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">
+              <span className="text-[10px] font-bold  tracking-wider text-slate-400 block mb-0.5">
                 Account ID
               </span>
               <span className="font-mono text-slate-500 text-[11px] truncate block">{user.id}</span>
@@ -168,7 +168,7 @@ export default function UserDetailsModal({
           {/* Rejection Reason Notice if any */}
           {profile?.rejectionReason && (
             <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 space-y-1">
-              <span className="font-bold text-[11px] uppercase tracking-wide block">
+              <span className="font-bold text-[11px]  tracking-wide block">
                 Previous Rejection Reason
               </span>
               <p>{profile.rejectionReason}</p>
@@ -178,41 +178,41 @@ export default function UserDetailsModal({
           {/* Producer-Specific Details */}
           {userType === "producer" && profile && (
             <div className="space-y-4">
-              <div className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+              <div className="text-xs font-bold  tracking-wider text-slate-500 flex items-center gap-1.5">
                 <Sprout className="w-4 h-4 text-emerald-600" />
                 <span>Agricultural Farm Information</span>
               </div>
 
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 p-4 rounded-xl bg-emerald-50/50 border border-emerald-100">
                 <div>
-                  <span className="text-[10px] font-bold uppercase text-slate-400 block">Farm Name</span>
+                  <span className="text-[10px] font-bold  text-slate-400 block">Farm Name</span>
                   <span className="font-semibold text-slate-900">{profile.farmName || "N/A"}</span>
                 </div>
                 <div>
-                  <span className="text-[10px] font-bold uppercase text-slate-400 block">Producer Type</span>
+                  <span className="text-[10px] font-bold  text-slate-400 block">Producer Type</span>
                   <span className="font-semibold text-slate-900">{profile.producerType || "Private"}</span>
                 </div>
                 <div>
-                  <span className="text-[10px] font-bold uppercase text-slate-400 block">Farm Size</span>
+                  <span className="text-[10px] font-bold  text-slate-400 block">Farm Size</span>
                   <span className="font-semibold text-slate-900">{profile.farmSize ? `${profile.farmSize} Hectares` : "N/A"}</span>
                 </div>
                 <div>
-                  <span className="text-[10px] font-bold uppercase text-slate-400 block">Farm Location</span>
+                  <span className="text-[10px] font-bold  text-slate-400 block">Farm Location</span>
                   <span className="font-semibold text-slate-900">{profile.farmLocation || "N/A"}</span>
                 </div>
                 <div>
-                  <span className="text-[10px] font-bold uppercase text-slate-400 block">Company Name</span>
+                  <span className="text-[10px] font-bold  text-slate-400 block">Company Name</span>
                   <span className="font-semibold text-slate-900">{profile.companyName || "N/A"}</span>
                 </div>
                 <div>
-                  <span className="text-[10px] font-bold uppercase text-slate-400 block">RCCM / SIREN</span>
+                  <span className="text-[10px] font-bold  text-slate-400 block">RCCM / SIREN</span>
                   <span className="font-semibold text-slate-900">{profile.rccmNo || profile.sirenNo || "N/A"}</span>
                 </div>
               </div>
 
               {/* Uploaded Verification Certificates */}
               <div className="space-y-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-slate-500 block">
+                <span className="text-xs font-bold  tracking-wider text-slate-500 block">
                   Uploaded Certificates & Verification Documents
                 </span>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -229,22 +229,22 @@ export default function UserDetailsModal({
           {/* Driver-Specific Details */}
           {userType === "driver" && profile && (
             <div className="space-y-4">
-              <div className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+              <div className="text-xs font-bold  tracking-wider text-slate-500 flex items-center gap-1.5">
                 <Truck className="w-4 h-4 text-sky-600" />
                 <span>Vehicle Fleet & Logistics Credentials</span>
               </div>
 
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 p-4 rounded-xl bg-sky-50/50 border border-sky-100">
                 <div>
-                  <span className="text-[10px] font-bold uppercase text-slate-400 block">Vehicle Type</span>
+                  <span className="text-[10px] font-bold  text-slate-400 block">Vehicle Type</span>
                   <span className="font-bold text-sky-900">{profile.vehicleType || "Fleet"}</span>
                 </div>
                 <div>
-                  <span className="text-[10px] font-bold uppercase text-slate-400 block">Registration Number</span>
+                  <span className="text-[10px] font-bold  text-slate-400 block">Registration Number</span>
                   <span className="font-bold font-mono text-slate-900">{profile.registrationNumber || "N/A"}</span>
                 </div>
                 <div>
-                  <span className="text-[10px] font-bold uppercase text-slate-400 block">Dispatch Availability</span>
+                  <span className="text-[10px] font-bold  text-slate-400 block">Dispatch Availability</span>
                   <span className={`font-semibold ${profile.isAvailable ? "text-emerald-600" : "text-slate-500"}`}>
                     {profile.isAvailable ? "Available for Dispatch" : "Offline / On Route"}
                   </span>
@@ -253,7 +253,7 @@ export default function UserDetailsModal({
 
               {/* Driver Licenses & Credentials */}
               <div className="space-y-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-slate-500 block">
+                <span className="text-xs font-bold  tracking-wider text-slate-500 block">
                   Driver Licenses & Clearance Documents
                 </span>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -270,7 +270,7 @@ export default function UserDetailsModal({
           {/* Buyer Details */}
           {userType === "buyer" && (
             <div className="space-y-3">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-500 block">
+              <span className="text-xs font-bold  tracking-wider text-slate-500 block">
                 Buyer Purchasing Activity
               </span>
               <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">

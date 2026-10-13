@@ -160,7 +160,7 @@ export default function ReportsManagementPage() {
         <div className="rounded-2xl bg-white border border-slate-200/90 shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 text-slate-600 border-b border-slate-200 font-semibold uppercase tracking-wider text-[11px]">
+              <thead className="bg-slate-50 text-slate-600 border-b border-slate-200 font-semibold  tracking-wider text-[11px]">
                 <tr>
                   <th className="py-3.5 px-4">Dispute ID</th>
                   <th className="py-3.5 px-4">Buyer Customer</th>
@@ -269,7 +269,7 @@ export default function ReportsManagementPage() {
 
             <div className="space-y-3 text-xs">
               <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
-                <span className="text-[10px] font-bold uppercase text-slate-400 block">
+                <span className="text-[10px] font-bold  text-slate-400 block">
                   Reported Product
                 </span>
                 <div className="font-bold text-slate-900 text-sm">
@@ -281,7 +281,7 @@ export default function ReportsManagementPage() {
               </div>
 
               <div className="space-y-1">
-                <span className="text-[10px] font-bold uppercase text-slate-400 block">
+                <span className="text-[10px] font-bold  text-slate-400 block">
                   Customer Statement & Quality Complaint
                 </span>
                 <p className="p-3 rounded-xl bg-rose-50/50 border border-rose-100 text-rose-900 leading-relaxed">

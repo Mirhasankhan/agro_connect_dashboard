@@ -103,7 +103,7 @@ export default function OrdersManagementPage() {
       <div className="space-y-6">
         {/* Header Bar */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>        
+          <div>
             <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
               Orders & Delivery Dispatch
             </h1>
@@ -128,7 +128,7 @@ export default function OrdersManagementPage() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div className="p-4 rounded-xl bg-white border border-slate-200 shadow-sm flex items-center justify-between">
             <div>
-              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+              <span className="text-[11px] font-bold  tracking-wider text-slate-400 block">
                 Total Orders Logged
               </span>
               <span className="text-xl font-bold text-slate-900">
@@ -142,7 +142,7 @@ export default function OrdersManagementPage() {
 
           <div className="p-4 rounded-xl bg-white border border-slate-200 shadow-sm flex items-center justify-between">
             <div>
-              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+              <span className="text-[11px] font-bold  tracking-wider text-slate-400 block">
                 Payment Verification
               </span>
               <span className="text-sm font-bold text-emerald-700 flex items-center gap-1">
@@ -157,7 +157,7 @@ export default function OrdersManagementPage() {
 
           <div className="p-4 rounded-xl bg-white border border-slate-200 shadow-sm flex items-center justify-between">
             <div>
-              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+              <span className="text-[11px] font-bold  tracking-wider text-slate-400 block">
                 Page Volume Sample
               </span>
               <span className="text-xl font-bold text-slate-900">
@@ -225,7 +225,7 @@ export default function OrdersManagementPage() {
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="bg-slate-50 text-slate-600 border-b border-slate-200 font-semibold uppercase tracking-wider text-[11px]">
+                <thead className="bg-slate-50 text-slate-600 border-b border-slate-200 font-semibold  tracking-wider text-[11px]">
                   <tr>
                     <th className="py-3.5 px-4">Order ID</th>
                     <th className="py-3.5 px-4">Buyer Customer</th>

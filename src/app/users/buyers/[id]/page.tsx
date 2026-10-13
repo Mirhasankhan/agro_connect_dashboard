@@ -214,7 +214,7 @@ export default function BuyerDetailsPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-center justify-between">
             <div>
-              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+              <span className="text-[11px] font-bold  tracking-wider text-slate-400 block">
                 Total Orders Placed
               </span>
               <span className="text-2xl font-bold text-slate-900">{orders.length}</span>
@@ -229,7 +229,7 @@ export default function BuyerDetailsPage() {
 
           <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-center justify-between">
             <div>
-              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+              <span className="text-[11px] font-bold  tracking-wider text-slate-400 block">
                 Lifetime Value (LTV)
               </span>
               <span className="text-2xl font-bold text-slate-900">
@@ -246,7 +246,7 @@ export default function BuyerDetailsPage() {
 
           <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-center justify-between">
             <div>
-              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+              <span className="text-[11px] font-bold  tracking-wider text-slate-400 block">
                 Average Basket
               </span>
               <span className="text-2xl font-bold text-slate-900">
@@ -261,7 +261,7 @@ export default function BuyerDetailsPage() {
 
           <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-center justify-between">
             <div>
-              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+              <span className="text-[11px] font-bold  tracking-wider text-slate-400 block">
                 Saved Delivery Addresses
               </span>
               <span className="text-2xl font-bold text-slate-900">{addresses.length}</span>
@@ -279,11 +279,10 @@ export default function BuyerDetailsPage() {
         <div className="flex items-center gap-2 border-b border-slate-200 text-xs font-semibold">
           <button
             onClick={() => setActiveTab("orders")}
-            className={`pb-3 px-3 transition-colors relative flex items-center gap-2 ${
-              activeTab === "orders"
+            className={`pb-3 px-3 transition-colors relative flex items-center gap-2 ${activeTab === "orders"
                 ? "text-emerald-700 border-b-2 border-emerald-600 font-bold"
                 : "text-slate-500 hover:text-slate-900"
-            }`}
+              }`}
           >
             <ShoppingBag className="w-4 h-4" />
             <span>Order History ({orders.length})</span>
@@ -291,11 +290,10 @@ export default function BuyerDetailsPage() {
 
           <button
             onClick={() => setActiveTab("addresses")}
-            className={`pb-3 px-3 transition-colors relative flex items-center gap-2 ${
-              activeTab === "addresses"
+            className={`pb-3 px-3 transition-colors relative flex items-center gap-2 ${activeTab === "addresses"
                 ? "text-emerald-700 border-b-2 border-emerald-600 font-bold"
                 : "text-slate-500 hover:text-slate-900"
-            }`}
+              }`}
           >
             <MapPin className="w-4 h-4" />
             <span>Shipping Addresses ({addresses.length})</span>
@@ -323,7 +321,7 @@ export default function BuyerDetailsPage() {
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-slate-50 text-slate-600 border-b border-slate-200 font-semibold uppercase tracking-wider text-[11px]">
+                  <thead className="bg-slate-50 text-slate-600 border-b border-slate-200 font-semibold  tracking-wider text-[11px]">
                     <tr>
                       <th className="py-3 px-4">Order ID</th>
                       <th className="py-3 px-4">Order Status</th>
@@ -409,7 +407,7 @@ export default function BuyerDetailsPage() {
                       <div className="p-2 rounded-xl bg-emerald-50 text-emerald-600">
                         <MapPin className="w-4 h-4" />
                       </div>
-                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                      <span className="text-[10px] font-bold text-slate-400  tracking-wider">
                         Address #{idx + 1}
                       </span>
                     </div>
@@ -426,7 +424,7 @@ export default function BuyerDetailsPage() {
 
                     {addr.instruction && (
                       <div className="pt-2 border-t border-slate-100">
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">
+                        <span className="text-[10px] font-bold  tracking-wider text-slate-400 block mb-0.5">
                           Delivery Instructions
                         </span>
                         <p className="text-xs text-slate-500 italic">&ldquo;{addr.instruction}&rdquo;</p>

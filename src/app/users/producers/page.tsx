@@ -16,7 +16,7 @@ import {
   XCircle,
   Clock,
   Eye,
-  Check, 
+  Check,
   Sprout,
   Building,
   RefreshCw,
@@ -73,7 +73,7 @@ export default function ProducerManagementPage() {
       <div className="space-y-6">
         {/* Header Bar */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>           
+          <div>
             <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
               Producer Management
             </h1>
@@ -162,7 +162,7 @@ export default function ProducerManagementPage() {
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="bg-slate-50 text-slate-600 border-b border-slate-200 font-semibold uppercase tracking-wider text-[11px]">
+                <thead className="bg-slate-50 text-slate-600 border-b border-slate-200 font-semibold  tracking-wider text-[11px]">
                   <tr>
                     <th className="py-3.5 px-4">Producer</th>
                     <th className="py-3.5 px-4">Farm & Location</th>
@@ -273,7 +273,7 @@ export default function ProducerManagementPage() {
                                   className="p-1.5 rounded-lg text-emerald-600 hover:bg-emerald-50 transition-colors"
                                 >
                                   <Check className="w-4 h-4" />
-                                </button>                             
+                                </button>
                               </>
                             )}
                           </div>

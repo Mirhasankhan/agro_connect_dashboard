@@ -142,7 +142,7 @@ export default function Sidebar({ mobileOpen = false, onMobileClose }: SidebarPr
             />
           </div>
           <div>
-            <span className="block text-xs font-semibold tracking-wider uppercase text-emerald-400">
+            <span className="block text-xs font-semibold tracking-wider  text-emerald-400">
               Admin Portal
             </span>
             <span className="block text-[11px] text-slate-400 font-medium">Control Center</span>
@@ -162,7 +162,7 @@ export default function Sidebar({ mobileOpen = false, onMobileClose }: SidebarPr
       {/* Navigation Links */}
       <div className="flex-1 overflow-y-auto px-3.5 py-4 space-y-1 scrollbar-thin scrollbar-thumb-slate-800 scrollbar-track-transparent">
         {/* Section Label */}
-        <div className="px-3 pb-2 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+        <div className="px-3 pb-2 text-[10px] font-bold  tracking-wider text-slate-400">
           Main Menu
         </div>
 
@@ -170,11 +170,10 @@ export default function Sidebar({ mobileOpen = false, onMobileClose }: SidebarPr
         <Link
           href="/"
           onClick={onMobileClose}
-          className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all ${
-            isRouteActive("/")
+          className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all ${isRouteActive("/")
               ? "bg-emerald-600 text-white shadow-md shadow-emerald-950 font-semibold"
               : "text-slate-300 hover:bg-slate-800/80 hover:text-white"
-          }`}
+            }`}
         >
           <LayoutDashboard className={`w-4 h-4 ${isRouteActive("/") ? "text-white" : "text-slate-400"}`} />
           <span>Dashboard</span>
@@ -185,11 +184,10 @@ export default function Sidebar({ mobileOpen = false, onMobileClose }: SidebarPr
           <button
             type="button"
             onClick={() => setUserMgmtOpen(!userMgmtOpen)}
-            className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all ${
-              isUserMgmtActive
+            className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all ${isUserMgmtActive
                 ? "bg-slate-800/90 text-emerald-400 font-semibold"
                 : "text-slate-300 hover:bg-slate-800/80 hover:text-white"
-            }`}
+              }`}
           >
             <div className="flex items-center gap-3">
               <Users className={`w-4 h-4 ${isUserMgmtActive ? "text-emerald-400" : "text-slate-400"}`} />
@@ -213,11 +211,10 @@ export default function Sidebar({ mobileOpen = false, onMobileClose }: SidebarPr
                     key={subLink.href}
                     href={subLink.href}
                     onClick={onMobileClose}
-                    className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
-                      active
+                    className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium transition-colors ${active
                         ? "bg-emerald-600/90 text-white font-semibold"
                         : "text-slate-400 hover:text-slate-100 hover:bg-slate-800/60"
-                    }`}
+                      }`}
                   >
                     <SubIcon className={`w-3.5 h-3.5 ${active ? "text-white" : "text-slate-400"}`} />
                     <span>{subLink.name}</span>
@@ -229,7 +226,7 @@ export default function Sidebar({ mobileOpen = false, onMobileClose }: SidebarPr
         </div>
 
         {/* Section Label */}
-        <div className="px-3 pt-4 pb-2 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+        <div className="px-3 pt-4 pb-2 text-[10px] font-bold  tracking-wider text-slate-400">
           Operations & Commerce
         </div>
 
@@ -242,11 +239,10 @@ export default function Sidebar({ mobileOpen = false, onMobileClose }: SidebarPr
               key={link.href}
               href={link.href}
               onClick={onMobileClose}
-              className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all ${
-                active
+              className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all ${active
                   ? "bg-emerald-600 text-white shadow-md shadow-emerald-950 font-semibold"
                   : "text-slate-300 hover:bg-slate-800/80 hover:text-white"
-              }`}
+                }`}
             >
               <Icon className={`w-4 h-4 ${active ? "text-white" : "text-slate-400"}`} />
               <span>{link.name}</span>

@@ -65,7 +65,7 @@ export default function ProducerEarningDetailModal({
           {/* Status & Amount Highlight */}
           <div className="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-100 flex items-center justify-between">
             <div>
-              <span className="text-xs font-semibold text-emerald-800 uppercase tracking-wider block">
+              <span className="text-xs font-semibold text-emerald-800  tracking-wider block">
                 Producer Payout
               </span>
               <span className="text-2xl font-black text-emerald-950">
@@ -91,7 +91,7 @@ export default function ProducerEarningDetailModal({
           {/* Producer Profile Section */}
           <div className="p-4 rounded-2xl border border-slate-200 bg-slate-50/50 space-y-3">
             <div className="flex items-center justify-between">
-              <div className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+              <div className="text-xs font-bold  tracking-wider text-slate-500 flex items-center gap-1.5">
                 <Sprout className="w-3.5 h-3.5 text-emerald-600" />
                 Producer Information
               </div>
@@ -137,7 +137,7 @@ export default function ProducerEarningDetailModal({
 
           {/* Produce Item Section */}
           <div className="p-4 rounded-2xl border border-slate-200 bg-white space-y-3">
-            <div className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+            <div className="text-xs font-bold  tracking-wider text-slate-500 flex items-center gap-1.5">
               <Package className="w-3.5 h-3.5 text-emerald-600" />
               Order Item Fulfilled
             </div>
@@ -169,7 +169,7 @@ export default function ProducerEarningDetailModal({
 
           {/* Transfer Timeline & Dates */}
           <div className="p-4 rounded-2xl border border-slate-200 bg-slate-50/50 space-y-2 text-xs">
-            <div className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5 mb-2">
+            <div className="text-xs font-bold  tracking-wider text-slate-500 flex items-center gap-1.5 mb-2">
               <Calendar className="w-3.5 h-3.5 text-slate-400" />
               Ledger Timestamps
             </div>
