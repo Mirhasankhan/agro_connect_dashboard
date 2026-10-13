@@ -23,6 +23,7 @@ import {
   ExternalLink,
   Sprout,
 } from "lucide-react";
+import { formatCurrency } from "@/utils/formatters";
 import { format } from "date-fns";
 
 export default function OrderDetailsPage() {
@@ -212,10 +213,10 @@ export default function OrderDetailsPage() {
                 Total Order Amount
               </span>
               <span className="text-2xl font-bold text-emerald-700">
-                {(order.totalAmount || 0).toLocaleString()} <span className="text-sm font-normal text-slate-500">XOF</span>
+                {formatCurrency(order.totalAmount || 0)}
               </span>
               <span className="text-[11px] text-slate-500 block mt-0.5">
-                Items: {itemsSubtotal.toLocaleString()} XOF
+                Items: {formatCurrency(itemsSubtotal)}
               </span>
             </div>
             <div className="p-3 rounded-xl bg-emerald-50 text-emerald-600">
@@ -247,7 +248,7 @@ export default function OrderDetailsPage() {
                 Delivery Surcharge
               </span>
               <span className="text-2xl font-bold text-slate-900">
-                {deliveryFee.toLocaleString()} <span className="text-sm font-normal text-slate-500">XOF</span>
+                {formatCurrency(deliveryFee)}
               </span>
               <span className="text-[11px] text-slate-500 block mt-0.5">
                 Dispatched to carrier driver
@@ -503,7 +504,7 @@ export default function OrderDetailsPage() {
 
                     {/* Unit Price */}
                     <td className="py-3.5 px-4 text-slate-700 font-medium">
-                      {(item.unitPrice || 0).toLocaleString()} XOF{" "}
+                      {formatCurrency(item.unitPrice || 0)}{" "}
                       <span className="text-[10px] text-slate-400">/ {item.sellingUnit}</span>
                     </td>
 
@@ -514,7 +515,7 @@ export default function OrderDetailsPage() {
 
                     {/* Subtotal */}
                     <td className="py-3.5 px-4 font-bold text-emerald-700">
-                      {(item.subtotal || 0).toLocaleString()} XOF
+                      {formatCurrency(item.subtotal || 0)}
                     </td>
 
                     {/* Status */}
@@ -525,7 +526,7 @@ export default function OrderDetailsPage() {
                       {item.producerEarning ? (
                         <div>
                           <span className="font-bold text-slate-900">
-                            {item.producerEarning.amount.toLocaleString()} XOF
+                            {formatCurrency(item.producerEarning.amount)}
                           </span>
                           <span className="text-[10px] block text-emerald-600 font-medium">
                             {item.producerEarning.isTransferred ? "Transferred" : "Pending transfer"}
@@ -549,14 +550,14 @@ export default function OrderDetailsPage() {
             <div className="space-y-1 text-right">
               <div className="text-slate-500">
                 Items Subtotal:{" "}
-                <span className="font-semibold text-slate-800">{itemsSubtotal.toLocaleString()} XOF</span>
+                <span className="font-semibold text-slate-800">{formatCurrency(itemsSubtotal)}</span>
               </div>
               <div className="text-slate-500">
                 Logistics & Carrier Fee:{" "}
-                <span className="font-semibold text-slate-800">{deliveryFee.toLocaleString()} XOF</span>
+                <span className="font-semibold text-slate-800">{formatCurrency(deliveryFee)}</span>
               </div>
               <div className="text-sm font-bold text-emerald-800 pt-1 border-t border-slate-200">
-                Grand Total: {(order.totalAmount || 0).toLocaleString()} XOF
+                Grand Total: {formatCurrency(order.totalAmount || 0)}
               </div>
             </div>
           </div>

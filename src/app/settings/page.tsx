@@ -21,7 +21,7 @@ export default function SettingsPage() {
   const [platformName, setPlatformName] = useState("AgroConnect Côte d'Ivoire");
   const [baseDeliveryFee, setBaseDeliveryFee] = useState("5000");
   const [hubCity, setHubCity] = useState("Yamoussoukro");
-  const [currency, setCurrency] = useState("XOF");
+  const [currency, setCurrency] = useState("BDT");
 
   // Security password state
   const [oldPassword, setOldPassword] = useState("");
@@ -149,7 +149,7 @@ export default function SettingsPage() {
                   onChange={(e) => setCurrency(e.target.value)}
                   className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-xs text-slate-900 focus:outline-none focus:border-emerald-600"
                 >
-                  <option value="XOF">XOF - West African CFA Franc (CFA)</option>
+                  <option value="BDT">BDT - Bangladeshi Taka (৳)</option>
                   <option value="EUR">EUR - Euro</option>
                   <option value="USD">USD - US Dollar</option>
                 </select>
@@ -157,7 +157,7 @@ export default function SettingsPage() {
 
               <div className="space-y-1.5">
                 <label className="block text-xs font-semibold text-slate-700">
-                  Standard Delivery Surcharge (XOF)
+                  Standard Delivery Surcharge (BDT)
                 </label>
                 <input
                   type="number"

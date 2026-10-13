@@ -14,6 +14,7 @@ import {
   Mail,
 } from "lucide-react";
 import { format } from "date-fns";
+import { formatCurrency } from "@/utils/formatters";
 import { TAdminDriverEarning } from "@/redux/features/admin/adminApi";
 
 interface DriverEarningDetailModalProps {
@@ -66,9 +67,9 @@ export default function DriverEarningDetailModal({
               <span className="text-xs font-semibold text-sky-800 uppercase tracking-wider block">
                 Delivery Route Fee
               </span>
-              <span className="text-2xl font-black text-sky-950">
-                {(earning.amount || 0).toLocaleString()}{" "}
-                <span className="text-xs font-bold text-sky-700">XOF</span>
+              <span className="text-2xl font-black text-sky-955">
+                {formatCurrency(earning.amount || 0)}{" "}
+                <span className="text-xs font-bold text-sky-700">BDT</span>
               </span>
             </div>
             <div>
@@ -162,7 +163,7 @@ export default function DriverEarningDetailModal({
               <div className="flex items-center justify-between text-xs px-3 py-2 rounded-xl bg-slate-50 border border-slate-100">
                 <span className="text-slate-500 font-medium">Order Total Value</span>
                 <span className="text-slate-900 font-bold">
-                  {earning.order.totalAmount.toLocaleString()} XOF
+                  {formatCurrency(earning.order.totalAmount)}
                 </span>
               </div>
             )}
@@ -184,7 +185,7 @@ export default function DriverEarningDetailModal({
                         </span>
                       </div>
                       <span className="font-bold text-slate-700">
-                        {(item.subtotal || 0).toLocaleString()} XOF
+                        {formatCurrency(item.subtotal || 0)}
                       </span>
                     </div>
                   ))}

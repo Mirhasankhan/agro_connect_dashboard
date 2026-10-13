@@ -23,6 +23,7 @@ import {
   useGetAllCategoriesQuery,
 } from "@/redux/features/admin/adminApi";
 import { format } from "date-fns";
+import { formatCurrency } from "@/utils/formatters";
 
 export default function AdminOverviewDashboard() {
   // Fetch real metrics from backend
@@ -244,7 +245,7 @@ export default function AdminOverviewDashboard() {
                           {order.customer?.fullName || "Buyer"}
                         </td>
                         <td className="py-3 px-3 font-semibold text-slate-900">
-                          {(order.totalAmount || 0).toLocaleString()} XOF
+                          {formatCurrency(order.totalAmount || 0)}
                         </td>
                         <td className="py-3 px-3 text-slate-500">
                           {order.shippingAddress?.city || "Abidjan"}

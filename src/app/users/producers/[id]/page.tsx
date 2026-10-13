@@ -35,6 +35,7 @@ import {
   ShoppingBag,
 } from "lucide-react";
 import { format } from "date-fns";
+import { formatCurrency } from "@/utils/formatters";
 import { toast } from "react-toastify";
 
 export default function ProducerDetailsPage() {
@@ -365,7 +366,7 @@ export default function ProducerDetailsPage() {
                 Total Earnings
               </span>
               <span className="text-2xl font-bold text-slate-900">
-                {totalEarnings.toLocaleString()} <span className="text-sm font-normal text-slate-500">XOF</span>
+                {formatCurrency(totalEarnings)}
               </span>
               <span className="text-[11px] text-slate-500 block mt-0.5">
                 {earnings.length} payouts logged
@@ -382,10 +383,10 @@ export default function ProducerDetailsPage() {
                 Transferred Payouts
               </span>
               <span className="text-2xl font-bold text-emerald-700">
-                {transferredEarnings.toLocaleString()} <span className="text-sm font-normal text-slate-500">XOF</span>
+                {formatCurrency(transferredEarnings)}
               </span>
               <span className="text-[11px] text-amber-600 font-medium block mt-0.5">
-                {pendingEarnings > 0 ? `${pendingEarnings.toLocaleString()} XOF pending` : "All paid out"}
+                {pendingEarnings > 0 ? `${formatCurrency(pendingEarnings)} pending` : "All paid out"}
               </span>
             </div>
             <div className="p-3 rounded-xl bg-teal-50 text-teal-600">
@@ -634,7 +635,7 @@ export default function ProducerDetailsPage() {
                           </div>
                           <div className="text-right shrink-0">
                             <span className="text-sm font-bold text-emerald-700 block">
-                              {product.pricePerUnit?.toLocaleString()} XOF
+                              {formatCurrency(product.pricePerUnit || 0)}
                             </span>
                             <span className="text-[10px] text-slate-400">per {product.sellingUnit || "unit"}</span>
                           </div>
@@ -674,7 +675,7 @@ export default function ProducerDetailsPage() {
                                   key={idx}
                                   className="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-800 text-[10px] font-medium border border-emerald-100"
                                 >
-                                  {tier.quantity}+ units: {tier.pricePerUnit} XOF
+                                  {tier.quantity}+ units: {formatCurrency(tier.pricePerUnit || 0)}
                                 </span>
                               ))}
                             </div>
@@ -731,7 +732,7 @@ export default function ProducerDetailsPage() {
                 </div>
                 <div className="text-right">
                   <span className="text-xs font-bold text-emerald-700 block">
-                    Total: {totalEarnings.toLocaleString()} XOF
+                    Total: {formatCurrency(totalEarnings)}
                   </span>
                 </div>
               </div>
@@ -770,7 +771,7 @@ export default function ProducerDetailsPage() {
                             {earn.orderItem?.quantity || 1} {earn.orderItem?.sellingUnit || "units"}
                           </td>
                           <td className="py-3.5 px-4 font-bold text-emerald-700">
-                            {(earn.amount || 0).toLocaleString()} XOF
+                            {formatCurrency(earn.amount || 0)}
                           </td>
                           <td className="py-3.5 px-4">
                             {earn.isTransferred ? (

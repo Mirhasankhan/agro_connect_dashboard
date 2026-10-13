@@ -17,6 +17,7 @@ import {
   useAssignDriverMutation,
 } from "@/redux/features/admin/adminApi";
 import { toast } from "react-toastify";
+import { formatCurrency } from "@/utils/formatters";
 
 interface AssignDriverModalProps {
   isOpen: boolean;
@@ -144,7 +145,7 @@ export default function AssignDriverModal({
                   Total Amount
                 </span>
                 <span className="font-bold text-emerald-700">
-                  {(order.totalAmount || 0).toLocaleString()} XOF
+                  {formatCurrency(order.totalAmount || 0)}
                 </span>
               </div>
               <div>

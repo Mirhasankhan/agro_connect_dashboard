@@ -20,6 +20,7 @@ import {
   X,
   Tag,
 } from "lucide-react";
+import { formatCurrency } from "@/utils/formatters";
 
 export default function ProductsCatalogPage() {
   const [search, setSearch] = useState("");
@@ -211,7 +212,7 @@ export default function ProductsCatalogPage() {
                         {/* Price */}
                         <td className="py-3.5 px-4">
                           <span className="font-bold text-slate-900 text-sm">
-                            {(prod.pricePerUnit || 0).toLocaleString()} XOF
+                            {formatCurrency(prod.pricePerUnit || 0)}
                           </span>
                           <span className="text-slate-400 text-[11px]"> / {prod.sellingUnit}</span>
                         </td>
@@ -355,7 +356,7 @@ export default function ProductsCatalogPage() {
                         Base Price
                       </span>
                       <span className="font-bold text-emerald-700 text-sm">
-                        {(detailedProduct.pricePerUnit || 0).toLocaleString()} XOF
+                        {formatCurrency(detailedProduct.pricePerUnit || 0)}
                       </span>
                     </div>
                     <div>
@@ -416,7 +417,7 @@ export default function ProductsCatalogPage() {
                                   {tier.quantity}+ {detailedProduct.sellingUnit}
                                 </td>
                                 <td className="py-2.5 px-3 text-right font-bold text-emerald-700">
-                                  {(tier.pricePerUnit || 0).toLocaleString()} XOF
+                                  {formatCurrency(tier.pricePerUnit || 0)}
                                 </td>
                               </tr>
                             ))}

@@ -26,6 +26,7 @@ import {
   RotateCcw,
 } from "lucide-react";
 import { format } from "date-fns";
+import { formatCurrency } from "@/utils/formatters";
 
 export default function OrdersManagementPage() {
   const [search, setSearch] = useState("");
@@ -160,7 +161,7 @@ export default function OrdersManagementPage() {
                 Page Volume Sample
               </span>
               <span className="text-xl font-bold text-slate-900">
-                {totalVolume.toLocaleString()} XOF
+                {formatCurrency(totalVolume)}
               </span>
             </div>
             <div className="p-2.5 rounded-lg bg-sky-50 text-sky-600">
@@ -291,7 +292,7 @@ export default function OrdersManagementPage() {
 
                         {/* Amount */}
                         <td className="py-3.5 px-4 font-bold text-emerald-700">
-                          {(order.totalAmount || 0).toLocaleString()} XOF
+                          {formatCurrency(order.totalAmount || 0)}
                         </td>
 
                         {/* Status */}

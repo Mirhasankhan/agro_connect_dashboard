@@ -22,6 +22,7 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { format } from "date-fns";
+import { formatCurrency } from "@/utils/formatters";
 
 export default function BuyerDetailsPage() {
   const params = useParams();
@@ -232,7 +233,7 @@ export default function BuyerDetailsPage() {
                 Lifetime Value (LTV)
               </span>
               <span className="text-2xl font-bold text-slate-900">
-                {totalSpent.toLocaleString()} <span className="text-sm font-normal text-slate-500">XOF</span>
+                {formatCurrency(totalSpent)}
               </span>
               <span className="text-[11px] text-emerald-600 font-medium block mt-0.5">
                 100% pre-paid via Stripe
@@ -249,8 +250,7 @@ export default function BuyerDetailsPage() {
                 Average Basket
               </span>
               <span className="text-2xl font-bold text-slate-900">
-                {Math.round(avgOrderValue).toLocaleString()}{" "}
-                <span className="text-sm font-normal text-slate-500">XOF</span>
+                {formatCurrency(Math.round(avgOrderValue))}
               </span>
               <span className="text-[11px] text-slate-500 block mt-0.5">Per order basket size</span>
             </div>
@@ -367,7 +367,7 @@ export default function BuyerDetailsPage() {
                           )}
                         </td>
                         <td className="py-3.5 px-4 font-bold text-emerald-700">
-                          {(order.totalAmount || 0).toLocaleString()} XOF
+                          {formatCurrency(order.totalAmount || 0)}
                         </td>
                         <td className="py-3.5 px-4 text-slate-500 whitespace-nowrap">
                           {order.createdAt ? format(new Date(order.createdAt), "MMM dd, yyyy") : "N/A"}

@@ -15,6 +15,7 @@ import {
   Building,
 } from "lucide-react";
 import { format } from "date-fns";
+import { formatCurrency } from "@/utils/formatters";
 import { TAdminProducerEarning } from "@/redux/features/admin/adminApi";
 
 interface ProducerEarningDetailModalProps {
@@ -65,11 +66,11 @@ export default function ProducerEarningDetailModal({
           <div className="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-100 flex items-center justify-between">
             <div>
               <span className="text-xs font-semibold text-emerald-800 uppercase tracking-wider block">
-                Disbursement Amount
+                Producer Payout
               </span>
               <span className="text-2xl font-black text-emerald-950">
-                {(earning.amount || 0).toLocaleString()}{" "}
-                <span className="text-xs font-bold text-emerald-700">XOF</span>
+                {formatCurrency(earning.amount || 0)}{" "}
+                <span className="text-xs font-bold text-emerald-700">BDT</span>
               </span>
             </div>
             <div>
@@ -160,7 +161,7 @@ export default function ProducerEarningDetailModal({
               <div className="flex items-center justify-between text-xs px-3 py-2 rounded-xl bg-slate-50/80 border border-slate-100">
                 <span className="text-slate-500 font-medium">Item Subtotal Value</span>
                 <span className="text-slate-900 font-bold">
-                  {earning.orderItem.subtotal.toLocaleString()} XOF
+                  {formatCurrency(earning.orderItem.subtotal)}
                 </span>
               </div>
             )}

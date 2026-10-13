@@ -34,6 +34,7 @@ import {
   Navigation,
 } from "lucide-react";
 import { format } from "date-fns";
+import { formatCurrency } from "@/utils/formatters";
 import { toast } from "react-toastify";
 
 export default function DriverDetailsPage() {
@@ -366,7 +367,7 @@ export default function DriverDetailsPage() {
                 Delivery Earnings
               </span>
               <span className="text-2xl font-bold text-slate-900">
-                {totalEarnings.toLocaleString()} <span className="text-sm font-normal text-slate-500">XOF</span>
+                {formatCurrency(totalEarnings)}
               </span>
               <span className="text-[11px] text-slate-500 block mt-0.5">
                 From logistics charges
@@ -383,10 +384,10 @@ export default function DriverDetailsPage() {
                 Transferred Payouts
               </span>
               <span className="text-2xl font-bold text-emerald-700">
-                {transferredEarnings.toLocaleString()} <span className="text-sm font-normal text-slate-500">XOF</span>
+                {formatCurrency(transferredEarnings)}
               </span>
               <span className="text-[11px] text-amber-600 font-medium block mt-0.5">
-                {pendingEarnings > 0 ? `${pendingEarnings.toLocaleString()} XOF pending` : "All paid out"}
+                {pendingEarnings > 0 ? `${formatCurrency(pendingEarnings)} pending` : "All paid out"}
               </span>
             </div>
             <div className="p-3 rounded-xl bg-teal-50 text-teal-600">
@@ -601,7 +602,7 @@ export default function DriverDetailsPage() {
                           </span>
                         )}
                         <span className="font-bold text-slate-900 text-xs">
-                          {(delivery.order?.totalAmount || 0).toLocaleString()} XOF
+                          {formatCurrency(delivery.order?.totalAmount || 0)}
                         </span>
                       </div>
                     </div>
@@ -621,11 +622,11 @@ export default function DriverDetailsPage() {
                               <div>
                                 <span className="font-semibold text-slate-800 block">{item.productName}</span>
                                 <span className="text-[11px] text-slate-500">
-                                  {item.quantity} {item.sellingUnit} &times; {item.unitPrice} XOF
+                                  {item.quantity} {item.sellingUnit} &times; {formatCurrency(item.unitPrice || 0)}
                                 </span>
                               </div>
                               <span className="font-bold text-slate-900 text-xs">
-                                {item.subtotal?.toLocaleString()} XOF
+                                {formatCurrency(item.subtotal || 0)}
                               </span>
                             </div>
                           ))}
@@ -652,7 +653,7 @@ export default function DriverDetailsPage() {
                 </div>
                 <div className="text-right">
                   <span className="text-xs font-bold text-sky-700 block">
-                    Total: {totalEarnings.toLocaleString()} XOF
+                    Total: {formatCurrency(totalEarnings)}
                   </span>
                 </div>
               </div>
@@ -688,10 +689,10 @@ export default function DriverDetailsPage() {
                             {earn.order?.orderId ? `#${earn.order.orderId.slice(-8)}` : "Logistics dispatch"}
                           </td>
                           <td className="py-3.5 px-4 text-slate-600">
-                            {earn.order?.deliveryCharge ? `${earn.order.deliveryCharge.toLocaleString()} XOF` : "Standard"}
+                            {earn.order?.deliveryCharge ? formatCurrency(earn.order.deliveryCharge) : "Standard"}
                           </td>
                           <td className="py-3.5 px-4 font-bold text-sky-700">
-                            {(earn.amount || 0).toLocaleString()} XOF
+                            {formatCurrency(earn.amount || 0)}
                           </td>
                           <td className="py-3.5 px-4">
                             {earn.isTransferred ? (

@@ -17,11 +17,11 @@ import {
 
 export default function AnalyticsPage() {
   const categoryBreakdown = [
-    { name: "Tubers & Roots (Cassava, Yam)", percentage: 38, value: "14.2M XOF", color: "bg-emerald-500" },
-    { name: "Fresh Vegetables (Tomato, Okra, Peppers)", percentage: 26, value: "9.8M XOF", color: "bg-teal-500" },
-    { name: "Tree Crops (Plantain, Banana)", percentage: 18, value: "6.7M XOF", color: "bg-amber-500" },
-    { name: "Cash Harvests (Cocoa, Cashew)", percentage: 12, value: "4.5M XOF", color: "bg-orange-500" },
-    { name: "Cereals & Grains (Rice, Maize)", percentage: 6, value: "2.2M XOF", color: "bg-sky-500" },
+    { name: "Tubers & Roots (Cassava, Yam)", percentage: 38, value: "৳14.2M", color: "bg-emerald-500" },
+    { name: "Fresh Vegetables (Tomato, Okra, Peppers)", percentage: 26, value: "৳9.8M", color: "bg-teal-500" },
+    { name: "Tree Crops (Plantain, Banana)", percentage: 18, value: "৳6.7M", color: "bg-amber-500" },
+    { name: "Cash Harvests (Cocoa, Cashew)", percentage: 12, value: "৳4.5M", color: "bg-orange-500" },
+    { name: "Cereals & Grains (Rice, Maize)", percentage: 6, value: "৳2.2M", color: "bg-sky-500" },
   ];
 
   const regionalFlow = [
@@ -72,7 +72,7 @@ export default function AnalyticsPage() {
               <DollarSign className="w-4 h-4 text-emerald-600" />
             </div>
             <div className="text-2xl sm:text-3xl font-extrabold text-slate-900">
-              37.4M XOF
+              ৳37.4M
             </div>
             <div className="flex items-center gap-1 text-xs text-emerald-600 font-semibold">
               <TrendingUp className="w-3.5 h-3.5" />
@@ -130,7 +130,7 @@ export default function AnalyticsPage() {
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-base font-bold text-slate-900">
-                  Monthly Commerce Growth & Revenue (XOF)
+                  Monthly Commerce Growth & Revenue (BDT)
                 </h2>
                 <p className="text-xs text-slate-500">
                   Platform volume processed across registered hubs.
@@ -163,13 +163,13 @@ export default function AnalyticsPage() {
                 <span className="text-slate-400 block text-[10px] uppercase font-bold">
                   Peak Month
                 </span>
-                <span className="font-bold text-slate-900">October (5.1M XOF)</span>
+                <span className="font-bold text-slate-900">October (৳5.1M)</span>
               </div>
               <div className="p-3 rounded-xl bg-slate-50 border border-slate-100">
                 <span className="text-slate-400 block text-[10px] uppercase font-bold">
                   Avg Monthly GMV
                 </span>
-                <span className="font-bold text-slate-900">3.5M XOF</span>
+                <span className="font-bold text-slate-900">৳3.5M</span>
               </div>
               <div className="p-3 rounded-xl bg-slate-50 border border-slate-100">
                 <span className="text-slate-400 block text-[10px] uppercase font-bold">

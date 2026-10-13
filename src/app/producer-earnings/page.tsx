@@ -22,6 +22,7 @@ import {
   X,
 } from "lucide-react";
 import { format } from "date-fns";
+import { formatCurrency } from "@/utils/formatters";
 
 export default function ProducerEarningsPage() {
   const [search, setSearch] = useState("");
@@ -87,8 +88,8 @@ export default function ProducerEarningsPage() {
               <Coins className="w-4 h-4 text-emerald-600" />
             </div>
             <div className="text-2xl font-black text-slate-900 tracking-tight">
-              {totalVolume.toLocaleString()}{" "}
-              <span className="text-xs font-bold text-slate-400">XOF</span>
+              {formatCurrency(totalVolume)}{" "}
+              <span className="text-xs font-bold text-slate-400">BDT</span>
             </div>
             <div className="text-xs text-slate-500 flex items-center gap-1">
               <TrendingUp className="w-3.5 h-3.5 text-emerald-600" />
@@ -102,8 +103,8 @@ export default function ProducerEarningsPage() {
               <CheckCircle2 className="w-4 h-4 text-emerald-600" />
             </div>
             <div className="text-2xl font-black text-emerald-900 tracking-tight">
-              {settledVolume.toLocaleString()}{" "}
-              <span className="text-xs font-bold text-emerald-600">XOF</span>
+              {formatCurrency(settledVolume)}{" "}
+              <span className="text-xs font-bold text-emerald-600">BDT</span>
             </div>
             <div className="text-xs text-emerald-700">
               {settledEarnings.length} disbursements completed
@@ -116,8 +117,8 @@ export default function ProducerEarningsPage() {
               <Clock className="w-4 h-4 text-amber-500" />
             </div>
             <div className="text-2xl font-black text-amber-900 tracking-tight">
-              {pendingVolume.toLocaleString()}{" "}
-              <span className="text-xs font-bold text-amber-600">XOF</span>
+              {formatCurrency(pendingVolume)}{" "}
+              <span className="text-xs font-bold text-amber-600">BDT</span>
             </div>
             <div className="text-xs text-amber-700">
               {pendingEarnings.length} awaiting delivery sign-off
@@ -379,7 +380,7 @@ export default function ProducerEarningsPage() {
                         </div>
                         {earn.orderItem?.subtotal !== undefined && (
                           <div className="text-[11px] text-slate-400">
-                            Subtotal: {earn.orderItem.subtotal.toLocaleString()} XOF
+                            Subtotal: {formatCurrency(earn.orderItem.subtotal)}
                           </div>
                         )}
                       </td>
@@ -392,9 +393,8 @@ export default function ProducerEarningsPage() {
                       {/* Disbursed Amount */}
                       <td className="py-3.5 px-4 whitespace-nowrap">
                         <span className="font-black text-emerald-800 text-sm">
-                          {(earn.amount || 0).toLocaleString()}
-                        </span>{" "}
-                        <span className="text-[11px] font-bold text-emerald-600">XOF</span>
+                          {formatCurrency(earn.amount || 0)}
+                        </span>
                       </td>
 
                       {/* Settlement Status */}
