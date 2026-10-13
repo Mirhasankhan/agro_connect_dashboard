@@ -1,27 +1,57 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import {
   Settings,
-  Bell,
-  Save,
-  Loader2,
+  User,
   KeyRound,
-  Sliders,
+  Bell,
+  Camera,
+  Phone,
+  Mail,
+  Shield,
+  ShieldCheck,
+  CheckCircle2,
   AlertTriangle,
+  Loader2,
+  X,
+  Upload,
 } from "lucide-react";
-import { useChangePasswordMutation } from "@/redux/features/auth/authApi";
+import {
+  useChangePasswordMutation,
+  useProfileQuery,
+  useUpdateProfileMutation,
+} from "@/redux/features/auth/authApi";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { updateProfileData } from "@/redux/features/auth/authSlice";
 import { toast } from "react-toastify";
 
 export default function SettingsPage() {
-  const [activeTab, setActiveTab] = useState<"general" | "security" | "notifications">("general");
+  const dispatch = useAppDispatch();
+  const { user } = useAppSelector((state) => state.auth);
 
-  // General settings state
-  const [platformName, setPlatformName] = useState("AgroConnect Côte d'Ivoire");
-  const [baseDeliveryFee, setBaseDeliveryFee] = useState("5000");
-  const [hubCity, setHubCity] = useState("Yamoussoukro");
-  const [currency, setCurrency] = useState("BDT");
+  const [activeTab, setActiveTab] = useState<"profile" | "security" | "notifications">("profile");
+
+  // Fetch admin profile
+  const {
+    data: profileResponse,
+    refetch: refetchProfile,
+  } = useProfileQuery();
+
+  const [updateProfile, { isLoading: isUpdatingProfile }] = useUpdateProfileMutation();
+  const [changePassword, { isLoading: isChangingPassword }] = useChangePasswordMutation();
+
+  const serverProfile = profileResponse?.data || user;
+
+  // Profile Form State
+  const [fullName, setFullName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [profileError, setProfileError] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Security password state
   const [oldPassword, setOldPassword] = useState("");
@@ -29,8 +59,131 @@ export default function SettingsPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
 
-  const [changePassword, { isLoading: isChangingPassword }] = useChangePasswordMutation();
+  // Sync profile data from server or Redux store
+  useEffect(() => {
+    if (serverProfile) {
+      setFullName(serverProfile.fullName || "");
+      setPhoneNumber(serverProfile.phoneNumber || "");
+    }
+  }, [serverProfile]);
 
+  // Sync server profile to Redux when query resolves
+  useEffect(() => {
+    if (profileResponse?.data) {
+      dispatch(updateProfileData(profileResponse.data));
+    }
+  }, [profileResponse, dispatch]);
+
+  // Clean up object URLs on unmount
+  useEffect(() => {
+    return () => {
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl]);
+
+  // Handle local image file selection
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please upload a valid image file (PNG, JPG, WEBP, etc.)");
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("Image file size must be less than 5MB");
+      return;
+    }
+
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+    }
+
+    const objectUrl = URL.createObjectURL(file);
+    setSelectedFile(file);
+    setPreviewUrl(objectUrl);
+    setProfileError("");
+  };
+
+  const handleRemoveSelectedPhoto = () => {
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+    }
+    setSelectedFile(null);
+    setPreviewUrl(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
+  const handleResetProfileForm = () => {
+    handleRemoveSelectedPhoto();
+    setFullName(serverProfile?.fullName || "");
+    setPhoneNumber(serverProfile?.phoneNumber || "");
+    setProfileError("");
+  };
+
+  // Submit profile details
+  const handleProfileSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setProfileError("");
+
+    const trimmedName = fullName.trim();
+    if (!trimmedName) {
+      const msg = "Full name cannot be empty.";
+      setProfileError(msg);
+      toast.error(msg);
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("fullName", trimmedName);
+    formData.append("phoneNumber", phoneNumber.trim());
+
+    if (selectedFile) {
+      formData.append("profileImage", selectedFile);
+    }
+
+    try {
+      const res = await updateProfile(formData).unwrap();
+      const updatedUser = res?.data;
+
+      // Update Redux state immediately
+      dispatch(
+        updateProfileData({
+          fullName: trimmedName,
+          phoneNumber: phoneNumber.trim(),
+          ...(updatedUser?.profileImage
+            ? { profileImage: updatedUser.profileImage }
+            : {}),
+        }),
+      );
+
+      toast.success(res?.message || "Admin profile updated successfully!");
+
+      // Cleanup preview state
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+      setSelectedFile(null);
+      setPreviewUrl(null);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+
+      refetchProfile();
+    } catch (err: any) {
+      const msg =
+        err?.data?.message || err?.message || "Failed to update admin profile.";
+      setProfileError(msg);
+      toast.error(msg);
+    }
+  };
+
+  // Password submission
   const handlePasswordSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setPasswordError("");
@@ -52,16 +205,17 @@ export default function SettingsPage() {
       setNewPassword("");
       setConfirmPassword("");
     } catch (err: any) {
-      const msg = err?.data?.message || err?.message || "Failed to update password.";
+      const msg =
+        err?.data?.message || err?.message || "Failed to update password.";
       setPasswordError(msg);
       toast.error(msg);
     }
   };
 
-  const handleSaveGeneral = (e: React.FormEvent) => {
-    e.preventDefault();
-    toast.success("Platform logistics settings saved successfully.");
-  };
+  const activeAvatarSrc =
+    previewUrl ||
+    serverProfile?.profileImage ||
+    user?.profileImage;
 
   return (
     <DashboardLayout>
@@ -77,7 +231,7 @@ export default function SettingsPage() {
               Platform Settings
             </h1>
             <p className="text-xs text-slate-500">
-              System logistics fees, regional hub configurations, and admin security settings.
+              Manage your administrator identity, credentials, and notification preferences.
             </p>
           </div>
         </div>
@@ -85,18 +239,20 @@ export default function SettingsPage() {
         {/* Tab Navigation */}
         <div className="flex items-center gap-2 border-b border-slate-200 pb-2 text-xs font-bold">
           <button
-            onClick={() => setActiveTab("general")}
+            type="button"
+            onClick={() => setActiveTab("profile")}
             className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all ${
-              activeTab === "general"
+              activeTab === "profile"
                 ? "bg-emerald-600 text-white shadow-sm"
                 : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
             }`}
           >
-            <Sliders className="w-4 h-4" />
-            <span>Platform Logistics</span>
+            <User className="w-4 h-4" />
+            <span>Admin Profile</span>
           </button>
 
           <button
+            type="button"
             onClick={() => setActiveTab("security")}
             className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all ${
               activeTab === "security"
@@ -109,6 +265,7 @@ export default function SettingsPage() {
           </button>
 
           <button
+            type="button"
             onClick={() => setActiveTab("notifications")}
             className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all ${
               activeTab === "notifications"
@@ -121,77 +278,212 @@ export default function SettingsPage() {
           </button>
         </div>
 
-        {/* Tab 1: General Platform Logistics */}
-        {activeTab === "general" && (
-          <form onSubmit={handleSaveGeneral} className="rounded-2xl bg-white border border-slate-200/90 p-6 shadow-sm space-y-6 text-xs">
+        {/* Tab 1: Admin Profile */}
+        {activeTab === "profile" && (
+          <form
+            onSubmit={handleProfileSubmit}
+            className="rounded-2xl bg-white border border-slate-200/90 p-6 sm:p-8 shadow-sm space-y-8 text-xs max-w-2xl"
+          >
+            {/* Header info */}
             <div>
-              <h2 className="text-sm font-bold text-slate-900">Platform Logistics Configuration</h2>
-              <p className="text-xs text-slate-500">
-                Default transport parameters applied to new order calculation.
+              <div className="flex items-center gap-2">
+                <h2 className="text-sm font-bold text-slate-900">Admin Profile Details</h2>
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-semibold text-[10px] border border-emerald-200">
+                  <ShieldCheck className="w-3 h-3 text-emerald-600" />
+                  Verified Admin
+                </span>
+              </div>
+              <p className="text-xs text-slate-500 mt-1">
+                Update your administrative account avatar, display full name, and contact phone number.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="space-y-1.5">
-                <label className="block text-xs font-semibold text-slate-700">Platform Title</label>
-                <input
-                  type="text"
-                  value={platformName}
-                  onChange={(e) => setPlatformName(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs text-slate-900 focus:outline-none focus:border-emerald-600"
-                />
+            {profileError && (
+              <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4 shrink-0" />
+                <span>{profileError}</span>
               </div>
+            )}
 
-              <div className="space-y-1.5">
-                <label className="block text-xs font-semibold text-slate-700">Operating Currency</label>
-                <select
-                  value={currency}
-                  onChange={(e) => setCurrency(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-xs text-slate-900 focus:outline-none focus:border-emerald-600"
+            {/* Profile Avatar Upload Section */}
+            <div className="p-5 rounded-2xl bg-slate-50/80 border border-slate-200 flex flex-col sm:flex-row items-center gap-5">
+              <div className="relative group shrink-0">
+                <div className="w-24 h-24 rounded-full overflow-hidden bg-slate-900 ring-4 ring-emerald-500/20 shadow-md flex items-center justify-center">
+                  {activeAvatarSrc ? (
+                    <Image
+                      src={activeAvatarSrc}
+                      alt={fullName || "Admin Profile"}
+                      width={96}
+                      height={96}
+                      unoptimized
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <span className="text-2xl font-bold text-emerald-400">
+                      {(fullName || user?.fullName || "A").charAt(0).toUpperCase()}
+                    </span>
+                  )}
+                </div>
+
+                {/* Camera quick-action overlay */}
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="absolute bottom-0 right-0 p-2 rounded-full bg-emerald-600 text-white shadow-md hover:bg-emerald-700 hover:scale-105 active:scale-95 transition-all ring-2 ring-white"
+                  title="Upload new profile image"
                 >
-                  <option value="BDT">BDT - Bangladeshi Taka (৳)</option>
-                  <option value="EUR">EUR - Euro</option>
-                  <option value="USD">USD - US Dollar</option>
-                </select>
+                  <Camera className="w-4 h-4" />
+                </button>
               </div>
 
-              <div className="space-y-1.5">
-                <label className="block text-xs font-semibold text-slate-700">
-                  Standard Delivery Surcharge (BDT)
-                </label>
-                <input
-                  type="number"
-                  value={baseDeliveryFee}
-                  onChange={(e) => setBaseDeliveryFee(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs text-slate-900 focus:outline-none focus:border-emerald-600 font-mono"
-                />
-                <span className="text-[11px] text-slate-400">Default baseline fee per route.</span>
-              </div>
+              {/* Upload metadata and buttons */}
+              <div className="flex-1 text-center sm:text-left space-y-2">
+                <div>
+                  <h3 className="text-xs font-bold text-slate-900">Administrator Avatar</h3>
+                  <p className="text-[11px] text-slate-500 mt-0.5">
+                    Accepted formats: PNG, JPG, or WEBP. Max file size: 5MB.
+                  </p>
+                </div>
 
-              <div className="space-y-1.5">
-                <label className="block text-xs font-semibold text-slate-700">
-                  Central Agricultural Intake Hub
-                </label>
-                <select
-                  value={hubCity}
-                  onChange={(e) => setHubCity(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-xs text-slate-900 focus:outline-none focus:border-emerald-600"
-                >
-                  <option value="Yamoussoukro">Yamoussoukro Central Agricultural Terminal</option>
-                  <option value="Abidjan">Abidjan Autonomous Distribution Terminal</option>
-                  <option value="San-Pédro">San-Pédro Maritime Agro-Hub</option>
-                  <option value="Bouaké">Bouaké Valley Depot</option>
-                </select>
+                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 pt-1">
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/png, image/jpeg, image/jpg, image/webp"
+                    className="hidden"
+                    onChange={handleImageChange}
+                  />
+
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-white border border-slate-300 hover:border-emerald-600 hover:text-emerald-700 text-slate-700 font-semibold text-xs shadow-sm transition-all"
+                  >
+                    <Upload className="w-3.5 h-3.5" />
+                    <span>Choose Photo</span>
+                  </button>
+
+                  {selectedFile && (
+                    <button
+                      type="button"
+                      onClick={handleRemoveSelectedPhoto}
+                      className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-rose-50 text-rose-700 hover:bg-rose-100 font-semibold text-xs border border-rose-200 transition-colors"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                      <span>Discard Selection</span>
+                    </button>
+                  )}
+                </div>
+
+                {selectedFile && (
+                  <div className="text-[11px] text-emerald-700 flex items-center justify-center sm:justify-start gap-1 font-medium pt-1">
+                    <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
+                    <span>New photo chosen: &quot;{selectedFile.name}&quot; (Save to apply)</span>
+                  </div>
+                )}
               </div>
             </div>
 
-            <div className="pt-4 border-t border-slate-100 flex justify-end">
+            {/* Form Fields: Full Name, Phone Number, Email */}
+            <div className="space-y-4">
+              <div className="space-y-1.5">
+                <label className="block text-xs font-semibold text-slate-700">
+                  Full Name <span className="text-rose-500">*</span>
+                </label>
+                <div className="relative">
+                  <User className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  <input
+                    type="text"
+                    required
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                    placeholder="Enter your full name"
+                    className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 text-xs text-slate-900 focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 transition-all placeholder:text-slate-400"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="block text-xs font-semibold text-slate-700">
+                  Phone Number
+                </label>
+                <div className="relative">
+                  <Phone className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  <input
+                    type="tel"
+                    value={phoneNumber}
+                    onChange={(e) => setPhoneNumber(e.target.value)}
+                    placeholder="+880 1712-345678"
+                    className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 text-xs text-slate-900 focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 transition-all placeholder:text-slate-400"
+                  />
+                </div>
+                <p className="text-[11px] text-slate-400">
+                  Contact number for security alerts and emergency administrative dispatches.
+                </p>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="block text-xs font-semibold text-slate-700">
+                  Email Address
+                </label>
+                <div className="relative">
+                  <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  <input
+                    type="email"
+                    disabled
+                    readOnly
+                    value={serverProfile?.email || user?.email || ""}
+                    className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-100 text-xs text-slate-500 cursor-not-allowed select-none"
+                  />
+                </div>
+                <p className="text-[11px] text-slate-400">
+                  Primary account identifier. Cannot be edited directly.
+                </p>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="block text-xs font-semibold text-slate-700">
+                  Assigned Authority
+                </label>
+                <div className="flex items-center gap-2 p-3 rounded-xl bg-slate-50 border border-slate-200">
+                  <Shield className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <div className="flex-1">
+                    <span className="font-bold text-slate-800">Platform Administrator</span>
+                    <span className="text-slate-500 block text-[11px]">
+                      Full system access to logistics, verification, and commerce operations.
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Actions: Save & Reset */}
+            <div className="pt-4 border-t border-slate-100 flex items-center justify-end gap-3">
+              <button
+                type="button"
+                onClick={handleResetProfileForm}
+                disabled={isUpdatingProfile}
+                className="px-4 py-2.5 rounded-xl border border-slate-300 hover:bg-slate-100 text-slate-700 font-semibold text-xs transition-colors disabled:opacity-50"
+              >
+                Reset
+              </button>
+
               <button
                 type="submit"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-sm transition-all"
+                disabled={isUpdatingProfile}
+                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-sm transition-all disabled:opacity-50 active:scale-[0.99]"
               >
-                <Save className="w-4 h-4" />
-                <span>Save Logistics Config</span>
+                {isUpdatingProfile ? (
+                  <>
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    <span>Saving Changes...</span>
+                  </>
+                ) : (
+                  <>
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                    <span>Save Profile Changes</span>
+                  </>
+                )}
               </button>
             </div>
           </form>
@@ -199,7 +491,10 @@ export default function SettingsPage() {
 
         {/* Tab 2: Security & Password */}
         {activeTab === "security" && (
-          <form onSubmit={handlePasswordSubmit} className="rounded-2xl bg-white border border-slate-200/90 p-6 shadow-sm space-y-6 text-xs max-w-xl">
+          <form
+            onSubmit={handlePasswordSubmit}
+            className="rounded-2xl bg-white border border-slate-200/90 p-6 shadow-sm space-y-6 text-xs max-w-xl"
+          >
             <div>
               <h2 className="text-sm font-bold text-slate-900">Change Admin Password</h2>
               <p className="text-xs text-slate-500">

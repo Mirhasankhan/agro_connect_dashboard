@@ -255,9 +255,20 @@ export default function Sidebar({ mobileOpen = false, onMobileClose }: SidebarPr
       <div className="p-3.5 border-t border-slate-800 bg-slate-950/60">
         <div className="flex items-center justify-between gap-3 p-2 rounded-xl bg-slate-900/80 border border-slate-800">
           <div className="flex items-center gap-2.5 min-w-0">
-            <div className="w-8 h-8 rounded-full bg-emerald-700 text-white font-bold flex items-center justify-center text-xs shrink-0 ring-2 ring-emerald-500/30">
-              {user?.fullName?.charAt(0) || "A"}
-            </div>
+            {user?.profileImage ? (
+              <Image
+                src={user.profileImage}
+                alt={user.fullName || "Admin"}
+                width={32}
+                height={32}
+                unoptimized
+                className="w-8 h-8 rounded-full object-cover shrink-0 ring-2 ring-emerald-500/30"
+              />
+            ) : (
+              <div className="w-8 h-8 rounded-full bg-emerald-700 text-white font-bold flex items-center justify-center text-xs shrink-0 ring-2 ring-emerald-500/30">
+                {user?.fullName?.charAt(0) || "A"}
+              </div>
+            )}
             <div className="min-w-0">
               <div className="text-xs font-semibold text-white truncate">
                 {user?.fullName || "Administrator"}

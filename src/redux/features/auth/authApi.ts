@@ -52,7 +52,7 @@ const authApi = baseApi.injectEndpoints({
       providesTags: ["User"],
     }),
 
-    updateProfile: builder.mutation<TApiResponse<null>, FormData>({
+    updateProfile: builder.mutation<TApiResponse<TUser | null>, FormData>({
       query: (formData) => ({
         url: "/auth/update-profile",
         method: "PUT",
