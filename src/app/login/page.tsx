@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Eye, EyeOff, Loader2, Mail, Lock, ArrowRight, Sprout } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, ArrowRight, Sprout } from "lucide-react";
 import { toast } from "react-toastify";
 import logoImg from "@/assets/logo.png";
 import loginpageBg from "@/assets/loginpage.avif";
@@ -232,8 +232,7 @@ export default function AdminLoginPage() {
               className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm shadow-sm transition-all hover:shadow active:scale-[0.99] disabled:opacity-70 disabled:cursor-not-allowed"
             >
               {isLoading ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
+                <>          
                   <span>Authenticating...</span>
                 </>
               ) : (

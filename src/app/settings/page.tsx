@@ -11,8 +11,7 @@ import {
   Camera,
   Phone,
   Mail,
-  Shield,
-  ShieldCheck,
+  Shield,  
   CheckCircle2,
   AlertTriangle,
   Loader2,
@@ -287,11 +286,7 @@ export default function SettingsPage() {
             {/* Header info */}
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-sm font-bold text-slate-900">Admin Profile Details</h2>
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-semibold text-[10px] border border-emerald-200">
-                  <ShieldCheck className="w-3 h-3 text-emerald-600" />
-                  Verified Admin
-                </span>
+                <h2 className="text-sm font-bold text-slate-900">Admin Profile Details</h2>              
               </div>
               <p className="text-xs text-slate-500 mt-1">
                 Update your administrative account avatar, display full name, and contact phone number.
@@ -339,10 +334,7 @@ export default function SettingsPage() {
               {/* Upload metadata and buttons */}
               <div className="flex-1 text-center sm:text-left space-y-2">
                 <div>
-                  <h3 className="text-xs font-bold text-slate-900">Administrator Avatar</h3>
-                  <p className="text-[11px] text-slate-500 mt-0.5">
-                    Accepted formats: PNG, JPG, or WEBP. Max file size: 5MB.
-                  </p>
+                  <h3 className="text-xs font-bold text-slate-900">Administrator Avatar</h3>                 
                 </div>
 
                 <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 pt-1">
