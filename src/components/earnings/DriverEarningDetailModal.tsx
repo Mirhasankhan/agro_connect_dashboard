@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
 import {
   X,
@@ -14,6 +14,7 @@ import {
   Mail,
   ArrowUpRight,
   AlertTriangle,
+  RefreshCw,
 } from "lucide-react";
 import { format } from "date-fns";
 import { formatCurrency } from "@/utils/formatters";
@@ -22,7 +23,6 @@ import {
   useTransferDriverEarningMutation,
 } from "@/redux/features/admin/adminApi";
 import { toast } from "react-toastify";
-import TransferConfirmModal from "./TransferConfirmModal";
 
 interface DriverEarningDetailModalProps {
   isOpen: boolean;
@@ -35,7 +35,6 @@ export default function DriverEarningDetailModal({
   onClose,
   earning,
 }: DriverEarningDetailModalProps) {
-  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [transferDriverEarning, { isLoading: isTransferring }] =
     useTransferDriverEarningMutation();
 
@@ -54,13 +53,11 @@ export default function DriverEarningDetailModal({
     try {
       const res = await transferDriverEarning(earning.id).unwrap();
       toast.success(res.message || "Driver earning transferred successfully!");
-      setIsConfirmOpen(false);
       onClose();
     } catch (err: any) {
       toast.error(
         err?.data?.message || err?.message || "Failed to transfer driver earning."
       );
-      throw err;
     }
   };
 
@@ -159,7 +156,7 @@ export default function DriverEarningDetailModal({
               <div className="flex items-center justify-between">
                 <div className="text-xs font-bold tracking-wider text-slate-500 flex items-center gap-1.5">
                   <Truck className="w-3.5 h-3.5 text-sky-600" />
-                  Fleet Driver Profile
+                  Driver Profile
                 </div>
                 {earning.driver?.id && (
                   <Link
@@ -211,17 +208,8 @@ export default function DriverEarningDetailModal({
               <div className="flex items-center justify-between">
                 <div className="text-xs font-bold tracking-wider text-slate-500 flex items-center gap-1.5">
                   <ShoppingBag className="w-3.5 h-3.5 text-sky-600" />
-                  Associated Order Manifest
-                </div>
-                {earning.order?.orderId && (
-                  <Link
-                    href={`/orders/${earning.order.orderId}`}
-                    className="text-xs font-bold text-sky-700 hover:text-sky-800 flex items-center gap-1 hover:underline font-mono"
-                  >
-                    <span>Order #{earning.order.orderId}</span>
-                    <ExternalLink className="w-3 h-3" />
-                  </Link>
-                )}
+                  Associated Order
+                </div>                
               </div>
 
               {earning.order?.items && earning.order.items.length > 0 && (
@@ -280,57 +268,29 @@ export default function DriverEarningDetailModal({
                 </span>
               </div>
             </div>
-
-            {/* Logistics Note */}
-            <div className="flex items-start gap-2.5 p-3 rounded-xl bg-sky-50 border border-sky-200/70 text-sky-900 text-xs">
-              <ShieldCheck className="w-4 h-4 text-sky-600 shrink-0 mt-0.5" />
-              <p className="leading-relaxed">
-                Driver trip compensations are automatically disbursed to registered
-                driver accounts upon validated delivery verification and hub dispatch
-                confirmation.
-              </p>
-            </div>
+       
           </div>
 
           {/* Footer */}
-          <div className="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between gap-3">
-            <button
-              onClick={onClose}
-              className="px-4 py-2 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-700 text-xs font-bold transition-colors"
-            >
-              Close Details
-            </button>
+          <div className="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between gap-3">           
 
-            {!earning.isTransferred && (
+            {!earning.isTransferred && is24HoursPassed && (
               <button
-                onClick={() => setIsConfirmOpen(true)}
-                className="px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-700 active:scale-95 text-white text-xs font-bold shadow-sm transition-all flex items-center gap-1.5"
+                onClick={handleTransfer}
+                disabled={isTransferring}
+                className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs font-bold shadow-sm transition-all flex items-center gap-1.5 disabled:opacity-50"
               >
-                <span>Transfer Funds Manually</span>
-                <ArrowUpRight className="w-3.5 h-3.5" />
+                {isTransferring ? (
+                  <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                ) : (
+                  <ArrowUpRight className="w-3.5 h-3.5" />
+                )}
+                <span>{isTransferring ? "Transferring..." : "Transfer Funds Directly"}</span>
               </button>
             )}
           </div>
         </div>
       </div>
-
-      {/* Confirmation Modal */}
-      <TransferConfirmModal
-        isOpen={isConfirmOpen}
-        onClose={() => setIsConfirmOpen(false)}
-        onConfirm={handleTransfer}
-        type="Driver"
-        earningId={earning.id}
-        recipientName={earning.driver?.fullName || "Logistics Driver"}
-        recipientSubtitle={
-          earning.driver?.driverProfile?.vehicleType
-            ? `${earning.driver.driverProfile.vehicleType} Courier`
-            : "Fleet Courier"
-        }
-        amount={earning.amount || 0}
-        createdAt={earning.createdAt}
-        isLoading={isTransferring}
-      />
     </>
   );
 }

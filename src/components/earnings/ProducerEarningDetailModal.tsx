@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
 import {
   X,
@@ -8,22 +8,20 @@ import {
   CheckCircle2,
   Clock,
   Sprout,
-  Package,
-  Calendar,
+  Package, 
   ExternalLink,
   ShieldCheck,
   Building,
   ArrowUpRight,
   AlertTriangle,
+  RefreshCw,
 } from "lucide-react";
-import { format } from "date-fns";
 import { formatCurrency } from "@/utils/formatters";
 import {
   TAdminProducerEarning,
   useTransferProducerEarningMutation,
 } from "@/redux/features/admin/adminApi";
 import { toast } from "react-toastify";
-import TransferConfirmModal from "./TransferConfirmModal";
 
 interface ProducerEarningDetailModalProps {
   isOpen: boolean;
@@ -36,7 +34,6 @@ export default function ProducerEarningDetailModal({
   onClose,
   earning,
 }: ProducerEarningDetailModalProps) {
-  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [transferProducerEarning, { isLoading: isTransferring }] =
     useTransferProducerEarningMutation();
 
@@ -55,13 +52,11 @@ export default function ProducerEarningDetailModal({
     try {
       const res = await transferProducerEarning(earning.id).unwrap();
       toast.success(res.message || "Producer earning transferred successfully!");
-      setIsConfirmOpen(false);
       onClose();
     } catch (err: any) {
       toast.error(
         err?.data?.message || err?.message || "Failed to transfer earning."
       );
-      throw err;
     }
   };
 
@@ -74,17 +69,11 @@ export default function ProducerEarningDetailModal({
         >
           {/* Header */}
           <div className="px-6 py-5 bg-gradient-to-r from-emerald-600 to-teal-700 text-white flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-white/15 backdrop-blur-md flex items-center justify-center border border-white/20">
-                <Coins className="w-5 h-5 text-emerald-100" />
-              </div>
+            <div className="flex items-center gap-3">              
               <div>
                 <h3 className="text-base font-bold text-white tracking-tight">
                   Producer Payout Details
-                </h3>
-                <p className="text-xs text-emerald-100/90 font-mono">
-                  ID: {earning.id}
-                </p>
+                </h3>               
               </div>
             </div>
             <button
@@ -240,88 +229,29 @@ export default function ProducerEarningDetailModal({
                   </span>
                 </div>
               )}
-            </div>
-
-            {/* Transfer Timeline & Dates */}
-            <div className="p-4 rounded-2xl border border-slate-200 bg-slate-50/50 space-y-2 text-xs">
-              <div className="text-xs font-bold tracking-wider text-slate-500 flex items-center gap-1.5 mb-2">
-                <Calendar className="w-3.5 h-3.5 text-slate-400" />
-                Ledger Timestamps
-              </div>
-
-              <div className="flex items-center justify-between py-1 border-b border-slate-200/60">
-                <span className="text-slate-500">Record Created</span>
-                <span className="font-semibold text-slate-800">
-                  {earning.createdAt
-                    ? format(
-                        new Date(earning.createdAt),
-                        "MMMM dd, yyyy · HH:mm:ss"
-                      )
-                    : "N/A"}
-                </span>
-              </div>
-
-              <div className="flex items-center justify-between py-1">
-                <span className="text-slate-500">Transfer Settlement Date</span>
-                <span className="font-semibold text-slate-800">
-                  {earning.paidAt
-                    ? format(
-                        new Date(earning.paidAt),
-                        "MMMM dd, yyyy · HH:mm:ss"
-                      )
-                    : "Pending final escrow settlement"}
-                </span>
-              </div>
-            </div>
-
-            {/* Security & Escrow Note */}
-            <div className="flex items-start gap-2.5 p-3 rounded-xl bg-sky-50 border border-sky-200/70 text-sky-900 text-xs">
-              <ShieldCheck className="w-4 h-4 text-sky-600 shrink-0 mt-0.5" />
-              <p className="leading-relaxed">
-                Farmer revenue settlements are secured through Stripe Connect
-                escrow. Payouts are transferred directly into verified bank
-                accounts upon customer delivery confirmation.
-              </p>
-            </div>
+            </div>                    
           </div>
 
           {/* Footer */}
-          <div className="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between gap-3">
-            <button
-              onClick={onClose}
-              className="px-4 py-2 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-700 text-xs font-bold transition-colors"
-            >
-              Close Details
-            </button>
+          <div className="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between gap-3">           
 
-            {!earning.isTransferred && (
+            {!earning.isTransferred && is24HoursPassed && (
               <button
-                onClick={() => setIsConfirmOpen(true)}
-                className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs font-bold shadow-sm transition-all flex items-center gap-1.5"
+                onClick={handleTransfer}
+                disabled={isTransferring}
+                className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs font-bold shadow-sm transition-all flex items-center gap-1.5 disabled:opacity-50"
               >
-                <span>Transfer Funds Manually</span>
-                <ArrowUpRight className="w-3.5 h-3.5" />
+                {isTransferring ? (
+                  <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                ) : (
+                  <ArrowUpRight className="w-3.5 h-3.5" />
+                )}
+                <span>{isTransferring ? "Transferring..." : "Transfer Funds Directly"}</span>
               </button>
             )}
           </div>
         </div>
       </div>
-
-      {/* Confirmation Modal */}
-      <TransferConfirmModal
-        isOpen={isConfirmOpen}
-        onClose={() => setIsConfirmOpen(false)}
-        onConfirm={handleTransfer}
-        type="Producer"
-        earningId={earning.id}
-        recipientName={earning.producer?.fullName || "Agricultural Producer"}
-        recipientSubtitle={
-          earning.producer?.producerProfile?.farmName || "Direct Farm Partner"
-        }
-        amount={earning.amount || 0}
-        createdAt={earning.createdAt}
-        isLoading={isTransferring}
-      />
     </>
   );
 }

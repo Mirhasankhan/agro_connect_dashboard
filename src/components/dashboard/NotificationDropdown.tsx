@@ -6,7 +6,6 @@ import {
   RefreshCw,
   Inbox,
   X,
-  ShieldAlert,
 } from "lucide-react";
 import {
   useGetUserNotificationsQuery,
