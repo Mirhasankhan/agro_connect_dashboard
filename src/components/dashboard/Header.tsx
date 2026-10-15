@@ -5,9 +5,9 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
   Menu,
-  Bell,
 } from "lucide-react";
 import { useAppSelector } from "@/redux/hooks";
+import NotificationDropdown from "./NotificationDropdown";
 
 interface HeaderProps {
   onMobileOpen: () => void;
@@ -102,15 +102,8 @@ export default function Header({ onMobileOpen }: HeaderProps) {
         {/* Right: Status Pill, Notifications & Admin Info */}
         <div className="flex items-center gap-3 shrink-0">       
 
-          {/* Quick Notifications Button */}
-          <button
-            type="button"
-            className="relative p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors"
-            aria-label="Notifications"
-          >
-            <Bell className="w-4 h-4" />
-            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-emerald-600 rounded-full ring-2 ring-white" />
-          </button>
+          {/* Quick Notifications Dropdown */}
+          <NotificationDropdown />
 
           {/* Admin Avatar & Role Badge */}
           <div className="flex items-center gap-2.5 pl-2 border-l border-slate-200">

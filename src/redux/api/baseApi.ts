@@ -32,6 +32,7 @@ export const baseApi = createApi({
     "Producer",
     "Driver",
     "Admin",
+    "Notification",
   ],
   endpoints: () => ({}),
 });
