@@ -4,7 +4,6 @@ import React from "react";
 import Link from "next/link";
 import {
   X,
-  Coins,
   CheckCircle2,
   Clock,
   Sprout,

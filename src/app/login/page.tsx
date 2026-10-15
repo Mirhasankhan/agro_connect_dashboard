@@ -279,7 +279,7 @@ export default function AdminLoginPage() {
                 {/* Email row */}
                 <div className="flex items-center justify-between gap-2 bg-white/90 border border-emerald-100 rounded-lg px-2.5 py-1.5 hover:border-emerald-200 transition-colors">
                   <div className="flex items-center gap-1.5 min-w-0">
-                    <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider shrink-0">
+                    <span className="text-[11px] font-medium text-slate-400  tracking-wider shrink-0">
                       Email:
                     </span>
                     <span className="font-mono text-xs text-slate-800 font-semibold truncate select-all">
@@ -310,7 +310,7 @@ export default function AdminLoginPage() {
                 {/* Password row */}
                 <div className="flex items-center justify-between gap-2 bg-white/90 border border-emerald-100 rounded-lg px-2.5 py-1.5 hover:border-emerald-200 transition-colors">
                   <div className="flex items-center gap-1.5 min-w-0">
-                    <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider shrink-0">
+                    <span className="text-[11px] font-medium text-slate-400  tracking-wider shrink-0">
                       Pass:
                     </span>
                     <span className="font-mono text-xs text-slate-800 font-semibold truncate select-all">

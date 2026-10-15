@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import {
   useGetAllProductsQuery,
-  useGetProductDetailsQuery,
   useToggleProductFeaturedMutation,
 } from "@/redux/features/product/productApi";
 import { useGetAllCategoriesQuery } from "@/redux/features/admin/adminApi";
@@ -19,9 +19,8 @@ import {
   Eye,
   Star,
   Sprout,
-  X,
-  Tag,
-  Sparkles,
+  ShieldCheck,
+  ArrowUpRight,
 } from "lucide-react";
 import { formatCurrency } from "@/utils/formatters";
 
@@ -32,10 +31,6 @@ export default function ProductsCatalogPage() {
   const [selectedFeatured, setSelectedFeatured] = useState<string>("");
   const [togglingId, setTogglingId] = useState<string | null>(null);
   const [page, setPage] = useState(1);
-
-  // Selected product for details inspection
-  const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
-  const [detailsModalOpen, setDetailsModalOpen] = useState(false);
 
   // Toggle product featured mutation
   const [toggleProductFeatured] = useToggleProductFeaturedMutation();
@@ -77,13 +72,6 @@ export default function ProductsCatalogPage() {
   const products = data?.data?.products || [];
   const meta = data?.data?.meta;
 
-  // Product details query
-  const { data: detailsData, isLoading: isLoadingDetails } = useGetProductDetailsQuery(
-    selectedProductId || "",
-    { skip: !selectedProductId }
-  );
-  const detailedProduct = detailsData?.data?.product;
-
   return (
     <DashboardLayout>
       <div className="space-y-6">
@@ -94,7 +82,7 @@ export default function ProductsCatalogPage() {
               Product Catalog
             </h1>
             <p className="text-xs text-slate-500">
-              Explore farmer produce listings, bulk pricing tiers, stock availability, and ratings.
+              Explore farmer produce listings, bulk pricing tiers, stock availability, and detailed performance.
             </p>
           </div>
 
@@ -102,7 +90,7 @@ export default function ProductsCatalogPage() {
             <button
               onClick={() => refetch()}
               disabled={isFetching}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-xs font-semibold text-slate-700 shadow-sm transition-colors"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-xs font-semibold text-slate-700 shadow-sm transition-colors cursor-pointer"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${isFetching ? "animate-spin text-emerald-600" : ""}`} />
               <span>Refresh</span>
@@ -198,12 +186,12 @@ export default function ProductsCatalogPage() {
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="bg-slate-50 text-slate-600 border-b border-slate-200 font-semibold  tracking-wider text-[11px]">
+                <thead className="bg-slate-50 text-slate-600 border-b border-slate-200 font-semibold tracking-wider text-[11px]">
                   <tr>
                     <th className="py-3.5 px-4">Produce</th>
                     <th className="py-3.5 px-4">Farm / Producer</th>
                     <th className="py-3.5 px-4">Price per Unit</th>
-                    <th className="py-3.5 px-4">Available Stock</th>
+                    <th className="py-3.5 px-4">Stock & Sold</th>
                     <th className="py-3.5 px-4">Rating</th>
                     <th className="py-3.5 px-4 text-center">Featured</th>
                     <th className="py-3.5 px-4 text-right">Actions</th>
@@ -214,42 +202,82 @@ export default function ProductsCatalogPage() {
                     const farmName =
                       prod.producer?.producerProfile?.farmName ||
                       prod.producer?.producerProfile?.companyName ||
+                      prod.producer?.fullName ||
                       "Certified Farm";
+
+                    const location =
+                      prod.producer?.city ||
+                      prod.producer?.producerProfile?.city ||
+                      "Ivory Coast";
 
                     return (
                       <tr key={prod.id} className="hover:bg-slate-50/70 transition-colors">
                         {/* Product Info */}
                         <td className="py-3.5 px-4">
-                          <div className="flex items-center gap-3">
-                            <div className="w-12 h-12 rounded-xl bg-slate-100 border border-slate-200 overflow-hidden shrink-0 flex items-center justify-center">
+                          <Link
+                            href={`/products/${prod.id}`}
+                            className="flex items-center gap-3 group"
+                          >
+                            <div className="w-12 h-12 rounded-xl bg-slate-100 border border-slate-200 overflow-hidden shrink-0 flex items-center justify-center group-hover:border-emerald-400 transition-colors">
                               {prod.imageUrls?.[0] ? (
                                 <img
                                   src={prod.imageUrls[0]}
                                   alt={prod.name}
-                                  className="w-full h-full object-cover"
+                                  className="w-full h-full object-cover group-hover:scale-105 transition-transform"
                                 />
                               ) : (
                                 <Package className="w-5 h-5 text-slate-400" />
                               )}
                             </div>
                             <div className="min-w-0">
-                              <div className="font-bold text-slate-900 truncate">{prod.name}</div>
-                              <div className="text-[11px] text-slate-400 truncate">
-                                Selling by {prod.sellingUnit || "Unit"}
+                              <div className="font-bold text-slate-900 group-hover:text-emerald-700 transition-colors truncate flex items-center gap-1.5">
+                                <span>{prod.name}</span>
+                                {prod.isCertified && (
+                                  <span title="Certified Harvest">
+                                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                                  </span>
+                                )}
+                              </div>
+                              <div className="text-[11px] text-slate-400 truncate flex items-center gap-1.5 mt-0.5">
+                                <span>Unit: {prod.sellingUnit || "Unit"}</span>
+                                {prod.category?.name && (
+                                  <>
+                                    <span>•</span>
+                                    <span className="text-slate-500 font-medium">{prod.category.name}</span>
+                                  </>
+                                )}
                               </div>
                             </div>
-                          </div>
+                          </Link>
                         </td>
 
                         {/* Producer Farm */}
                         <td className="py-3.5 px-4 text-slate-800">
-                          <div className="font-semibold flex items-center gap-1.5 truncate max-w-[200px]">
-                            <Sprout className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                            <span>{farmName}</span>
-                          </div>
-                          <div className="text-[11px] text-slate-400">
-                            {(prod.producer as any)?.city || prod.producer?.producerProfile?.city || "Ivory Coast"}
-                          </div>
+                          {prod.producer?.id ? (
+                            <Link
+                              href={`/users/producers/${prod.producer.id}`}
+                              className="group block"
+                            >
+                              <div className="font-semibold flex items-center gap-1.5 truncate max-w-[200px] group-hover:text-emerald-700 transition-colors">
+                                <Sprout className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                                <span className="truncate">{farmName}</span>
+                                <ArrowUpRight className="w-3 h-3 text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+                              </div>
+                              <div className="text-[11px] text-slate-400 truncate">
+                                {location}
+                              </div>
+                            </Link>
+                          ) : (
+                            <div>
+                              <div className="font-semibold flex items-center gap-1.5 truncate max-w-[200px]">
+                                <Sprout className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                                <span>{farmName}</span>
+                              </div>
+                              <div className="text-[11px] text-slate-400 truncate">
+                                {location}
+                              </div>
+                            </div>
+                          )}
                         </td>
 
                         {/* Price */}
@@ -260,16 +288,23 @@ export default function ProductsCatalogPage() {
                           <span className="text-slate-400 text-[11px]"> / {prod.sellingUnit}</span>
                         </td>
 
-                        {/* Stock */}
+                        {/* Stock & Sold */}
                         <td className="py-3.5 px-4">
-                          <span
-                            className={`font-semibold ${(prod.availableQuantity || 0) > 10
-                                ? "text-emerald-700"
-                                : "text-amber-600"
-                              }`}
-                          >
-                            {(prod.availableQuantity || 0).toLocaleString()} {prod.sellingUnit}
-                          </span>
+                          <div className="flex flex-col">
+                            <span
+                              className={`font-semibold ${(prod.availableQuantity || 0) > 10
+                                  ? "text-emerald-700"
+                                  : (prod.availableQuantity || 0) > 0
+                                  ? "text-amber-600"
+                                  : "text-rose-600"
+                                }`}
+                            >
+                              {(prod.availableQuantity || 0).toLocaleString()} {prod.sellingUnit} in stock
+                            </span>
+                            <span className="text-[11px] text-slate-400">
+                              {(prod.sold || 0).toLocaleString()} sold
+                            </span>
+                          </div>
                         </td>
 
                         {/* Rating */}
@@ -294,7 +329,7 @@ export default function ProductsCatalogPage() {
                                 ? "Click to remove from homepage featured section"
                                 : "Click to showcase on homepage featured section"
                             }
-                            className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-semibold transition-all border ${
+                            className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-semibold transition-all border cursor-pointer ${
                               prod.isFeatured
                                 ? "bg-amber-50 text-amber-800 border-amber-300 hover:bg-amber-100 shadow-xs"
                                 : "bg-slate-50 text-slate-500 border-slate-200 hover:bg-slate-100 hover:text-slate-800"
@@ -315,18 +350,15 @@ export default function ProductsCatalogPage() {
                           </button>
                         </td>
 
-                        {/* Action */}
+                        {/* Action: Link to dedicated Product Details Page */}
                         <td className="py-3.5 px-4 text-right">
-                          <button
-                            onClick={() => {
-                              setSelectedProductId(prod.id);
-                              setDetailsModalOpen(true);
-                            }}
-                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors font-semibold"
+                          <Link
+                            href={`/products/${prod.id}`}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-slate-700 bg-white border border-slate-200 hover:bg-emerald-50 hover:border-emerald-300 hover:text-emerald-700 transition-all font-semibold shadow-2xs group"
                           >
-                            <Eye className="w-3.5 h-3.5" />
-                            <span>Inspect</span>
-                          </button>
+                            <Eye className="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-600 transition-colors" />
+                            <span>Details</span>
+                          </Link>
                         </td>
                       </tr>
                     );
@@ -348,14 +380,14 @@ export default function ProductsCatalogPage() {
                 <button
                   disabled={page <= 1}
                   onClick={() => setPage(page - 1)}
-                  className="p-1.5 rounded-lg border border-slate-200 hover:bg-white disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                  className="p-1.5 rounded-lg border border-slate-200 hover:bg-white disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
                 >
                   <ChevronLeft className="w-4 h-4" />
                 </button>
                 <button
                   disabled={page >= (meta.totalPage || meta.totalPages || 1)}
                   onClick={() => setPage(page + 1)}
-                  className="p-1.5 rounded-lg border border-slate-200 hover:bg-white disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                  className="p-1.5 rounded-lg border border-slate-200 hover:bg-white disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
                 >
                   <ChevronRight className="w-4 h-4" />
                 </button>
@@ -364,209 +396,6 @@ export default function ProductsCatalogPage() {
           )}
         </div>
       </div>
-
-      {/* Product Details Drawer Modal */}
-      {detailsModalOpen && selectedProductId && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm animate-in fade-in duration-150">
-          <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl bg-white shadow-2xl border border-slate-200 flex flex-col">
-            <div className="sticky top-0 z-10 bg-white/95 backdrop-blur-md px-6 py-4 border-b border-slate-200 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="p-2 rounded-xl bg-emerald-50 text-emerald-700">
-                  <Package className="w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className="text-base font-bold text-slate-900">
-                    {detailedProduct?.name || "Product Details"}
-                  </h3>
-                  <p className="text-xs text-slate-500">
-                    Harvest overview and wholesale tier structure.
-                  </p>
-                </div>
-              </div>
-
-              <button
-                onClick={() => setDetailsModalOpen(false)}
-                className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <div className="p-6 space-y-6 text-xs text-slate-700">
-              {isLoadingDetails ? (
-                <div className="p-8 text-center text-slate-400 flex items-center justify-center gap-2">
-                  <RefreshCw className="w-4 h-4 animate-spin text-emerald-600" />
-                  <span>Loading product specifications...</span>
-                </div>
-              ) : detailedProduct ? (
-                <>
-                  {/* Image Gallery */}
-                  {detailedProduct.imageUrls && detailedProduct.imageUrls.length > 0 && (
-                    <div className="space-y-2">
-                      <span className="text-[10px] font-bold  tracking-wider text-slate-400 block">
-                        Product Photography
-                      </span>
-                      <div className="grid grid-cols-3 gap-3">
-                        {detailedProduct.imageUrls.map((url, idx) => (
-                          <div
-                            key={idx}
-                            className="h-28 rounded-xl overflow-hidden border border-slate-200 bg-slate-50"
-                          >
-                            <img
-                              src={url}
-                              alt={`${detailedProduct.name} ${idx + 1}`}
-                              className="w-full h-full object-cover"
-                            />
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Pricing & Stock Details */}
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-4 rounded-xl bg-slate-50 border border-slate-200">
-                    <div>
-                      <span className="text-[10px] font-bold  text-slate-400 block">
-                        Base Price
-                      </span>
-                      <span className="font-bold text-emerald-700 text-sm">
-                        {formatCurrency(detailedProduct.pricePerUnit || 0)}
-                      </span>
-                    </div>
-                    <div>
-                      <span className="text-[10px] font-bold  text-slate-400 block">
-                        Selling Unit
-                      </span>
-                      <span className="font-semibold text-slate-800">
-                        {detailedProduct.sellingUnit}
-                      </span>
-                    </div>
-                    <div>
-                      <span className="text-[10px] font-bold  text-slate-400 block">
-                        Stock Available
-                      </span>
-                      <span className="font-semibold text-slate-800">
-                        {detailedProduct.availableQuantity} {detailedProduct.sellingUnit}
-                      </span>
-                    </div>
-                    <div>
-                      <span className="text-[10px] font-bold  text-slate-400 block">
-                        Quantity Sold
-                      </span>
-                      <span className="font-semibold text-slate-800">
-                        {detailedProduct.sold ?? 0} {detailedProduct.sellingUnit}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Home Featured Toggle Card */}
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl bg-amber-50/60 border border-amber-200">
-                    <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
-                        <Sparkles className="w-5 h-5 text-amber-600" />
-                      </div>
-                      <div>
-                        <div className="font-bold text-slate-900 text-xs flex items-center gap-1.5">
-                          <span>Homepage Featured Harvest</span>
-                          {detailedProduct.isFeatured && (
-                            <span className="px-1.5 py-0.5 rounded bg-amber-500 text-white text-[9px] font-bold uppercase tracking-wider">
-                              Active
-                            </span>
-                          )}
-                        </div>
-                        <div className="text-[11px] text-slate-600 mt-0.5">
-                          {detailedProduct.isFeatured
-                            ? "This product is prominently showcased in the customer homepage 'Featured Harvests' section."
-                            : "Standard catalog product (not showcased in the customer homepage featured section)."}
-                        </div>
-                      </div>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        handleToggleFeatured(
-                          detailedProduct.id,
-                          Boolean(detailedProduct.isFeatured)
-                        )
-                      }
-                      disabled={togglingId === detailedProduct.id}
-                      className={`inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold border transition-all shrink-0 ${
-                        detailedProduct.isFeatured
-                          ? "bg-amber-600 text-white border-amber-600 hover:bg-amber-700 shadow-xs"
-                          : "bg-white text-slate-700 border-slate-300 hover:bg-slate-50"
-                      } ${togglingId === detailedProduct.id ? "opacity-60 cursor-not-allowed" : ""}`}
-                    >
-                      {togglingId === detailedProduct.id ? (
-                        <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-                      ) : (
-                        <Star
-                          className={`w-3.5 h-3.5 ${
-                            detailedProduct.isFeatured ? "fill-white" : ""
-                          }`}
-                        />
-                      )}
-                      <span>
-                        {detailedProduct.isFeatured ? "Remove From Featured" : "Mark as Featured"}
-                      </span>
-                    </button>
-                  </div>
-
-                  {/* Description */}
-                  <div className="space-y-1.5">
-                    <span className="text-[10px] font-bold  tracking-wider text-slate-400 block">
-                      Description & Agricultural Notes
-                    </span>
-                    <p className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 leading-relaxed text-slate-700">
-                      {detailedProduct.description || "No description provided."}
-                    </p>
-                  </div>
-
-                  {/* Pricing Tiers if available */}
-                  {detailedProduct.pricingTiers && detailedProduct.pricingTiers.length > 0 && (
-                    <div className="space-y-2">
-                      <span className="text-[10px] font-bold  tracking-wider text-slate-400 flex items-center gap-1.5">
-                        <Tag className="w-3.5 h-3.5 text-emerald-600" />
-                        <span>Bulk Pricing Tiers</span>
-                      </span>
-                      <div className="border border-slate-200 rounded-xl overflow-hidden">
-                        <table className="w-full text-left text-xs">
-                          <thead className="bg-slate-50 text-slate-600 border-b border-slate-200">
-                            <tr>
-                              <th className="py-2.5 px-3 font-semibold">Min Quantity</th>
-                              <th className="py-2.5 px-3 font-semibold text-right">Discounted Price</th>
-                            </tr>
-                          </thead>
-                          <tbody className="divide-y divide-slate-100">
-                            {detailedProduct.pricingTiers.map((tier: any, idx: number) => (
-                              <tr key={idx}>
-                                <td className="py-2.5 px-3 font-medium text-slate-800">
-                                  {tier.quantity}+ {detailedProduct.sellingUnit}
-                                </td>
-                                <td className="py-2.5 px-3 text-right font-bold text-emerald-700">
-                                  {formatCurrency(tier.pricePerUnit || 0)}
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  )}
-                </>
-              ) : null}
-            </div>
-
-            <div className="sticky bottom-0 bg-white px-6 py-4 border-t border-slate-200 flex items-center justify-end">
-              <button
-                onClick={() => setDetailsModalOpen(false)}
-                className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 transition-colors"
-              >
-                Close Window
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </DashboardLayout>
   );
 }

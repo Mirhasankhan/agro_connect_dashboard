@@ -48,7 +48,10 @@ export const productApi = baseApi.injectEndpoints({
         url: `/admin/toggle-product-featured/${id}`,
         method: "PATCH",
       }),
-      invalidatesTags: ["Product"],
+      invalidatesTags: (result, error, id) => [
+        "Product",
+        { type: "Product", id },
+      ],
     }),
   }),
 });

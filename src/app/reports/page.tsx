@@ -288,7 +288,7 @@ export default function ReportsManagementPage() {
               {/* Product and Order Info */}
               <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5">
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                  <span className="text-[10px] font-bold  tracking-wider text-slate-400">
                     Produce & Order Details
                   </span>
                   <span className="font-mono text-emerald-700 font-bold">
@@ -315,7 +315,7 @@ export default function ReportsManagementPage() {
 
               {/* Customer Statement */}
               <div className="space-y-1">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
+                <span className="text-[10px] font-bold  tracking-wider text-slate-400 block">
                   Customer Quality Complaint
                 </span>
                 <p className="p-3 rounded-xl bg-rose-50/50 border border-rose-100 text-rose-900 leading-relaxed whitespace-pre-wrap">

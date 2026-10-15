@@ -68,12 +68,41 @@ export default function Header({ onMobileOpen }: HeaderProps) {
   const pathname = usePathname();
   const { user } = useAppSelector((state) => state.auth);
 
-  // Match title from map or default
-  const currentRouteMeta =
-    routeTitleMap[pathname] || {
-      title: "Admin Portal",
-      subtitle: "AgroConnect central management operations.",
-    };
+  // Match title from map or fallback to dynamic subroutes
+  let currentRouteMeta = routeTitleMap[pathname];
+  if (!currentRouteMeta) {
+    if (pathname.startsWith("/products/")) {
+      currentRouteMeta = {
+        title: "Product Details",
+        subtitle: "Comprehensive harvest specifications, wholesale pricing, farm origin, and sales ledger.",
+      };
+    } else if (pathname.startsWith("/orders/")) {
+      currentRouteMeta = {
+        title: "Order Details & Dispatch",
+        subtitle: "Delivery route assignment and customer order tracking.",
+      };
+    } else if (pathname.startsWith("/users/producers/")) {
+      currentRouteMeta = {
+        title: "Producer Profile",
+        subtitle: "Farm verification, produce listings, and producer credentials.",
+      };
+    } else if (pathname.startsWith("/users/drivers/")) {
+      currentRouteMeta = {
+        title: "Driver Profile",
+        subtitle: "Driver vehicle verification and delivery logs.",
+      };
+    } else if (pathname.startsWith("/users/buyers/")) {
+      currentRouteMeta = {
+        title: "Buyer Profile",
+        subtitle: "Customer purchasing activity and account information.",
+      };
+    } else {
+      currentRouteMeta = {
+        title: "Admin Portal",
+        subtitle: "AgroConnect central management operations.",
+      };
+    }
+  }
 
   return (
     <header className="sticky top-0 z-10 bg-white/90 backdrop-blur-md border-b border-slate-200/90 transition-all">

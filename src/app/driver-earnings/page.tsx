@@ -19,7 +19,6 @@ import {
   ChevronRight,
   Eye,
   RefreshCw,
-  ExternalLink,
   ArrowUpRight,
 } from "lucide-react";
 import { format } from "date-fns";

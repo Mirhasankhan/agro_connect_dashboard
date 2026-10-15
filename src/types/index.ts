@@ -129,6 +129,7 @@ export interface TReview {
   comment: string;
   createdAt?: string;
   buyer?: {
+    id?: string;
     fullName: string;
     profileImage?: string | null;
   };
@@ -150,6 +151,7 @@ export interface TProduct {
   avgRating?: number;
   totalReviews?: number;
   createdAt?: string;
+  updatedAt?: string;
   category?: {
     id?: string;
     name: string;
@@ -163,26 +165,41 @@ export interface TProduct {
   producer?: {
     id?: string;
     fullName?: string;
+    email?: string;
+    phoneNumber?: string | null;
     profileImage?: string | null;
     address?: string | null;
+    city?: string | null;
+    region?: string | null;
     producerProfile?: {
       farmName?: string;
       companyName?: string | null;
       city?: string | null;
+      farmLocation?: string | null;
       farmSize?: number;
       producerType?: ProducerType;
+      verificationStatus?: string;
     };
   };
   wishlists?: { id: string }[] | boolean;
   reviews?: TReview[];
   orderItems?: {
+    id?: string;
+    orderId?: string;
+    unitPrice?: number;
     quantity: number;
     subtotal: number;
     status: ItemStatus;
     createdAt: string;
     order?: {
+      id?: string;
+      status?: string;
+      createdAt?: string;
       customer?: {
+        id?: string;
         fullName: string;
+        email?: string;
+        phoneNumber?: string | null;
         profileImage?: string | null;
         shippingAddresses?: {
           addressLine: string;
