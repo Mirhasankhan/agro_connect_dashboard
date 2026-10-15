@@ -4,7 +4,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const baseApi = createApi({
   reducerPath: "baseApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: process.env.NEXT_PUBLIC_BASE_URL || "http://10.10.13.8:4095/api/v1",
+    baseUrl: process.env.NEXT_PUBLIC_BASE_URL || "https://agro.connect.smtsigma.com/api/v1",
     prepareHeaders: (headers, { endpoint }) => {
       const { token } = JWTDecode();
 
