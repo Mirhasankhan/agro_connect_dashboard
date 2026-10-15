@@ -5,9 +5,11 @@ import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import {
   useGetAllProductsQuery,
   useGetProductDetailsQuery,
+  useToggleProductFeaturedMutation,
 } from "@/redux/features/product/productApi";
 import { useGetAllCategoriesQuery } from "@/redux/features/admin/adminApi";
 import { SellingUnit } from "@/types";
+import { toast } from "react-toastify";
 import {
   Search,
   Package,
@@ -19,6 +21,7 @@ import {
   Sprout,
   X,
   Tag,
+  Sparkles,
 } from "lucide-react";
 import { formatCurrency } from "@/utils/formatters";
 
@@ -26,11 +29,35 @@ export default function ProductsCatalogPage() {
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedUnit, setSelectedUnit] = useState<string>("");
+  const [selectedFeatured, setSelectedFeatured] = useState<string>("");
+  const [togglingId, setTogglingId] = useState<string | null>(null);
   const [page, setPage] = useState(1);
 
   // Selected product for details inspection
   const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
+
+  // Toggle product featured mutation
+  const [toggleProductFeatured] = useToggleProductFeaturedMutation();
+
+  const handleToggleFeatured = async (productId: string, currentFeatured: boolean) => {
+    try {
+      setTogglingId(productId);
+      const res = await toggleProductFeatured(productId).unwrap();
+      toast.success(
+        res.message ||
+          (currentFeatured
+            ? "Product removed from featured"
+            : "Product marked as featured")
+      );
+    } catch (err: any) {
+      toast.error(
+        err?.data?.message || err?.message || "Failed to update featured status"
+      );
+    } finally {
+      setTogglingId(null);
+    }
+  };
 
   // Categories for filter
   const { data: categoriesData } = useGetAllCategoriesQuery();
@@ -41,6 +68,7 @@ export default function ProductsCatalogPage() {
     search: search.trim() || undefined,
     categoryId: selectedCategory || undefined,
     sellingUnit: (selectedUnit as SellingUnit) || undefined,
+    isFeatured: selectedFeatured || undefined,
     page,
     limit: 10,
   };
@@ -137,6 +165,20 @@ export default function ProductsCatalogPage() {
               <option value="LITER">Liter</option>
               <option value="DOZEN">Dozen</option>
             </select>
+
+            {/* Featured Filter */}
+            <select
+              value={selectedFeatured}
+              onChange={(e) => {
+                setSelectedFeatured(e.target.value);
+                setPage(1);
+              }}
+              className="px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-medium text-slate-700 focus:outline-none focus:border-emerald-600"
+            >
+              <option value="">All Featured Status</option>
+              <option value="true">Featured Only ⭐</option>
+              <option value="false">Standard (Not Featured)</option>
+            </select>
           </div>
         </div>
 
@@ -163,6 +205,7 @@ export default function ProductsCatalogPage() {
                     <th className="py-3.5 px-4">Price per Unit</th>
                     <th className="py-3.5 px-4">Available Stock</th>
                     <th className="py-3.5 px-4">Rating</th>
+                    <th className="py-3.5 px-4 text-center">Featured</th>
                     <th className="py-3.5 px-4 text-right">Actions</th>
                   </tr>
                 </thead>
@@ -238,6 +281,38 @@ export default function ProductsCatalogPage() {
                               ({prod.totalReviews ?? 0})
                             </span>
                           </div>
+                        </td>
+
+                        {/* Featured Toggle */}
+                        <td className="py-3.5 px-4 text-center">
+                          <button
+                            type="button"
+                            onClick={() => handleToggleFeatured(prod.id, Boolean(prod.isFeatured))}
+                            disabled={togglingId === prod.id}
+                            title={
+                              prod.isFeatured
+                                ? "Click to remove from homepage featured section"
+                                : "Click to showcase on homepage featured section"
+                            }
+                            className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-semibold transition-all border ${
+                              prod.isFeatured
+                                ? "bg-amber-50 text-amber-800 border-amber-300 hover:bg-amber-100 shadow-xs"
+                                : "bg-slate-50 text-slate-500 border-slate-200 hover:bg-slate-100 hover:text-slate-800"
+                            } ${togglingId === prod.id ? "opacity-60 cursor-not-allowed" : ""}`}
+                          >
+                            {togglingId === prod.id ? (
+                              <RefreshCw className="w-3.5 h-3.5 animate-spin text-amber-600" />
+                            ) : (
+                              <Star
+                                className={`w-3.5 h-3.5 ${
+                                  prod.isFeatured
+                                    ? "fill-amber-400 text-amber-500"
+                                    : "text-slate-400"
+                                }`}
+                              />
+                            )}
+                            <span>{prod.isFeatured ? "Featured" : "Standard"}</span>
+                          </button>
                         </td>
 
                         {/* Action */}
@@ -382,6 +457,58 @@ export default function ProductsCatalogPage() {
                         {detailedProduct.sold ?? 0} {detailedProduct.sellingUnit}
                       </span>
                     </div>
+                  </div>
+
+                  {/* Home Featured Toggle Card */}
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl bg-amber-50/60 border border-amber-200">
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
+                        <Sparkles className="w-5 h-5 text-amber-600" />
+                      </div>
+                      <div>
+                        <div className="font-bold text-slate-900 text-xs flex items-center gap-1.5">
+                          <span>Homepage Featured Harvest</span>
+                          {detailedProduct.isFeatured && (
+                            <span className="px-1.5 py-0.5 rounded bg-amber-500 text-white text-[9px] font-bold uppercase tracking-wider">
+                              Active
+                            </span>
+                          )}
+                        </div>
+                        <div className="text-[11px] text-slate-600 mt-0.5">
+                          {detailedProduct.isFeatured
+                            ? "This product is prominently showcased in the customer homepage 'Featured Harvests' section."
+                            : "Standard catalog product (not showcased in the customer homepage featured section)."}
+                        </div>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        handleToggleFeatured(
+                          detailedProduct.id,
+                          Boolean(detailedProduct.isFeatured)
+                        )
+                      }
+                      disabled={togglingId === detailedProduct.id}
+                      className={`inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold border transition-all shrink-0 ${
+                        detailedProduct.isFeatured
+                          ? "bg-amber-600 text-white border-amber-600 hover:bg-amber-700 shadow-xs"
+                          : "bg-white text-slate-700 border-slate-300 hover:bg-slate-50"
+                      } ${togglingId === detailedProduct.id ? "opacity-60 cursor-not-allowed" : ""}`}
+                    >
+                      {togglingId === detailedProduct.id ? (
+                        <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                      ) : (
+                        <Star
+                          className={`w-3.5 h-3.5 ${
+                            detailedProduct.isFeatured ? "fill-white" : ""
+                          }`}
+                        />
+                      )}
+                      <span>
+                        {detailedProduct.isFeatured ? "Remove From Featured" : "Mark as Featured"}
+                      </span>
+                    </button>
                   </div>
 
                   {/* Description */}

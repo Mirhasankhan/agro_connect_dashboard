@@ -6,6 +6,7 @@ export interface ProductQueryParams {
   categoryId?: string;
   sellingUnit?: SellingUnit;
   status?: "active" | "outOfStock";
+  isFeatured?: boolean | string;
   minPrice?: number | string;
   maxPrice?: number | string;
   sort?: "pricePerUnit" | "availableQuantity" | "avgRating" | "createdAt";
@@ -38,7 +39,23 @@ export const productApi = baseApi.injectEndpoints({
       }),
       providesTags: (result, error, id) => [{ type: "Product", id }],
     }),
+
+    toggleProductFeatured: builder.mutation<
+      TApiResponse<{ id: string; isFeatured: boolean }>,
+      string
+    >({
+      query: (id) => ({
+        url: `/admin/toggle-product-featured/${id}`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["Product"],
+    }),
   }),
 });
 
-export const { useGetAllProductsQuery, useGetProductDetailsQuery } = productApi;
+export const {
+  useGetAllProductsQuery,
+  useGetProductDetailsQuery,
+  useToggleProductFeaturedMutation,
+} = productApi;
+

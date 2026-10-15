@@ -118,11 +118,7 @@ export default function DriverEarningsPage() {
             <div className="text-2xl font-black text-slate-900 tracking-tight">
               {formatCurrency(totalVolume)}{" "}
               <span className="text-xs font-bold text-slate-400">BDT</span>
-            </div>
-            <div className="text-xs text-slate-500 flex items-center gap-1">
-              <TrendingUp className="w-3.5 h-3.5 text-sky-600" />
-              <span>{earnings.length} delivery payouts</span>
-            </div>
+            </div>           
           </div>
 
           <div className="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-sm space-y-2">
@@ -133,10 +129,7 @@ export default function DriverEarningsPage() {
             <div className="text-2xl font-black text-emerald-900 tracking-tight">
               {formatCurrency(settledVolume)}{" "}
               <span className="text-xs font-bold text-emerald-600">BDT</span>
-            </div>
-            <div className="text-xs text-emerald-700">
-              {settledEarnings.length} settlements complete
-            </div>
+            </div>           
           </div>
 
           <div className="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-sm space-y-2">
@@ -147,24 +140,18 @@ export default function DriverEarningsPage() {
             <div className="text-2xl font-black text-amber-900 tracking-tight">
               {formatCurrency(pendingVolume)}{" "}
               <span className="text-xs font-bold text-amber-600">BDT</span>
-            </div>
-            <div className="text-xs text-amber-700">
-              {pendingEarnings.length} queued for next payout cycle
-            </div>
+            </div>          
           </div>
 
           <div className="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-sm space-y-2">
             <div className="flex items-center justify-between text-xs font-semibold text-slate-400  tracking-wider">
-              <span>Active Fleet Drivers</span>
+              <span>Active Drivers</span>
               <Wallet className="w-4 h-4 text-indigo-600" />
             </div>
             <div className="text-2xl font-black text-slate-900 tracking-tight">
               {uniqueDriversCount}{" "}
               <span className="text-xs font-bold text-slate-400">drivers</span>
-            </div>
-            <div className="text-xs text-slate-500">
-              {meta?.total ? `${meta.total} total dispatch logs` : "Compensated fleet partners"}
-            </div>
+            </div>          
           </div>
         </div>
 
