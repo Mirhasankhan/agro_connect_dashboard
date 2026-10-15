@@ -4,8 +4,10 @@ import React, { useState } from "react";
 import Link from "next/link";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import DriverEarningDetailModal from "@/components/earnings/DriverEarningDetailModal";
+import TransferConfirmModal from "@/components/earnings/TransferConfirmModal";
 import {
   useGetAllDriverEarningsQuery,
+  useTransferDriverEarningMutation,
   TAdminDriverEarning,
 } from "@/redux/features/admin/adminApi";
 import {
@@ -21,9 +23,11 @@ import {
   Mail,
   X,
   ExternalLink,
+  ArrowUpRight,
 } from "lucide-react";
 import { format } from "date-fns";
 import { formatCurrency } from "@/utils/formatters";
+import { toast } from "react-toastify";
 
 export default function DriverEarningsPage() {
   const [search, setSearch] = useState("");
@@ -35,6 +39,29 @@ export default function DriverEarningsPage() {
   // Selected driver earning for inspection modal
   const [selectedEarning, setSelectedEarning] = useState<TAdminDriverEarning | null>(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
+
+  // Selected driver earning for direct manual transfer
+  const [transferringEarning, setTransferringEarning] = useState<TAdminDriverEarning | null>(null);
+  const [transferDriverEarning, { isLoading: isTransferring }] =
+    useTransferDriverEarningMutation();
+
+  const handleOpenTransferConfirm = (earning: TAdminDriverEarning) => {
+    setTransferringEarning(earning);
+  };
+
+  const handleConfirmTransfer = async () => {
+    if (!transferringEarning) return;
+    try {
+      const res = await transferDriverEarning(transferringEarning.id).unwrap();
+      toast.success(res.message || "Driver earning transferred successfully!");
+      setTransferringEarning(null);
+    } catch (err: any) {
+      toast.error(
+        err?.data?.message || err?.message || "Failed to transfer driver earning."
+      );
+      throw err;
+    }
+  };
 
   // Query parameters
   const queryParams = {
@@ -439,13 +466,25 @@ export default function DriverEarningsPage() {
 
                       {/* Action */}
                       <td className="py-3.5 px-4 text-right whitespace-nowrap" onClick={(e) => e.stopPropagation()}>
-                        <button
-                          onClick={() => handleOpenDetail(earn)}
-                          className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-sky-50 text-slate-700 hover:text-sky-700 text-xs font-bold transition-all border border-slate-200/80 hover:border-sky-200"
-                        >
-                          <Eye className="w-3.5 h-3.5" />
-                          <span>Inspect</span>
-                        </button>
+                        <div className="flex items-center justify-end gap-1.5">
+                          {!earn.isTransferred && (
+                            <button
+                              onClick={() => handleOpenTransferConfirm(earn)}
+                              className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-xs font-bold transition-all shadow-sm active:scale-95"
+                              title="Transfer Earning Manually"
+                            >
+                              <ArrowUpRight className="w-3.5 h-3.5" />
+                              <span>Transfer</span>
+                            </button>
+                          )}
+                          <button
+                            onClick={() => handleOpenDetail(earn)}
+                            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-sky-50 text-slate-700 hover:text-sky-700 text-xs font-bold transition-all border border-slate-200/80 hover:border-sky-200"
+                          >
+                            <Eye className="w-3.5 h-3.5" />
+                            <span>Inspect</span>
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))
@@ -503,6 +542,28 @@ export default function DriverEarningsPage() {
         onClose={() => setIsDetailOpen(false)}
         earning={selectedEarning}
       />
+
+      {/* Manual Transfer Confirmation Modal */}
+      {transferringEarning && (
+        <TransferConfirmModal
+          isOpen={!!transferringEarning}
+          onClose={() => setTransferringEarning(null)}
+          onConfirm={handleConfirmTransfer}
+          type="Driver"
+          earningId={transferringEarning.id}
+          recipientName={
+            transferringEarning.driver?.fullName || "Logistics Driver"
+          }
+          recipientSubtitle={
+            transferringEarning.driver?.driverProfile?.vehicleType
+              ? `${transferringEarning.driver.driverProfile.vehicleType} Courier`
+              : "Fleet Courier"
+          }
+          amount={transferringEarning.amount || 0}
+          createdAt={transferringEarning.createdAt}
+          isLoading={isTransferring}
+        />
+      )}
     </DashboardLayout>
   );
 }

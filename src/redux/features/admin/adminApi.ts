@@ -505,6 +505,22 @@ export const adminApi = baseApi.injectEndpoints({
       }),
       providesTags: ["Driver", "Admin"],
     }),
+
+    transferProducerEarning: builder.mutation<TApiResponse<null>, string>({
+      query: (id) => ({
+        url: `/admin/transfer-producer-earning/${id}`,
+        method: "POST",
+      }),
+      invalidatesTags: ["Producer", "Admin", "Payment"],
+    }),
+
+    transferDriverEarning: builder.mutation<TApiResponse<null>, string>({
+      query: (id) => ({
+        url: `/admin/transfer-driver-earning/${id}`,
+        method: "POST",
+      }),
+      invalidatesTags: ["Driver", "Admin", "Payment"],
+    }),
   }),
 });
 
@@ -525,4 +541,6 @@ export const {
   useAssignDriverMutation,
   useGetAllProducerEarningsQuery,
   useGetAllDriverEarningsQuery,
+  useTransferProducerEarningMutation,
+  useTransferDriverEarningMutation,
 } = adminApi;

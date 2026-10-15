@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Eye, EyeOff, Mail, Lock, ArrowRight, Sprout } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, ArrowRight, Sprout, Copy, Check, Key } from "lucide-react";
 import { toast } from "react-toastify";
 import logoImg from "@/assets/logo.png";
 import loginpageBg from "@/assets/loginpage.avif";
@@ -28,11 +28,13 @@ export default function AdminLoginPage() {
   const dispatch = useAppDispatch();
 
   const [showPassword, setShowPassword] = useState(false);
+  const [copiedField, setCopiedField] = useState<"email" | "password" | null>(null);
   const [adminLogin, { isLoading }] = useAdminLoginMutation();
 
   const {
     register,
     handleSubmit,
+    setValue,
     setError,
     formState: { errors },
   } = useForm<AdminLoginFormValues>({
@@ -77,6 +79,39 @@ export default function AdminLoginPage() {
       setError("root", { message: errorMessage });
       toast.error(errorMessage);
     }
+  };
+
+  const handleCopy = async (text: string, field: "email" | "password") => {
+    try {
+      if (typeof navigator !== "undefined" && navigator?.clipboard?.writeText) {
+        await navigator.clipboard.writeText(text);
+      } else if (typeof document !== "undefined") {
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textarea);
+      }
+      setCopiedField(field);
+      toast.info(`${field === "email" ? "Email" : "Password"} copied to clipboard!`, {
+        autoClose: 1500,
+        hideProgressBar: true,
+      });
+      setTimeout(() => {
+        setCopiedField((prev) => (prev === field ? null : prev));
+      }, 2000);
+    } catch {
+      toast.error("Failed to copy to clipboard");
+    }
+  };
+
+  const handleAutoFill = () => {
+    setValue("email", "admin@example.com", { shouldValidate: true });
+    setValue("password", "123456", { shouldValidate: true });
+    toast.success("Demo credentials loaded into form!");
   };
 
   return (
@@ -223,7 +258,87 @@ export default function AdminLoginPage() {
               )}
             </div>
 
-         
+            {/* Demo Credentials Box */}
+            <div className="rounded-xl border border-emerald-200/90 bg-gradient-to-br from-emerald-50/80 via-teal-50/40 to-emerald-50/80 p-3.5 space-y-2.5">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1.5 text-xs font-semibold text-emerald-900">
+                  <Key className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>Demo Admin Credentials</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleAutoFill}
+                  className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 hover:text-emerald-800 bg-white hover:bg-emerald-100/60 border border-emerald-200 px-2.5 py-0.5 rounded shadow-2xs transition-all active:scale-95 cursor-pointer"
+                  title="Click to automatically fill form"
+                >
+                  Auto-fill
+                </button>
+              </div>
+
+              <div className="space-y-1.5 text-xs">
+                {/* Email row */}
+                <div className="flex items-center justify-between gap-2 bg-white/90 border border-emerald-100 rounded-lg px-2.5 py-1.5 hover:border-emerald-200 transition-colors">
+                  <div className="flex items-center gap-1.5 min-w-0">
+                    <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider shrink-0">
+                      Email:
+                    </span>
+                    <span className="font-mono text-xs text-slate-800 font-semibold truncate select-all">
+                      admin@example.com
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleCopy("admin@example.com", "email")}
+                    className="shrink-0 inline-flex items-center gap-1 px-2 py-0.5 rounded hover:bg-slate-100 text-slate-500 hover:text-emerald-700 transition-colors cursor-pointer text-[11px]"
+                    title="Copy email to clipboard"
+                    aria-label="Copy demo email"
+                  >
+                    {copiedField === "email" ? (
+                      <>
+                        <Check className="w-3.5 h-3.5 text-emerald-600" />
+                        <span className="text-[11px] font-medium text-emerald-600">Copied</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-3.5 h-3.5" />
+                        <span className="text-[11px] text-slate-500">Copy</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+
+                {/* Password row */}
+                <div className="flex items-center justify-between gap-2 bg-white/90 border border-emerald-100 rounded-lg px-2.5 py-1.5 hover:border-emerald-200 transition-colors">
+                  <div className="flex items-center gap-1.5 min-w-0">
+                    <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider shrink-0">
+                      Pass:
+                    </span>
+                    <span className="font-mono text-xs text-slate-800 font-semibold truncate select-all">
+                      123456
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleCopy("123456", "password")}
+                    className="shrink-0 inline-flex items-center gap-1 px-2 py-0.5 rounded hover:bg-slate-100 text-slate-500 hover:text-emerald-700 transition-colors cursor-pointer text-[11px]"
+                    title="Copy password to clipboard"
+                    aria-label="Copy demo password"
+                  >
+                    {copiedField === "password" ? (
+                      <>
+                        <Check className="w-3.5 h-3.5 text-emerald-600" />
+                        <span className="text-[11px] font-medium text-emerald-600">Copied</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-3.5 h-3.5" />
+                        <span className="text-[11px] text-slate-500">Copy</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+            </div>
 
             {/* Submit Button */}
             <button

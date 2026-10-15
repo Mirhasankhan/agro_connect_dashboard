@@ -4,8 +4,10 @@ import React, { useState } from "react";
 import Link from "next/link";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import ProducerEarningDetailModal from "@/components/earnings/ProducerEarningDetailModal";
+import TransferConfirmModal from "@/components/earnings/TransferConfirmModal";
 import {
   useGetAllProducerEarningsQuery,
+  useTransferProducerEarningMutation,
   TAdminProducerEarning,
 } from "@/redux/features/admin/adminApi";
 import {
@@ -20,9 +22,11 @@ import {
   TrendingUp,
   Building,
   X,
+  ArrowUpRight,
 } from "lucide-react";
 import { format } from "date-fns";
 import { formatCurrency } from "@/utils/formatters";
+import { toast } from "react-toastify";
 
 export default function ProducerEarningsPage() {
   const [search, setSearch] = useState("");
@@ -34,6 +38,29 @@ export default function ProducerEarningsPage() {
   // Selected earning for inspection modal
   const [selectedEarning, setSelectedEarning] = useState<TAdminProducerEarning | null>(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
+
+  // Selected earning for direct manual transfer
+  const [transferringEarning, setTransferringEarning] = useState<TAdminProducerEarning | null>(null);
+  const [transferProducerEarning, { isLoading: isTransferring }] =
+    useTransferProducerEarningMutation();
+
+  const handleOpenTransferConfirm = (earning: TAdminProducerEarning) => {
+    setTransferringEarning(earning);
+  };
+
+  const handleConfirmTransfer = async () => {
+    if (!transferringEarning) return;
+    try {
+      const res = await transferProducerEarning(transferringEarning.id).unwrap();
+      toast.success(res.message || "Producer earning transferred successfully!");
+      setTransferringEarning(null);
+    } catch (err: any) {
+      toast.error(
+        err?.data?.message || err?.message || "Failed to transfer producer earning."
+      );
+      throw err;
+    }
+  };
 
   // RTK Query parameters
   const queryParams = {
@@ -418,13 +445,25 @@ export default function ProducerEarningsPage() {
 
                       {/* Action */}
                       <td className="py-3.5 px-4 text-right whitespace-nowrap" onClick={(e) => e.stopPropagation()}>
-                        <button
-                          onClick={() => handleOpenDetail(earn)}
-                          className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-emerald-50 text-slate-700 hover:text-emerald-700 text-xs font-bold transition-all border border-slate-200/80 hover:border-emerald-200"
-                        >
-                          <Eye className="w-3.5 h-3.5" />
-                          <span>Inspect</span>
-                        </button>
+                        <div className="flex items-center justify-end gap-1.5">
+                          {!earn.isTransferred && (
+                            <button
+                              onClick={() => handleOpenTransferConfirm(earn)}
+                              className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-all shadow-sm active:scale-95"
+                              title="Transfer Earning Manually"
+                            >
+                              <ArrowUpRight className="w-3.5 h-3.5" />
+                              <span>Transfer</span>
+                            </button>
+                          )}
+                          <button
+                            onClick={() => handleOpenDetail(earn)}
+                            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-emerald-50 text-slate-700 hover:text-emerald-700 text-xs font-bold transition-all border border-slate-200/80 hover:border-emerald-200"
+                          >
+                            <Eye className="w-3.5 h-3.5" />
+                            <span>Inspect</span>
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))
@@ -482,6 +521,27 @@ export default function ProducerEarningsPage() {
         onClose={() => setIsDetailOpen(false)}
         earning={selectedEarning}
       />
+
+      {/* Manual Transfer Confirmation Modal */}
+      {transferringEarning && (
+        <TransferConfirmModal
+          isOpen={!!transferringEarning}
+          onClose={() => setTransferringEarning(null)}
+          onConfirm={handleConfirmTransfer}
+          type="Producer"
+          earningId={transferringEarning.id}
+          recipientName={
+            transferringEarning.producer?.fullName || "Agricultural Producer"
+          }
+          recipientSubtitle={
+            transferringEarning.producer?.producerProfile?.farmName ||
+            "Direct Farm Partner"
+          }
+          amount={transferringEarning.amount || 0}
+          createdAt={transferringEarning.createdAt}
+          isLoading={isTransferring}
+        />
+      )}
     </DashboardLayout>
   );
 }
