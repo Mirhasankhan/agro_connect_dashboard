@@ -88,7 +88,45 @@ export default function OrderDetailsPage() {
     }
   };
 
-  const renderItemStatusBadge = (status: string) => {
+  const renderItemStatusBadge = (
+    status: string,
+    report?: { status: string } | null
+  ) => {
+    if (status === "Refunded") {
+      return (
+        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-rose-50 text-rose-700 border border-rose-200">
+          <XCircle className="w-3 h-3" />
+          <span>Refunded</span>
+        </span>
+      );
+    }
+
+    if (report) {
+      if (report.status === "Pending") {
+        return (
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
+            <AlertCircle className="w-3 h-3" />
+            <span>Dispute Pending</span>
+          </span>
+        );
+      }
+      if (report.status === "Resolved") {
+        return (
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-purple-50 text-purple-700 border border-purple-200">
+            <CheckCircle2 className="w-3 h-3" />
+            <span>Dispute Resolved</span>
+          </span>
+        );
+      }
+      if (report.status === "Rejected") {
+        return (
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-200">
+            <span>Dispute Dismissed</span>
+          </span>
+        );
+      }
+    }
+
     switch (status) {
       case "Delivered":
         return (
@@ -519,7 +557,7 @@ export default function OrderDetailsPage() {
                     </td>
 
                     {/* Status */}
-                    <td className="py-3.5 px-4">{renderItemStatusBadge(item.status)}</td>
+                    <td className="py-3.5 px-4">{renderItemStatusBadge(item.status, item.report)}</td>
 
                     {/* Producer Payout */}
                     <td className="py-3.5 px-4 text-slate-700">

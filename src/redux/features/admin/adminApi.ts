@@ -50,6 +50,76 @@ export interface OrderQueryParams {
   limit?: number | string;
 }
 
+export type TReportStatus = "Pending" | "Resolved" | "Rejected";
+
+export interface TAdminReport {
+  id: string;
+  reason: string;
+  fileUrl?: string | null;
+  adminComment?: string | null;
+  status: TReportStatus;
+  createdAt: string;
+  updatedAt?: string;
+  buyer?: {
+    id: string;
+    fullName: string;
+    email: string;
+    phoneNumber?: string | null;
+    profileImage?: string | null;
+  };
+  orderItem?: {
+    id: string;
+    productName: string;
+    sellingUnit: string;
+    quantity: number;
+    unitPrice: number;
+    subtotal: number;
+    status: string;
+    order?: {
+      id: string;
+      orderId: string;
+      status: string;
+      paymentStatus: string;
+      totalAmount: number;
+      createdAt: string;
+    };
+    product?: {
+      id: string;
+      name: string;
+      imageUrls: string[];
+      producer?: {
+        id: string;
+        fullName: string;
+        email: string;
+        phoneNumber?: string | null;
+        profileImage?: string | null;
+        producerProfile?: {
+          farmName?: string | null;
+        } | null;
+      };
+    };
+    producerEarning?: {
+      id: string;
+      amount: number;
+      isTransferred: boolean;
+      paidAt?: string | null;
+    } | null;
+  };
+}
+
+export interface ReportQueryParams {
+  search?: string;
+  status?: TReportStatus;
+  order?: "asc" | "desc";
+  page?: number | string;
+  limit?: number | string;
+}
+
+export interface ResolveReportPayload {
+  status: "Resolved" | "Rejected";
+  adminComment?: string;
+}
+
 export interface TProducerProduct {
   id: string;
   name: string;
@@ -323,6 +393,13 @@ export interface TAdminOrderDetail {
       rating: number;
       comment: string;
     };
+    report?: {
+      id: string;
+      reason: string;
+      fileUrl?: string | null;
+      adminComment?: string | null;
+      status: TReportStatus;
+    } | null;
   }[];
   driverEarning?: {
     amount: number;
@@ -521,6 +598,39 @@ export const adminApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Driver", "Admin", "Payment"],
     }),
+
+    // REPORTS & QUALITY DISPUTES
+    getAllReports: builder.query<
+      TApiResponse<{ reports: TAdminReport[]; meta: TPaginationMeta }>,
+      ReportQueryParams | void
+    >({
+      query: (params) => ({
+        url: "/admin/all-reports",
+        method: "GET",
+        params: params || {},
+      }),
+      providesTags: ["Admin", "Order"],
+    }),
+
+    getReportDetails: builder.query<TApiResponse<{ report: TAdminReport }>, string>({
+      query: (id) => ({
+        url: `/admin/report-details/${id}`,
+        method: "GET",
+      }),
+      providesTags: (result, error, id) => [{ type: "Admin", id }],
+    }),
+
+    resolveReport: builder.mutation<
+      TApiResponse<null>,
+      { id: string; payload: ResolveReportPayload }
+    >({
+      query: ({ id, payload }) => ({
+        url: `/admin/resolve-report/${id}`,
+        method: "PATCH",
+        body: payload,
+      }),
+      invalidatesTags: ["Admin", "Order", "Producer", "Payment"],
+    }),
   }),
 });
 
@@ -543,4 +653,7 @@ export const {
   useGetAllDriverEarningsQuery,
   useTransferProducerEarningMutation,
   useTransferDriverEarningMutation,
+  useGetAllReportsQuery,
+  useGetReportDetailsQuery,
+  useResolveReportMutation,
 } = adminApi;
