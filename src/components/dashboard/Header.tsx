@@ -54,10 +54,6 @@ const routeTitleMap: Record<string, { title: string; subtitle: string }> = {
     title: "Incidents & Dispute Reports",
     subtitle: "Address damaged produce, transit delays, and buyer disputes.",
   },
-  "/analytics": {
-    title: "Platform Analytics & Intelligence",
-    subtitle: "Visual trends, volume throughput, and regional supply insights.",
-  },
   "/settings": {
     title: "Platform Settings",
     subtitle: "System configuration, platform delivery fees, and administrative controls.",

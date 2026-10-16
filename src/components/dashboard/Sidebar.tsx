@@ -14,8 +14,7 @@ import {
   Package,
   Wallet,
   Coins,
-  AlertOctagon,
-  BarChart3,
+  AlertOctagon, 
   Settings,
   ChevronDown,
   ChevronRight,
@@ -96,11 +95,7 @@ export default function Sidebar({ mobileOpen = false, onMobileClose }: SidebarPr
       href: "/reports",
       icon: AlertOctagon,
     },
-    {
-      name: "Analytics",
-      href: "/analytics",
-      icon: BarChart3,
-    },
+   
     {
       name: "Settings",
       href: "/settings",

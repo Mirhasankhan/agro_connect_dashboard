@@ -13,8 +13,7 @@ import {
   ArrowRight,
   ShieldCheck,
   CheckCircle2,
-  ChevronRight,
-  TrendingUp,
+  ChevronRight, 
 } from "lucide-react";
 import {
   useGetAllOrdersQuery,
@@ -333,24 +332,6 @@ export default function AdminOverviewDashboard() {
                   </div>
                 </div>
                 <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-rose-600 group-hover:translate-x-0.5 transition-transform" />
-              </Link>
-
-              <Link
-                href="/analytics"
-                className="flex items-center justify-between p-3 rounded-xl border border-slate-200/80 hover:border-emerald-500 hover:bg-emerald-50/40 transition-all group"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-sky-100 text-sky-800">
-                    <TrendingUp className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <div className="text-xs font-bold text-slate-900 group-hover:text-sky-700">
-                      Analytics
-                    </div>
-                    <div className="text-[11px] text-slate-400">Trade volume & charts</div>
-                  </div>
-                </div>
-                <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-sky-600 group-hover:translate-x-0.5 transition-transform" />
               </Link>
             </div>
           </div>
