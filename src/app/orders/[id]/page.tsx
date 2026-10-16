@@ -6,6 +6,8 @@ import Link from "next/link";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import AssignDriverModal from "@/components/orders/AssignDriverModal";
 import { useGetOrderDetailsQuery } from "@/redux/features/admin/adminApi";
+import { useDeliveryTracking } from "@/hooks/useDeliveryTracking";
+import { LiveDeliveryMap } from "@/components/tracking/LiveDeliveryMap";
 import {
   Truck,
   MapPin,
@@ -43,6 +45,25 @@ export default function OrderDetailsPage() {
   const activeDelivery = deliveries[0];
   const driver = activeDelivery?.driver;
   const items = order?.items || [];
+
+  // Real-time GPS live tracking hook
+  const {
+    latitude: liveLat,
+    longitude: liveLng,
+    heading: liveHeading,
+    speed: liveSpeed,
+    isTracking: liveIsTracking,
+    status: liveStatus,
+    lastUpdated: liveLastUpdated,
+  } = useDeliveryTracking(activeDelivery?.id, {
+    initialLatitude: activeDelivery?.latitude,
+    initialLongitude: activeDelivery?.longitude,
+    initialHeading: activeDelivery?.heading,
+    initialSpeed: activeDelivery?.speed,
+    initialIsTracking: activeDelivery?.isTracking,
+    initialStatus: activeDelivery?.status,
+    initialUpdatedAt: activeDelivery?.trackingUpdatedAt || activeDelivery?.updatedAt,
+  });
 
   // Financial calculations
   const itemsSubtotal = items.reduce((sum, item) => sum + (item.subtotal || 0), 0);
@@ -434,6 +455,35 @@ export default function OrderDetailsPage() {
                 <div className="p-3 rounded-xl bg-sky-50 border border-sky-100 text-xs flex items-center justify-between text-sky-800">
                   <span className="font-medium">Delivery Dispatch Status:</span>
                   <span className="font-bold">{activeDelivery.status}</span>
+                </div>
+
+                {/* Real-time Fleet Live Tracking */}
+                <div className="pt-2">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+                      <span className={`w-2 h-2 rounded-full ${liveIsTracking ? 'bg-emerald-500 animate-pulse' : 'bg-slate-300'}`} />
+                      Live Fleet Navigation & GPS
+                    </span>
+                    <span className="text-[11px] text-slate-500">
+                      {liveIsTracking ? 'Transmitting Live' : (activeDelivery?.status === 'Delivered' ? 'Trip Completed' : 'Awaiting Driver Signal')}
+                    </span>
+                  </div>
+
+                  <LiveDeliveryMap
+                    deliveryId={activeDelivery.id}
+                    driver={driver}
+                    shippingAddress={shippingAddress}
+                    currentLatitude={liveLat ?? activeDelivery.latitude}
+                    currentLongitude={liveLng ?? activeDelivery.longitude}
+                    currentHeading={liveHeading ?? activeDelivery.heading}
+                    currentSpeed={liveSpeed ?? activeDelivery.speed}
+                    isTracking={liveIsTracking || Boolean(activeDelivery.isTracking)}
+                    status={liveStatus || activeDelivery.status}
+                    lastUpdated={liveLastUpdated}
+                    height="320px"
+                    showControls={true}
+                    onRefresh={refetch}
+                  />
                 </div>
               </div>
             ) : (

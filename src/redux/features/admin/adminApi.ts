@@ -336,6 +336,11 @@ export interface TAdminOrderDetail {
     status: string;
     latitude?: number | null;
     longitude?: number | null;
+    heading?: number | null;
+    speed?: number | null;
+    isTracking?: boolean;
+    trackingStartedAt?: string | null;
+    trackingUpdatedAt?: string | null;
     createdAt: string;
     updatedAt: string;
     driver?: {
@@ -631,6 +636,17 @@ export const adminApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Admin", "Order", "Producer", "Payment"],
     }),
+
+    getDeliveryTrackingSnapshot: builder.query<
+      TApiResponse<any>,
+      string
+    >({
+      query: (deliveryId) => ({
+        url: `/order/delivery/tracking/${deliveryId}`,
+        method: "GET",
+      }),
+      providesTags: (result, error, id) => [{ type: "Order", id }],
+    }),
   }),
 });
 
@@ -656,4 +672,5 @@ export const {
   useGetAllReportsQuery,
   useGetReportDetailsQuery,
   useResolveReportMutation,
+  useGetDeliveryTrackingSnapshotQuery,
 } = adminApi;
