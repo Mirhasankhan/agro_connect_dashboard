@@ -334,6 +334,8 @@ export interface TAdminOrderDetail {
   deliveries?: {
     id: string;
     status: string;
+    startLatitude?: number | null;
+    startLongitude?: number | null;
     latitude?: number | null;
     longitude?: number | null;
     heading?: number | null;
