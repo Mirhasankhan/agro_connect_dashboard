@@ -50,6 +50,19 @@ export interface OrderQueryParams {
   limit?: number | string;
 }
 
+export interface AdminCancelOrderPayload {
+  reason: string;
+  refundType?: "FULL" | "ITEMS_ONLY" | "CUSTOM" | "NONE";
+  customRefundAmount?: number;
+  restoreInventory?: boolean;
+}
+
+export interface AdminCancelOrderItemPayload {
+  reason: string;
+  refundAmount?: number;
+  restoreInventory?: boolean;
+}
+
 export type TReportStatus = "Pending" | "Resolved" | "Rejected";
 
 export interface TAdminReport {
@@ -565,6 +578,30 @@ export const adminApi = baseApi.injectEndpoints({
       invalidatesTags: ["Order", "Driver"],
     }),
 
+    adminCancelOrder: builder.mutation<
+      TApiResponse<null>,
+      { id: string; payload: AdminCancelOrderPayload }
+    >({
+      query: ({ id, payload }) => ({
+        url: `/admin/cancel-order/${id}`,
+        method: "PATCH",
+        body: payload,
+      }),
+      invalidatesTags: ["Order", "Admin", "Driver", "Producer"],
+    }),
+
+    adminCancelOrderItem: builder.mutation<
+      TApiResponse<null>,
+      { id: string; payload: AdminCancelOrderItemPayload }
+    >({
+      query: ({ id, payload }) => ({
+        url: `/admin/cancel-order-item/${id}`,
+        method: "PATCH",
+        body: payload,
+      }),
+      invalidatesTags: ["Order", "Admin", "Producer"],
+    }),
+
     // EARNINGS
     getAllProducerEarnings: builder.query<
       TApiResponse<{ earnings: TAdminProducerEarning[]; meta: TPaginationMeta }>,
@@ -667,6 +704,8 @@ export const {
   useGetAllOrdersQuery,
   useGetOrderDetailsQuery,
   useAssignDriverMutation,
+  useAdminCancelOrderMutation,
+  useAdminCancelOrderItemMutation,
   useGetAllProducerEarningsQuery,
   useGetAllDriverEarningsQuery,
   useTransferProducerEarningMutation,

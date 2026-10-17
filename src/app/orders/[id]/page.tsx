@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import AssignDriverModal from "@/components/orders/AssignDriverModal";
+import AdminCancelModal from "@/components/orders/AdminCancelModal";
 import { useGetOrderDetailsQuery } from "@/redux/features/admin/adminApi";
 import { useDeliveryTracking } from "@/hooks/useDeliveryTracking";
 import { LiveDeliveryMap } from "@/components/tracking/LiveDeliveryMap";
@@ -24,6 +25,7 @@ import {
   ShieldCheck,
   ExternalLink,
   Sprout,
+  Ban,
 } from "lucide-react";
 import { formatCurrency } from "@/utils/formatters";
 import { format } from "date-fns";
@@ -33,6 +35,20 @@ export default function OrderDetailsPage() {
   const id = params?.id as string;
 
   const [assignModalOpen, setAssignModalOpen] = useState(false);
+  const [cancelModalConfig, setCancelModalConfig] = useState<{
+    isOpen: boolean;
+    mode: "order" | "item";
+    orderId: string;
+    orderCode?: string;
+    orderItemId?: string;
+    targetName?: string;
+    subtotal?: number;
+    totalAmount?: number;
+  }>({
+    isOpen: false,
+    mode: "order",
+    orderId: "",
+  });
 
   const { data, isLoading, isFetching, refetch } = useGetOrderDetailsQuery(id, {
     skip: !id,
@@ -101,6 +117,13 @@ export default function OrderDetailsPage() {
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-rose-50 text-rose-700 border border-rose-200">
             <XCircle className="w-3.5 h-3.5" />
             <span>Cancelled Order</span>
+          </span>
+        );
+      case "PartiallyCancelled":
+        return (
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200">
+            <AlertCircle className="w-3.5 h-3.5" />
+            <span>Partially Cancelled</span>
           </span>
         );
       default:
@@ -265,8 +288,64 @@ export default function OrderDetailsPage() {
                 <span>Assign Driver</span>
               </button>
             )}
+
+            {/* Admin Cancel Order Action */}
+            {order?.status !== "Delivered" && order?.status !== "Cancelled" && (
+              <button
+                onClick={() =>
+                  setCancelModalConfig({
+                    isOpen: true,
+                    mode: "order",
+                    orderId: order.id,
+                    orderCode: order.orderId?.slice(-8) || order.id.slice(-8),
+                    totalAmount: order.totalAmount,
+                  })
+                }
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white border border-rose-200 hover:bg-rose-50 text-xs font-semibold text-rose-700 shadow-sm transition-colors"
+              >
+                <Ban className="w-3.5 h-3.5" />
+                <span>Cancel Order</span>
+              </button>
+            )}
           </div>
         </div>
+
+        {/* Cancellation Alert Banners */}
+        {order.status === "Cancelled" && (
+          <div className="p-4 rounded-2xl bg-rose-50 border border-rose-200 flex items-start gap-3">
+            <div className="p-2 rounded-xl bg-rose-100 text-rose-700 shrink-0 mt-0.5">
+              <Ban className="w-5 h-5" />
+            </div>
+            <div className="space-y-1">
+              <h4 className="font-bold text-rose-900 text-sm">Order Fully Cancelled</h4>
+              <p className="text-xs text-rose-700">
+                This order was cancelled and inventory/driver assignments have been updated.
+                {order.cancelReason && (
+                  <span className="block mt-1 font-medium bg-rose-100/60 p-2 rounded-lg text-rose-800">
+                    Reason: {order.cancelReason}
+                  </span>
+                )}
+              </p>
+              <div className="text-[11px] text-rose-600 font-semibold pt-0.5">
+                Payment status: <span className="font-mono uppercase font-bold">{order.paymentStatus}</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {order.status === "PartiallyCancelled" && (
+          <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 flex items-start gap-3">
+            <div className="p-2 rounded-xl bg-amber-100 text-amber-700 shrink-0 mt-0.5">
+              <AlertCircle className="w-5 h-5" />
+            </div>
+            <div className="space-y-1">
+              <h4 className="font-bold text-amber-900 text-sm">Partially Cancelled Order</h4>
+              <p className="text-xs text-amber-800">
+                One or more items in this order were cancelled and refunded. Active items continue towards regional hub fulfillment and carrier delivery without interruption.
+              </p>
+            </div>
+          </div>
+        )}
 
         {/* Financial & Status Summary Ribbon */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -544,6 +623,7 @@ export default function OrderDetailsPage() {
                   <th className="py-3 px-4">Subtotal</th>
                   <th className="py-3 px-4">Hub Fulfillment Status</th>
                   <th className="py-3 px-4">Producer Payout</th>
+                  <th className="py-3 px-4 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
@@ -570,6 +650,11 @@ export default function OrderDetailsPage() {
                           {item.product?.category?.name && (
                             <div className="text-[10px] text-slate-400 font-medium">
                               {item.product.category.name}
+                            </div>
+                          )}
+                          {item.cancelReason && (
+                            <div className="text-[10px] text-rose-600 font-medium mt-0.5">
+                              Cancelled: {item.cancelReason}
                             </div>
                           )}
                         </div>
@@ -630,6 +715,35 @@ export default function OrderDetailsPage() {
                         <span className="text-slate-400">Standard</span>
                       )}
                     </td>
+
+                    {/* Actions */}
+                    <td className="py-3.5 px-4 text-right">
+                      {item.status !== "Delivered" && item.status !== "Cancelled" && order.status !== "Cancelled" ? (
+                        <button
+                          onClick={() =>
+                            setCancelModalConfig({
+                              isOpen: true,
+                              mode: "item",
+                              orderId: order.id,
+                              orderItemId: item.id,
+                              targetName: item.productName,
+                              subtotal: item.subtotal,
+                            })
+                          }
+                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-rose-200 bg-white hover:bg-rose-50 text-[11px] font-semibold text-rose-600 shadow-xs transition-colors"
+                          title="Cancel single item and issue partial refund"
+                        >
+                          <Ban className="w-3 h-3" />
+                          <span>Cancel</span>
+                        </button>
+                      ) : item.status === "Cancelled" ? (
+                        <span className="text-[10px] font-semibold text-rose-600 bg-rose-50 px-2 py-0.5 rounded border border-rose-100">
+                          Cancelled
+                        </span>
+                      ) : (
+                        <span className="text-slate-300">-</span>
+                      )}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -667,6 +781,20 @@ export default function OrderDetailsPage() {
           onSuccess={() => refetch()}
         />
       )}
+
+      {/* Admin Cancellation Modal */}
+      <AdminCancelModal
+        isOpen={cancelModalConfig.isOpen}
+        onClose={() => setCancelModalConfig((prev) => ({ ...prev, isOpen: false }))}
+        mode={cancelModalConfig.mode}
+        orderId={cancelModalConfig.orderId}
+        orderCode={cancelModalConfig.orderCode}
+        orderItemId={cancelModalConfig.orderItemId}
+        targetName={cancelModalConfig.targetName}
+        subtotal={cancelModalConfig.subtotal}
+        totalAmount={cancelModalConfig.totalAmount}
+        onSuccess={() => refetch()}
+      />
     </DashboardLayout>
   );
 }

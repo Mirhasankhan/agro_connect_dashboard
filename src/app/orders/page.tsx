@@ -24,6 +24,7 @@ import {
   Clock,
   XCircle,
   RotateCcw,
+  AlertCircle,
 } from "lucide-react";
 import { format } from "date-fns";
 import { formatCurrency } from "@/utils/formatters";
@@ -79,6 +80,13 @@ export default function OrdersManagementPage() {
           <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-rose-50 text-rose-700 border border-rose-200">
             <XCircle className="w-3 h-3 text-rose-600" />
             <span>Cancelled</span>
+          </span>
+        );
+      case "PartiallyCancelled":
+        return (
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
+            <AlertCircle className="w-3 h-3 text-amber-600" />
+            <span>Partially Cancelled</span>
           </span>
         );
       case "Refunded":
