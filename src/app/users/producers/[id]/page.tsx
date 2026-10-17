@@ -255,16 +255,13 @@ export default function ProducerDetailsPage() {
           </div>
         </div>
 
-        {/* Producer Banner & Profile Header Card */}
-        <div className="rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden">
-          <div className="h-28 bg-gradient-to-r from-emerald-800 via-teal-800 to-slate-900 relative">
-            <div className="absolute inset-0 opacity-15 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]" />
-          </div>
-
-          <div className="px-6 pb-6 pt-0 relative">
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 -mt-12 mb-4">
+        {/* Producer Profile & Overview */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-start">
+          <div className="rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden">
+            <div className="px-5 py-5 relative">
+              <div className="flex items-center gap-4 mb-4">
               <div className="flex items-end gap-4">
-                <div className="w-24 h-24 rounded-2xl bg-white p-1 shadow-lg border-2 border-white shrink-0 overflow-hidden">
+                <div className="w-20 h-20 rounded-2xl bg-white p-1 shadow-lg border-2 border-white shrink-0 overflow-hidden">
                   {producer.profileImage ? (
                     <img
                       src={producer.profileImage}
@@ -290,7 +287,7 @@ export default function ProducerDetailsPage() {
             </div>
 
             {/* Quick Contact & Geographic Meta Details */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 pt-3 border-t border-slate-100 text-xs">
+            <div className="space-y-3 pt-4 border-t border-slate-100 text-xs">
               <div className="flex items-center gap-2.5 text-slate-600">
                 <Mail className="w-4 h-4 text-emerald-600 shrink-0" />
                 <span className="truncate">{producer.email}</span>
@@ -326,10 +323,10 @@ export default function ProducerDetailsPage() {
               </div>
             )}
           </div>
-        </div>
+          </div>
 
-        {/* High-Level Financial & Volume KPI Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* High-Level Financial & Volume KPI Cards */}
+          <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-center justify-between">
             <div>
               <span className="text-[11px] font-bold  tracking-wider text-slate-400 block">
@@ -392,6 +389,7 @@ export default function ProducerDetailsPage() {
             <div className="p-3 rounded-xl bg-teal-50 text-teal-600">
               <TrendingUp className="w-6 h-6" />
             </div>
+          </div>
           </div>
         </div>
 
@@ -703,12 +701,7 @@ export default function ProducerDetailsPage() {
                         )}
                       </div>
                     </div>
-
-                    <div className="p-4 pt-0">
-                      <div className="text-[10px] text-slate-400 text-right">
-                        Product ID: #{product.id.slice(-8)}
-                      </div>
-                    </div>
+                  
                   </div>
                 ))}
               </div>

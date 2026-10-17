@@ -17,6 +17,7 @@ import {
   Eye,
   CheckCircle2,
 } from "lucide-react";
+import Image from "next/image";
 
 export default function BuyerManagementPage() {
   const [search, setSearch] = useState("");
@@ -121,9 +122,7 @@ export default function BuyerManagementPage() {
                             href={`/users/buyers/${buyer.id}`}
                             className="flex items-center gap-3 group"
                           >
-                            <div className="w-9 h-9 rounded-full bg-slate-900 text-emerald-400 font-bold flex items-center justify-center text-xs shrink-0 group-hover:ring-2 group-hover:ring-emerald-500 transition-all">
-                              {buyer.fullName?.charAt(0) || "B"}
-                            </div>
+                            <Image className="object-cover h-8 w-8 rounded-full" src={buyer?.profileImage as string} height={20} width={20} alt="" />
                             <div className="min-w-0">
                               <div className="font-bold text-slate-900 group-hover:text-emerald-700 transition-colors truncate">
                                 {buyer.fullName}

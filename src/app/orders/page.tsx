@@ -236,7 +236,7 @@ export default function OrdersManagementPage() {
                 <thead className="bg-slate-50 text-slate-600 border-b border-slate-200 font-semibold  tracking-wider text-[11px]">
                   <tr>
                     <th className="py-3.5 px-4">Order ID</th>
-                    <th className="py-3.5 px-4">Buyer Customer</th>
+                    <th className="py-3.5 px-4">Buyer</th>
                     <th className="py-3.5 px-4">Destination Address</th>
                     <th className="py-3.5 px-4">Items</th>
                     <th className="py-3.5 px-4">Total Amount</th>

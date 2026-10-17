@@ -248,16 +248,13 @@ export default function DriverDetailsPage() {
           </div>
         </div>
 
-        {/* Driver Banner & Header Card */}
-        <div className="rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden">
-          <div className="h-28 bg-gradient-to-r from-sky-800 via-blue-900 to-slate-900 relative">
-            <div className="absolute inset-0 opacity-15 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]" />
-          </div>
-
-          <div className="px-6 pb-6 pt-0 relative">
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 -mt-12 mb-4">
+        {/* Driver Profile & Overview */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-start">
+          <div className="rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden">
+            <div className="px-5 py-5 relative">
+              <div className="flex items-center gap-4 mb-4">
               <div className="flex items-end gap-4">
-                <div className="w-24 h-24 rounded-2xl bg-white p-1 shadow-lg border-2 border-white shrink-0 overflow-hidden">
+                <div className="w-20 h-20 rounded-2xl bg-white p-1 shadow-lg border-2 border-white shrink-0 overflow-hidden">
                   {driver.profileImage ? (
                     <img
                       src={driver.profileImage}
@@ -274,16 +271,7 @@ export default function DriverDetailsPage() {
                   <div className="flex items-center gap-2 flex-wrap">
                     <h2 className="text-lg font-bold text-slate-900">{driver.fullName}</h2>
                     {renderStatusBadge(verificationStatus)}
-                    {isAvailable ? (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                        <Radio className="w-3 h-3 text-emerald-500 animate-pulse" />
-                        <span>Ready for Dispatch</span>
-                      </span>
-                    ) : (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 text-slate-600 border border-slate-200">
-                        <span>Unavailable / Offline</span>
-                      </span>
-                    )}
+                    
                   </div>
                   <p className="text-xs text-slate-500 font-medium">
                     Vehicle: {profile?.vehicleType || "General Vehicle"} &bull; Reg: {profile?.registrationNumber || profile?.licensePlate || "Pending Plate"}
@@ -293,7 +281,7 @@ export default function DriverDetailsPage() {
             </div>
 
             {/* Quick Contact & Geographic Meta Details */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 pt-3 border-t border-slate-100 text-xs">
+            <div className="space-y-3 pt-4 border-t border-slate-100 text-xs">
               <div className="flex items-center gap-2.5 text-slate-600">
                 <Mail className="w-4 h-4 text-sky-600 shrink-0" />
                 <span className="truncate">{driver.email}</span>
@@ -327,10 +315,10 @@ export default function DriverDetailsPage() {
               </div>
             )}
           </div>
-        </div>
+          </div>
 
-        {/* Logistics KPI Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* Logistics KPI Cards */}
+          <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-center justify-between">
             <div>
               <span className="text-[11px] font-bold  tracking-wider text-slate-400 block">
@@ -393,6 +381,7 @@ export default function DriverDetailsPage() {
             <div className="p-3 rounded-xl bg-teal-50 text-teal-600">
               <TrendingUp className="w-6 h-6" />
             </div>
+          </div>
           </div>
         </div>
 
