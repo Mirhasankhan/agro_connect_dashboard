@@ -29,7 +29,7 @@ export default function BuyerDetailsPage() {
 
   const [activeTab, setActiveTab] = useState<"orders" | "addresses">("orders");
 
-  const { data, isLoading, isFetching, refetch } = useGetBuyerDetailsQuery(id, {
+  const { data, isLoading } = useGetBuyerDetailsQuery(id, {
     skip: !id,
   });
 
