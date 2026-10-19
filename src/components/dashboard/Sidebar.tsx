@@ -23,7 +23,7 @@ import {
   User,
 } from "lucide-react";
 import logoImg from "@/assets/logo.png";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { useAppDispatch } from "@/redux/hooks";
 import { logout } from "@/redux/features/auth/authSlice";
 
 interface SidebarProps {
@@ -35,7 +35,6 @@ export default function Sidebar({ mobileOpen = false, onMobileClose }: SidebarPr
   const pathname = usePathname();
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { user } = useAppSelector((state) => state.auth);
 
   // Auto-expand User Management if currently on a sub-route
   const isUserMgmtActive = pathname.startsWith("/users");
@@ -247,17 +246,14 @@ export default function Sidebar({ mobileOpen = false, onMobileClose }: SidebarPr
 
       {/* Admin User Footer & Logout */}
       <div className="p-3.5 border-t border-slate-800 bg-slate-950/60">
-        <div className="flex items-center justify-between gap-3 p-2 rounded-xl bg-slate-900/80 border border-slate-800">
-         
-
-          <button
-            onClick={handleLogout}
-            title="Sign Out"
-            className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-950/30 transition-colors"
-          >
-            <LogOut className="w-4 h-4" />
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={handleLogout}
+          className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-300 hover:text-rose-400 hover:bg-rose-950/30 border border-slate-800 hover:border-rose-900/40 bg-slate-900/80 transition-all duration-200"
+        >
+          <span>Logout</span>
+          <LogOut className="w-4 h-4" />
+        </button>
       </div>
     </div>
   );
