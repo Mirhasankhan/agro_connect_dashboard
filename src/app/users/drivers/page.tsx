@@ -79,7 +79,7 @@ export default function DriverManagementPage() {
               Driver Management
             </h1>
             <p className="text-xs text-slate-500">
-              Audit driver credentials, vehicle registrations, and manage fleet authorization.
+              Audit driver credentials, vehicle registrations, and manage authorization.
             </p>
           </div>
 
@@ -156,7 +156,7 @@ export default function DriverManagementPage() {
           {isLoading ? (
             <div className="p-12 text-center text-xs text-slate-400">
               <RefreshCw className="w-6 h-6 text-sky-600 animate-spin mx-auto mb-2" />
-              Loading fleet drivers...
+              Loading drivers...
             </div>
           ) : drivers.length === 0 ? (
             <div className="p-12 text-center text-xs text-slate-500 space-y-2">
@@ -259,7 +259,7 @@ export default function DriverManagementPage() {
                             {/* Dedicated Details Page Button */}
                             <Link
                               href={`/users/drivers/${driver.id}`}
-                              title="Inspect Driver Documents & Fleet Records"
+                              title="Inspect Driver Documents & Records"
                               className="p-1.5 rounded-lg text-slate-600 hover:text-sky-700 hover:bg-sky-50 transition-colors"
                             >
                               <Eye className="w-4 h-4" />

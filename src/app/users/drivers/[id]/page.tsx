@@ -91,7 +91,7 @@ export default function DriverDetailsPage() {
         return (
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
             <CheckCircle2 className="w-3.5 h-3.5" />
-            <span>Authorized Fleet Driver</span>
+            <span>Authorized Driver</span>
           </span>
         );
       case "Rejected":
@@ -150,7 +150,7 @@ export default function DriverDetailsPage() {
       <DashboardLayout>
         <div className="p-16 text-center text-xs text-slate-500 space-y-3">
           <RefreshCw className="w-8 h-8 text-sky-600 animate-spin mx-auto" />
-          <div className="font-semibold text-slate-700 text-sm">Loading driver profile & fleet records...</div>
+          <div className="font-semibold text-slate-700 text-sm">Loading driver profile & records...</div>
           <p className="text-slate-400">Fetching vehicle credentials, trip logs, and delivery earnings.</p>
         </div>
       </DashboardLayout>
@@ -427,7 +427,7 @@ export default function DriverDetailsPage() {
               <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4">
                 <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
                   <Truck className="w-4 h-4 text-sky-600" />
-                  <span>Fleet Vehicle Specifications</span>
+                  <span>Vehicle Specifications</span>
                 </h3>
 
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-xs">

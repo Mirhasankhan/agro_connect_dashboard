@@ -23,7 +23,7 @@ const routeTitleMap: Record<string, { title: string; subtitle: string }> = {
     subtitle: "Manage retail & wholesale agricultural produce buyers.",
   },
   "/users/drivers": {
-    title: "Driver Fleet Management",
+    title: "Driver Management",
     subtitle: "Review transport partners, verification credentials, and availability.",
   },
   "/users/producers": {

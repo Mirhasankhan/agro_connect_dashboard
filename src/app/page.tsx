@@ -11,7 +11,6 @@ import {
   Grid,
   AlertCircle,
   ArrowRight,
-  ShieldCheck,
   CheckCircle2,
   ChevronRight, 
 } from "lucide-react";
@@ -91,12 +90,11 @@ export default function AdminOverviewDashboard() {
           <div className="rounded-2xl bg-white p-6 border border-slate-200/90 shadow-sm space-y-5">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
-                  <ShieldCheck className="w-5 h-5 text-emerald-600" />
+                <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">              
                   <span>Pending Partner Verifications</span>
                 </h2>
                 <p className="text-xs text-slate-500 mt-0.5">
-                  Producers and fleet drivers awaiting account validation and document checks.
+                  Producers and drivers awaiting account validation and document checks.
                 </p>
               </div>
 

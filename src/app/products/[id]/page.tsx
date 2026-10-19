@@ -29,8 +29,6 @@ import {
   ExternalLink,
   Layers,
   FileText,
-  Check,
-  Copy,
   ChevronRight,
   Eye,
   AlertCircle,
@@ -46,7 +44,6 @@ export default function ProductDetailsPage() {
 
   const [activeTab, setActiveTab] = useState<"overview" | "producer" | "orders" | "reviews">("overview");
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-  const [copiedId, setCopiedId] = useState(false);
   const [togglingFeatured, setTogglingFeatured] = useState(false);
 
   // Filter state for order history
@@ -60,14 +57,7 @@ export default function ProductDetailsPage() {
 
   const product = data?.data?.product;
   const revenue = data?.data?.revenue ?? 0;
-
-  const handleCopyId = () => {
-    if (!product?.id) return;
-    navigator.clipboard.writeText(product.id);
-    setCopiedId(true);
-    toast.info("Product ID copied to clipboard");
-    setTimeout(() => setCopiedId(false), 2000);
-  };
+ 
 
   const handleToggleFeatured = async () => {
     if (!product) return;
@@ -237,16 +227,7 @@ export default function ProductDetailsPage() {
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-xs font-semibold text-slate-500">Produce Listing</span>
-                <span className="text-slate-300">•</span>
-                <button
-                  type="button"
-                  onClick={handleCopyId}
-                  className="inline-flex items-center gap-1 text-[11px] font-mono text-slate-400 hover:text-slate-600 bg-slate-100 hover:bg-slate-200/80 px-2 py-0.5 rounded-md transition-colors cursor-pointer"
-                  title="Click to copy product ID"
-                >
-                  <span>ID: {product.id.slice(-8)}</span>
-                  {copiedId ? <Check className="w-3 h-3 text-emerald-600" /> : <Copy className="w-3 h-3" />}
-                </button>
+                <span className="text-slate-300">•</span>              
               </div>
               <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-2 mt-0.5">
                 <span>{product.name}</span>
@@ -674,7 +655,7 @@ export default function ProductDetailsPage() {
                         </span>
                       </div>
                       <div className="flex items-center justify-between p-3 bg-slate-50/50">
-                        <span className="text-slate-500">Catalog Visibility</span>
+                        <span className="text-slate-500">Product Visibility</span>
                         <span className="font-semibold text-slate-900">
                           {product.isActive !== false ? "Active in Marketplace" : "Hidden / Inactive"}
                         </span>
@@ -741,50 +722,8 @@ export default function ProductDetailsPage() {
                   </div>
                 </div>
 
-                {/* Bulk Pricing Tier Full View */}
-                <div className="pt-4 border-t border-slate-100 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h4 className="text-xs font-bold text-slate-900">Wholesale Pricing Policy</h4>
-                      <p className="text-[11px] text-slate-500">Threshold volumes automatically applied to buyer orders.</p>
-                    </div>
-                  </div>
-
-                  {pricingTiers.length === 0 ? (
-                    <div className="p-8 text-center text-xs text-slate-400 bg-slate-50 rounded-xl border border-dashed border-slate-200">
-                      No bulk pricing tiers established for this product. Sold strictly at base unit price of{" "}
-                      <span className="font-semibold text-slate-700">{formatCurrency(product.pricePerUnit || 0)}</span>.
-                    </div>
-                  ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                      {pricingTiers.map((tier, idx) => {
-                        const savings = Math.max(0, (product.pricePerUnit || 0) - (tier.pricePerUnit || 0));
-                        return (
-                          <div
-                            key={tier.id || idx}
-                            className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2 hover:border-emerald-300 transition-colors"
-                          >
-                            <div className="flex items-center justify-between">
-                              <span className="text-[10px] font-bold text-slate-500 uppercase">
-                                Tier {idx + 1}
-                              </span>
-                              <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">
-                                {tier.quantity}+ {product.sellingUnit}
-                              </span>
-                            </div>
-                            <div className="text-lg font-bold text-emerald-700">
-                              {formatCurrency(tier.pricePerUnit || 0)}
-                              <span className="text-xs font-normal text-slate-400"> / {product.sellingUnit}</span>
-                            </div>
-                            <p className="text-[11px] text-slate-500">
-                              Buyer saves {formatCurrency(savings)} per {product.sellingUnit} on bulk purchases of {tier.quantity} or more.
-                            </p>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
+             
+               
               </div>
             )}
 

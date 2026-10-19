@@ -488,7 +488,7 @@ export default function OrderDetailsPage() {
             <div className="flex items-center justify-between pb-3 border-b border-slate-100">
               <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
                 <Truck className="w-4 h-4 text-sky-600" />
-                <span>Logistics & Fleet Dispatch</span>
+                <span>Logistics & Dispatch</span>
               </h3>
               {driver?.id && (
                 <Link
@@ -522,7 +522,7 @@ export default function OrderDetailsPage() {
                       Vehicle Type
                     </span>
                     <span className="font-semibold text-slate-900">
-                      {driver.driverProfile?.vehicleType || "Fleet Vehicle"}
+                      {driver.driverProfile?.vehicleType || "Vehicle"}
                     </span>
                   </div>
                   <div className="p-3 rounded-xl bg-slate-50 border border-slate-100">
@@ -545,7 +545,7 @@ export default function OrderDetailsPage() {
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
                       <span className={`w-2 h-2 rounded-full ${liveIsTracking ? 'bg-emerald-500 animate-pulse' : 'bg-slate-300'}`} />
-                      Live Fleet Navigation & GPS
+                      Live Navigation & GPS
                     </span>
                     <span className="text-[11px] text-slate-500">
                       {liveIsTracking ? 'Transmitting Live' : (activeDelivery?.status === 'Delivered' ? 'Trip Completed' : 'Awaiting Driver Signal')}
@@ -582,7 +582,7 @@ export default function OrderDetailsPage() {
                 <p className="text-slate-400 max-w-xs mx-auto">
                   {order?.status === "Delivered"
                     ? "This order has been fulfilled and delivered to the customer."
-                    : "This order is ready for dispatch. Assign a verified fleet driver to transport packages from hub to customer."}
+                    : "This order is ready for dispatch. Assign a verified driver to transport packages from hub to customer."}
                 </p>
                 {order?.status === "Active" && (
                   <button
@@ -590,7 +590,7 @@ export default function OrderDetailsPage() {
                     className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-sm shadow-emerald-600/20 transition-all active:scale-95"
                   >
                     <Truck className="w-3.5 h-3.5" />
-                    <span>Assign Fleet Driver</span>
+                    <span>Assign Driver</span>
                   </button>
                 )}
               </div>

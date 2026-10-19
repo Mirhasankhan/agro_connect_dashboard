@@ -4,14 +4,12 @@ import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import {
-  Settings,
   User,
   KeyRound,
   Bell,
   Camera,
   Phone,
   Mail,
-  Shield,  
   CheckCircle2,
   AlertTriangle,
   Loader2,
@@ -221,11 +219,7 @@ export default function SettingsPage() {
       <div className="space-y-6">
         {/* Header Bar */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-800 text-xs font-semibold border border-slate-200 mb-1">
-              <Settings className="w-3.5 h-3.5 text-slate-600" />
-              Administrative Controls
-            </div>
+          <div>            
             <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
               Platform Settings
             </h1>
@@ -408,10 +402,7 @@ export default function SettingsPage() {
                     placeholder="+880 1712-345678"
                     className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 text-xs text-slate-900 focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 transition-all placeholder:text-slate-400"
                   />
-                </div>
-                <p className="text-[11px] text-slate-400">
-                  Contact number for security alerts and emergency administrative dispatches.
-                </p>
+                </div>               
               </div>
 
               <div className="space-y-1.5">
@@ -427,26 +418,9 @@ export default function SettingsPage() {
                     value={serverProfile?.email || user?.email || ""}
                     className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-100 text-xs text-slate-500 cursor-not-allowed select-none"
                   />
-                </div>
-                <p className="text-[11px] text-slate-400">
-                  Primary account identifier. Cannot be edited directly.
-                </p>
+                </div>               
               </div>
-
-              <div className="space-y-1.5">
-                <label className="block text-xs font-semibold text-slate-700">
-                  Assigned Authority
-                </label>
-                <div className="flex items-center gap-2 p-3 rounded-xl bg-slate-50 border border-slate-200">
-                  <Shield className="w-4 h-4 text-emerald-600 shrink-0" />
-                  <div className="flex-1">
-                    <span className="font-bold text-slate-800">Platform Administrator</span>
-                    <span className="text-slate-500 block text-[11px]">
-                      Full system access to logistics, verification, and commerce operations.
-                    </span>
-                  </div>
-                </div>
-              </div>
+           
             </div>
 
             {/* Actions: Save & Reset */}

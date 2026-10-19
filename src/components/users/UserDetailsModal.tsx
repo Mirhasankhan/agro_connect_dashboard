@@ -231,7 +231,7 @@ export default function UserDetailsModal({
             <div className="space-y-4">
               <div className="text-xs font-bold  tracking-wider text-slate-500 flex items-center gap-1.5">
                 <Truck className="w-4 h-4 text-sky-600" />
-                <span>Vehicle Fleet & Logistics Credentials</span>
+                <span>Vehicle & Logistics Credentials</span>
               </div>
 
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 p-4 rounded-xl bg-sky-50/50 border border-sky-100">

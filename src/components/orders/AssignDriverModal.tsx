@@ -192,13 +192,13 @@ export default function AssignDriverModal({
           {/* Driver Fleet Selector */}
           <div className="space-y-2">
             <label className="block text-xs font-semibold text-slate-700">
-              Select Verified Fleet Driver <span className="text-rose-500">*</span>
+              Select Verified Driver <span className="text-rose-500">*</span>
             </label>
 
             {isLoadingDrivers ? (
               <div className="p-4 text-center text-slate-400 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-center gap-2">
                 <Loader2 className="w-4 h-4 animate-spin text-emerald-600" />
-                <span>Loading available verified fleet drivers...</span>
+                <span>Loading available verified drivers...</span>
               </div>
             ) : availableDrivers.length === 0 ? (
               <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs flex items-start gap-2">
