@@ -17,7 +17,6 @@ import {
   RefreshCw,
   ChevronLeft,
   ChevronRight,
-  ShieldCheck,
   CheckCircle2,
   DollarSign,
   Eye,
@@ -146,27 +145,12 @@ export default function OrdersManagementPage() {
             <div className="p-2.5 rounded-lg bg-emerald-50 text-emerald-600">
               <ShoppingBag className="w-5 h-5" />
             </div>
-          </div>
+          </div>    
 
           <div className="p-4 rounded-xl bg-white border border-slate-200 shadow-sm flex items-center justify-between">
             <div>
               <span className="text-[11px] font-bold  tracking-wider text-slate-400 block">
-                Payment Verification
-              </span>
-              <span className="text-sm font-bold text-emerald-700 flex items-center gap-1">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                <span>100% Pre-Paid via Stripe</span>
-              </span>
-            </div>
-            <div className="p-2.5 rounded-lg bg-emerald-50 text-emerald-600">
-              <ShieldCheck className="w-5 h-5" />
-            </div>
-          </div>
-
-          <div className="p-4 rounded-xl bg-white border border-slate-200 shadow-sm flex items-center justify-between">
-            <div>
-              <span className="text-[11px] font-bold  tracking-wider text-slate-400 block">
-                Page Volume Sample
+                Total Amount
               </span>
               <span className="text-xl font-bold text-slate-900">
                 {formatCurrency(totalVolume)}
@@ -274,10 +258,7 @@ export default function OrdersManagementPage() {
                             <div className="min-w-0">
                               <div className="font-bold text-slate-900 group-hover:text-emerald-700 transition-colors truncate">
                                 {order.customer?.fullName || "Buyer Customer"}
-                              </div>
-                              <div className="text-[10px] text-emerald-600 font-medium">
-                                Paid Account
-                              </div>
+                              </div>                              
                             </div>
                           </Link>
                         </td>

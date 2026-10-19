@@ -496,6 +496,12 @@ export interface TEarningQueryParams {
   limit?: number | string;
 }
 
+export interface TPlatformEarningPoint {
+  month?: string;
+  day?: string;
+  platformCharge: number;
+}
+
 export interface TStripeAccountStatus {
   hasStripeAccount: boolean;
   stripeAccountId: string | null;

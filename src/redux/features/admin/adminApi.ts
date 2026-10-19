@@ -13,9 +13,17 @@ import {
   TAdminProducerEarning,
   TAdminDriverEarning,
   TEarningQueryParams,
+  TEarningChartType,
+  TPlatformEarningPoint,
 } from "@/types";
 
-export type { TAdminProducerEarning, TAdminDriverEarning, TEarningQueryParams };
+export type {
+  TAdminProducerEarning,
+  TAdminDriverEarning,
+  TEarningQueryParams,
+  TEarningChartType,
+  TPlatformEarningPoint,
+};
 
 export interface ProducerQueryParams {
   search?: string;
@@ -643,6 +651,18 @@ export const adminApi = baseApi.injectEndpoints({
       invalidatesTags: ["Driver", "Admin", "Payment"],
     }),
 
+    getPlatformEarningSummary: builder.query<
+      TApiResponse<TPlatformEarningPoint[]>,
+      { type: TEarningChartType }
+    >({
+      query: ({ type }) => ({
+        url: "/admin/platform-earning-summary",
+        method: "GET",
+        params: { type },
+      }),
+      providesTags: ["Admin", "Payment"],
+    }),
+
     // REPORTS & QUALITY DISPUTES
     getAllReports: builder.query<
       TApiResponse<{ reports: TAdminReport[]; meta: TPaginationMeta }>,
@@ -710,6 +730,7 @@ export const {
   useGetAllDriverEarningsQuery,
   useTransferProducerEarningMutation,
   useTransferDriverEarningMutation,
+  useGetPlatformEarningSummaryQuery,
   useGetAllReportsQuery,
   useGetReportDetailsQuery,
   useResolveReportMutation,

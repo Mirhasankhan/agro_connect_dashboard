@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import StatsCard from "@/components/dashboard/StatsCard";
+import PlatformEarningChart from "@/components/dashboard/PlatformEarningChart";
 import {
   ShoppingBag,
   Truck,
@@ -82,7 +83,10 @@ export default function AdminOverviewDashboard() {
         />
       </div>
 
-      {/* 3. Operational Queues & Priority Action Cards */}
+      {/* 3. Platform Revenue Analytics Chart */}
+      <PlatformEarningChart />
+
+      {/* 4. Operational Queues & Priority Action Cards */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left: Pending Producer & Driver Verification Queue (2 cols) */}
         <div className="lg:col-span-2 space-y-6">
