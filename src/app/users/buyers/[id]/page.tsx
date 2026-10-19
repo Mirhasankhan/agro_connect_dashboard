@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { format } from "date-fns";
 import { formatCurrency } from "@/utils/formatters";
+import { DEFAULT_PROFILE_IMAGE } from "@/constants";
 
 export default function BuyerDetailsPage() {
   const params = useParams();
@@ -144,17 +145,14 @@ export default function BuyerDetailsPage() {
               <div className="flex items-center gap-4 mb-4">
               <div className="flex items-end gap-4">
                 <div className="w-16 h-16 rounded-2xl bg-white p-1 shadow-lg border-2 border-white shrink-0 overflow-hidden">
-                  {buyer.profileImage ? (
-                    <img
-                      src={buyer.profileImage}
-                      alt={buyer.fullName}
-                      className="w-full h-full object-cover rounded-xl"
-                    />
-                  ) : (
-                    <div className="w-full h-full bg-emerald-100 text-emerald-800 text-2xl font-bold flex items-center justify-center rounded-xl">
-                      {buyer.fullName?.charAt(0) || "B"}
-                    </div>
-                  )}
+                  <img
+                    src={buyer.profileImage || DEFAULT_PROFILE_IMAGE}
+                    alt={buyer.fullName || "Buyer"}
+                    className="w-full h-full object-cover rounded-xl"
+                    onError={(e) => {
+                      e.currentTarget.src = DEFAULT_PROFILE_IMAGE;
+                    }}
+                  />
                 </div>
                 <div className="pb-1">
                   <div className="flex items-center gap-2 flex-wrap">

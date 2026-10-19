@@ -27,6 +27,7 @@ import {
 } from "lucide-react";
 import { format } from "date-fns";
 import { formatCurrency } from "@/utils/formatters";
+import { DEFAULT_PROFILE_IMAGE } from "@/constants";
 
 export default function OrdersManagementPage() {
   const [search, setSearch] = useState("");
@@ -252,9 +253,14 @@ export default function OrdersManagementPage() {
                             href={`/orders/${order.id}`}
                             className="flex items-center gap-2.5 group"
                           >
-                            <div className="w-8 h-8 rounded-full bg-slate-900 text-emerald-400 font-bold flex items-center justify-center text-xs shrink-0 group-hover:ring-2 group-hover:ring-emerald-500 transition-all">
-                              {order.customer?.fullName?.charAt(0) || "B"}
-                            </div>
+                            <img
+                              src={order.customer?.profileImage || DEFAULT_PROFILE_IMAGE}
+                              alt={order.customer?.fullName || "Buyer Customer"}
+                              className="w-8 h-8 rounded-full object-cover border border-slate-200 shrink-0 group-hover:ring-2 group-hover:ring-emerald-500 transition-all"
+                              onError={(e) => {
+                                e.currentTarget.src = DEFAULT_PROFILE_IMAGE;
+                              }}
+                            />
                             <div className="min-w-0">
                               <div className="font-bold text-slate-900 group-hover:text-emerald-700 transition-colors truncate">
                                 {order.customer?.fullName || "Buyer Customer"}

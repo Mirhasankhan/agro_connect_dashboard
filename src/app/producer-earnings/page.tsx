@@ -25,6 +25,7 @@ import {
 import { format } from "date-fns";
 import { formatCurrency } from "@/utils/formatters";
 import { toast } from "react-toastify";
+import { DEFAULT_PROFILE_IMAGE } from "@/constants";
 
 const isPast24Hours = (createdAt?: string): boolean => {
   if (!createdAt) return false;
@@ -238,18 +239,14 @@ export default function ProducerEarningsPage() {
                             href={earn.producer?.id ? `/users/producers/${earn.producer.id}` : "#"}
                             className="flex items-center gap-3 group"
                           >
-                            {earn.producer?.profileImage ? (
-                              // eslint-disable-next-line @next/next/no-img-element
-                              <img
-                                src={earn.producer.profileImage}
-                                alt={earn.producer.fullName || "Producer"}
-                                className="w-9 h-9 rounded-full object-cover border border-slate-200 shrink-0 group-hover:ring-2 group-hover:ring-emerald-500 transition-all"
-                              />
-                            ) : (
-                              <div className="w-9 h-9 rounded-full bg-slate-900 text-emerald-400 font-bold flex items-center justify-center text-xs shrink-0 group-hover:ring-2 group-hover:ring-emerald-500 transition-all">
-                                {earn.producer?.fullName?.charAt(0) || "P"}
-                              </div>
-                            )}
+                            <img
+                              src={earn.producer?.profileImage || DEFAULT_PROFILE_IMAGE}
+                              alt={earn.producer?.fullName || "Producer"}
+                              className="w-9 h-9 rounded-full object-cover border border-slate-200 shrink-0 group-hover:ring-2 group-hover:ring-emerald-500 transition-all"
+                              onError={(e) => {
+                                e.currentTarget.src = DEFAULT_PROFILE_IMAGE;
+                              }}
+                            />
                             <div className="min-w-0">
                               <div className="font-bold text-slate-900 group-hover:text-emerald-700 transition-colors truncate">
                                 {earn.producer?.fullName || "Producer"}

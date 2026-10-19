@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { useAppSelector } from "@/redux/hooks";
 import NotificationDropdown from "./NotificationDropdown";
+import { DEFAULT_PROFILE_IMAGE } from "@/constants";
 
 interface HeaderProps {
   onMobileOpen: () => void;
@@ -132,20 +133,17 @@ export default function Header({ onMobileOpen }: HeaderProps) {
 
           {/* Admin Avatar & Role Badge */}
           <div className="flex items-center gap-2.5 pl-2 border-l border-slate-200">
-            {user?.profileImage ? (
-              <Image
-                src={user.profileImage}
-                alt={user.fullName || "Admin"}
-                width={32}
-                height={32}
-                unoptimized
-                className="w-8 h-8 rounded-full object-cover shadow-sm ring-1 ring-slate-200"
-              />
-            ) : (
-              <div className="w-8 h-8 rounded-full bg-slate-900 text-emerald-400 font-semibold flex items-center justify-center text-xs shadow-sm ring-1 ring-slate-200">
-                {user?.fullName?.charAt(0) || "A"}
-              </div>
-            )}
+            <Image
+              src={user?.profileImage || DEFAULT_PROFILE_IMAGE}
+              alt={user?.fullName || "Admin"}
+              width={32}
+              height={32}
+              unoptimized
+              className="w-8 h-8 rounded-full object-cover shadow-sm ring-1 ring-slate-200"
+              onError={(e) => {
+                e.currentTarget.src = DEFAULT_PROFILE_IMAGE;
+              }}
+            />
             <div className="hidden xl:block text-left">
               <div className="text-xs font-semibold text-slate-900 leading-tight">
                 {user?.fullName || "Admin"}

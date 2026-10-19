@@ -1,11 +1,9 @@
 "use client";
 
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-import Link from "next/link";
 import { 
   BarChart3,
-  LineChart,
-  ArrowUpRight,
+  LineChart,  
   Info,
 } from "lucide-react";
 import {
@@ -89,12 +87,7 @@ export default function PlatformEarningChart() {
     return chartPoints.reduce((acc, curr) => acc + (curr.platformCharge || 0), 0);
   }, [chartPoints]);
 
-  const maxCommission = useMemo(() => {
-    return chartPoints.reduce(
-      (max, curr) => Math.max(max, curr.platformCharge || 0),
-      0
-    );
-  }, [chartPoints]);
+
 
   // Prepare labels and values
   const labels = useMemo(() => {
@@ -342,15 +335,7 @@ export default function PlatformEarningChart() {
               <BarChart3 className="w-4 h-4" />
             </button>
           </div>
-
-          {/* Direct link to Producer Earnings */}
-          <Link
-            href="/producer-earnings"
-            className="text-xs font-semibold text-emerald-600 hover:text-emerald-700 flex items-center gap-1 ml-1 hover:underline shrink-0"
-          >
-            <span>All Earnings</span>
-            <ArrowUpRight className="w-3.5 h-3.5" />
-          </Link>
+        
         </div>
       </div>
 

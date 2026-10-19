@@ -21,6 +21,7 @@ import {
   useTransferProducerEarningMutation,
 } from "@/redux/features/admin/adminApi";
 import { toast } from "react-toastify";
+import { DEFAULT_PROFILE_IMAGE } from "@/constants";
 
 interface ProducerEarningDetailModalProps {
   isOpen: boolean;
@@ -162,20 +163,14 @@ export default function ProducerEarningDetailModal({
               </div>
 
               <div className="flex items-center gap-3">
-                {earning.producer?.profileImage ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={earning.producer.profileImage}
-                    alt={earning.producer.fullName || "Producer"}
-                    className="w-12 h-12 rounded-2xl object-cover border border-slate-200 shadow-sm"
-                  />
-                ) : (
-                  <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-base shadow-sm">
-                    {earning.producer?.fullName
-                      ? earning.producer.fullName.charAt(0).toUpperCase()
-                      : "P"}
-                  </div>
-                )}
+                <img
+                  src={earning.producer?.profileImage || DEFAULT_PROFILE_IMAGE}
+                  alt={earning.producer?.fullName || "Producer"}
+                  className="w-12 h-12 rounded-2xl object-cover border border-slate-200 shadow-sm"
+                  onError={(e) => {
+                    e.currentTarget.src = DEFAULT_PROFILE_IMAGE;
+                  }}
+                />
                 <div>
                   <h4 className="text-sm font-bold text-slate-900">
                     {earning.producer?.fullName || "Verified Agricultural Producer"}

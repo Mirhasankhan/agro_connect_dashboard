@@ -18,6 +18,7 @@ import {
 } from "@/redux/features/admin/adminApi";
 import { toast } from "react-toastify";
 import { formatCurrency } from "@/utils/formatters";
+import { DEFAULT_PROFILE_IMAGE } from "@/constants";
 
 interface AssignDriverModalProps {
   isOpen: boolean;
@@ -233,9 +234,14 @@ export default function AssignDriverModal({
                 {selectedDriver && (
                   <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
                     <div className="flex items-center gap-2.5">
-                      <div className="w-8 h-8 rounded-full bg-sky-100 text-sky-800 font-bold flex items-center justify-center text-xs">
-                        {selectedDriver.fullName.charAt(0)}
-                      </div>
+                      <img
+                        src={selectedDriver.profileImage || DEFAULT_PROFILE_IMAGE}
+                        alt={selectedDriver.fullName || "Driver"}
+                        className="w-8 h-8 rounded-full object-cover border border-slate-200 shrink-0"
+                        onError={(e) => {
+                          e.currentTarget.src = DEFAULT_PROFILE_IMAGE;
+                        }}
+                      />
                       <div>
                         <div className="font-bold text-slate-900">{selectedDriver.fullName}</div>
                         <div className="text-[11px] text-slate-500">

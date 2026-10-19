@@ -37,6 +37,7 @@ import {
 import { formatCurrency } from "@/utils/formatters";
 import { format } from "date-fns";
 import { toast } from "react-toastify";
+import { DEFAULT_PROFILE_IMAGE } from "@/constants";
 
 export default function ProductDetailsPage() {
   const params = useParams();
@@ -355,15 +356,14 @@ export default function ProductDetailsPage() {
               <div className="rounded-2xl bg-linear-to-br from-emerald-50/70 to-teal-50/40 border border-emerald-200/80 p-4 shadow-sm flex items-center justify-between gap-3">
                 <div className="flex items-center gap-3 min-w-0">
                   <div className="w-11 h-11 rounded-xl bg-white border border-emerald-200 shadow-2xs overflow-hidden shrink-0 flex items-center justify-center">
-                    {product.producer.profileImage ? (
-                      <img
-                        src={product.producer.profileImage}
-                        alt={product.producer.fullName || "Producer"}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <Sprout className="w-5 h-5 text-emerald-600" />
-                    )}
+                    <img
+                      src={product.producer.profileImage || DEFAULT_PROFILE_IMAGE}
+                      alt={product.producer.fullName || "Producer"}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.currentTarget.src = DEFAULT_PROFILE_IMAGE;
+                      }}
+                    />
                   </div>
                   <div className="min-w-0">
                     <span className="text-[10px] font-bold text-emerald-700 tracking-wider">
@@ -736,15 +736,14 @@ export default function ProductDetailsPage() {
                     <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-6">
                       <div className="flex items-center gap-4">
                         <div className="w-16 h-16 rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden shrink-0 flex items-center justify-center">
-                          {product.producer.profileImage ? (
-                            <img
-                              src={product.producer.profileImage}
-                              alt={product.producer.fullName || "Producer"}
-                              className="w-full h-full object-cover"
-                            />
-                          ) : (
-                            <Sprout className="w-8 h-8 text-emerald-600" />
-                          )}
+                          <img
+                            src={product.producer.profileImage || DEFAULT_PROFILE_IMAGE}
+                            alt={product.producer.fullName || "Producer"}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              e.currentTarget.src = DEFAULT_PROFILE_IMAGE;
+                            }}
+                          />
                         </div>
                         <div>
                           <div className="flex items-center gap-2">
@@ -940,15 +939,14 @@ export default function ProductDetailsPage() {
                               <td className="py-3 px-4">
                                 <div className="flex items-center gap-2">
                                   <div className="w-7 h-7 rounded-full bg-slate-100 border border-slate-200 overflow-hidden shrink-0 flex items-center justify-center">
-                                    {customer?.profileImage ? (
-                                      <img
-                                        src={customer.profileImage}
-                                        alt={customer.fullName || "Customer"}
-                                        className="w-full h-full object-cover"
-                                      />
-                                    ) : (
-                                      <User className="w-3.5 h-3.5 text-slate-400" />
-                                    )}
+                                    <img
+                                      src={customer?.profileImage || DEFAULT_PROFILE_IMAGE}
+                                      alt={customer?.fullName || "Customer"}
+                                      className="w-full h-full object-cover"
+                                      onError={(e) => {
+                                        e.currentTarget.src = DEFAULT_PROFILE_IMAGE;
+                                      }}
+                                    />
                                   </div>
                                   <div className="min-w-0">
                                     <div className="font-semibold text-slate-900 truncate">
@@ -1047,15 +1045,14 @@ export default function ProductDetailsPage() {
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2.5">
                             <div className="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 overflow-hidden flex items-center justify-center shrink-0">
-                              {rev.buyer?.profileImage ? (
-                                <img
-                                  src={rev.buyer.profileImage}
-                                  alt={rev.buyer.fullName}
-                                  className="w-full h-full object-cover"
-                                />
-                              ) : (
-                                <User className="w-4 h-4 text-slate-400" />
-                              )}
+                              <img
+                                src={rev.buyer?.profileImage || DEFAULT_PROFILE_IMAGE}
+                                alt={rev.buyer?.fullName || "Buyer"}
+                                className="w-full h-full object-cover"
+                                onError={(e) => {
+                                  e.currentTarget.src = DEFAULT_PROFILE_IMAGE;
+                                }}
+                              />
                             </div>
                             <div>
                               <div className="font-bold text-slate-900 text-xs">

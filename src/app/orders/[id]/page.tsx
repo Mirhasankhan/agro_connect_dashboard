@@ -29,6 +29,7 @@ import {
 } from "lucide-react";
 import { formatCurrency } from "@/utils/formatters";
 import { format } from "date-fns";
+import { DEFAULT_PROFILE_IMAGE } from "@/constants";
 
 export default function OrderDetailsPage() {
   const params = useParams();
@@ -440,9 +441,14 @@ export default function OrderDetailsPage() {
             </div>
 
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-xl bg-slate-900 text-emerald-400 text-base font-bold flex items-center justify-center shrink-0">
-                {customer?.fullName?.charAt(0) || "B"}
-              </div>
+              <img
+                src={customer?.profileImage || DEFAULT_PROFILE_IMAGE}
+                alt={customer?.fullName || "Buyer Customer"}
+                className="w-12 h-12 rounded-xl object-cover border border-slate-200 shadow-sm shrink-0"
+                onError={(e) => {
+                  e.currentTarget.src = DEFAULT_PROFILE_IMAGE;
+                }}
+              />
               <div className="min-w-0">
                 <div className="font-bold text-slate-900 text-sm truncate">
                   {customer?.fullName || "Buyer Customer"}
@@ -504,9 +510,14 @@ export default function OrderDetailsPage() {
             {driver ? (
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-xl bg-sky-100 text-sky-800 text-base font-bold flex items-center justify-center shrink-0">
-                    {driver.fullName?.charAt(0) || "D"}
-                  </div>
+                  <img
+                    src={driver.profileImage || DEFAULT_PROFILE_IMAGE}
+                    alt={driver.fullName || "Driver"}
+                    className="w-12 h-12 rounded-xl object-cover border border-slate-200 shadow-sm shrink-0"
+                    onError={(e) => {
+                      e.currentTarget.src = DEFAULT_PROFILE_IMAGE;
+                    }}
+                  />
                   <div className="min-w-0">
                     <div className="font-bold text-slate-900 text-sm truncate">{driver.fullName}</div>
                     <div className="text-xs text-slate-500 truncate">{driver.email}</div>

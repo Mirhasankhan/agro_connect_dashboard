@@ -25,7 +25,7 @@ import {
   Car,
 } from "lucide-react";
 import { toast } from "react-toastify";
-import Image from "next/image";
+import { DEFAULT_PROFILE_IMAGE } from "@/constants";
 
 export default function DriverManagementPage() {
   const [search, setSearch] = useState("");
@@ -191,7 +191,14 @@ export default function DriverManagementPage() {
                             href={`/users/drivers/${driver.id}`}
                             className="flex items-center gap-3 group"
                           >
-                            <Image className="object-cover h-8 w-8 rounded-full" src={driver?.profileImage || "/default-user.png" as string} height={20} width={20} alt="" />
+                            <img
+                              className="object-cover h-8 w-8 rounded-full border border-slate-200 shrink-0"
+                              src={driver?.profileImage || DEFAULT_PROFILE_IMAGE}
+                              alt={driver.fullName || "Driver"}
+                              onError={(e) => {
+                                e.currentTarget.src = DEFAULT_PROFILE_IMAGE;
+                              }}
+                            />
                             <div className="min-w-0">
                               <div className="font-bold text-slate-900 group-hover:text-sky-700 transition-colors truncate">
                                 {driver.fullName}

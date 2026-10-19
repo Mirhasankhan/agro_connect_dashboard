@@ -23,6 +23,7 @@ import {
   useTransferDriverEarningMutation,
 } from "@/redux/features/admin/adminApi";
 import { toast } from "react-toastify";
+import { DEFAULT_PROFILE_IMAGE } from "@/constants";
 
 interface DriverEarningDetailModalProps {
   isOpen: boolean;
@@ -170,20 +171,14 @@ export default function DriverEarningDetailModal({
               </div>
 
               <div className="flex items-center gap-3">
-                {earning.driver?.profileImage ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={earning.driver.profileImage}
-                    alt={earning.driver.fullName || "Driver"}
-                    className="w-12 h-12 rounded-2xl object-cover border border-slate-200 shadow-sm"
-                  />
-                ) : (
-                  <div className="w-12 h-12 rounded-2xl bg-sky-100 text-sky-800 flex items-center justify-center font-bold text-base shadow-sm">
-                    {earning.driver?.fullName
-                      ? earning.driver.fullName.charAt(0).toUpperCase()
-                      : "D"}
-                  </div>
-                )}
+                <img
+                  src={earning.driver?.profileImage || DEFAULT_PROFILE_IMAGE}
+                  alt={earning.driver?.fullName || "Driver"}
+                  className="w-12 h-12 rounded-2xl object-cover border border-slate-200 shadow-sm"
+                  onError={(e) => {
+                    e.currentTarget.src = DEFAULT_PROFILE_IMAGE;
+                  }}
+                />
                 <div className="space-y-0.5">
                   <h4 className="text-sm font-bold text-slate-900">
                     {earning.driver?.fullName || "Logistics Driver"}

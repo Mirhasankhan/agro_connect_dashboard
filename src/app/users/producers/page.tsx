@@ -25,6 +25,7 @@ import {
   ShieldAlert,
 } from "lucide-react";
 import { toast } from "react-toastify";
+import { DEFAULT_PROFILE_IMAGE } from "@/constants";
 
 export default function ProducerManagementPage() {
   const [search, setSearch] = useState("");
@@ -185,9 +186,14 @@ export default function ProducerManagementPage() {
                             href={`/users/producers/${producer.id}`}
                             className="flex items-center gap-3 group"
                           >
-                            <div className="w-9 h-9 rounded-full bg-emerald-100 text-emerald-800 font-bold flex items-center justify-center text-xs shrink-0 group-hover:bg-emerald-200 transition-colors">
-                              {producer.fullName?.charAt(0) || "P"}
-                            </div>
+                            <img
+                              src={producer.profileImage || DEFAULT_PROFILE_IMAGE}
+                              alt={producer.fullName || "Producer"}
+                              className="w-9 h-9 rounded-full object-cover border border-slate-200 shrink-0 group-hover:ring-2 group-hover:ring-emerald-500 transition-all"
+                              onError={(e) => {
+                                e.currentTarget.src = DEFAULT_PROFILE_IMAGE;
+                              }}
+                            />
                             <div className="min-w-0">
                               <div className="font-bold text-slate-900 group-hover:text-emerald-700 transition-colors truncate">
                                 {producer.fullName}

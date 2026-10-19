@@ -9,6 +9,7 @@ import {
   useGetProducerDetailsQuery,
   useAcceptRejectProducerMutation,
 } from "@/redux/features/admin/adminApi";
+import { DEFAULT_PROFILE_IMAGE } from "@/constants";
 import {
   Sprout,
   Building,
@@ -262,17 +263,14 @@ export default function ProducerDetailsPage() {
               <div className="flex items-center gap-4 mb-4">
               <div className="flex items-end gap-4">
                 <div className="w-20 h-20 rounded-2xl bg-white p-1 shadow-lg border-2 border-white shrink-0 overflow-hidden">
-                  {producer.profileImage ? (
-                    <img
-                      src={producer.profileImage}
-                      alt={producer.fullName}
-                      className="w-full h-full object-cover rounded-xl"
-                    />
-                  ) : (
-                    <div className="w-full h-full bg-emerald-100 text-emerald-800 text-2xl font-bold flex items-center justify-center rounded-xl">
-                      {producer.fullName?.charAt(0) || "P"}
-                    </div>
-                  )}
+                  <img
+                    src={producer.profileImage || DEFAULT_PROFILE_IMAGE}
+                    alt={producer.fullName || "Producer"}
+                    className="w-full h-full object-cover rounded-xl"
+                    onError={(e) => {
+                      e.currentTarget.src = DEFAULT_PROFILE_IMAGE;
+                    }}
+                  />
                 </div>
                 <div className="pb-1">
                   <div className="flex items-center gap-2 flex-wrap">

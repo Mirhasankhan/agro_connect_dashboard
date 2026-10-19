@@ -17,7 +17,7 @@ import {
   Eye,
   CheckCircle2,
 } from "lucide-react";
-import Image from "next/image";
+import { DEFAULT_PROFILE_IMAGE } from "@/constants";
 
 export default function BuyerManagementPage() {
   const [search, setSearch] = useState("");
@@ -122,7 +122,14 @@ export default function BuyerManagementPage() {
                             href={`/users/buyers/${buyer.id}`}
                             className="flex items-center gap-3 group"
                           >
-                            <Image className="object-cover h-8 w-8 rounded-full" src={buyer?.profileImage as string} height={20} width={20} alt="" />
+                            <img
+                              className="object-cover h-8 w-8 rounded-full border border-slate-200 shrink-0"
+                              src={buyer?.profileImage || DEFAULT_PROFILE_IMAGE}
+                              alt={buyer.fullName || "Buyer"}
+                              onError={(e) => {
+                                e.currentTarget.src = DEFAULT_PROFILE_IMAGE;
+                              }}
+                            />
                             <div className="min-w-0">
                               <div className="font-bold text-slate-900 group-hover:text-emerald-700 transition-colors truncate">
                                 {buyer.fullName}

@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import {
-  AlertOctagon,
   Search,
   CheckCircle2,
   XCircle,
@@ -21,6 +20,7 @@ import {
 } from "@/redux/features/admin/adminApi";
 import Pagination from "@/utils/pagination";
 import { formatCurrency } from "@/utils/formatters";
+import { DEFAULT_PROFILE_IMAGE } from "@/constants";
 
 export default function ReportsManagementPage() {
   const [search, setSearch] = useState("");
@@ -166,11 +166,23 @@ export default function ReportsManagementPage() {
 
                       {/* Customer */}
                       <td className="py-3.5 px-4">
-                        <div className="font-bold text-slate-900">
-                          {report.buyer?.fullName || "Buyer"}
-                        </div>
-                        <div className="text-[11px] text-slate-400">
-                          {report.buyer?.email}
+                        <div className="flex items-center gap-2.5">
+                          <img
+                            src={report.buyer?.profileImage || DEFAULT_PROFILE_IMAGE}
+                            alt={report.buyer?.fullName || "Buyer"}
+                            className="w-8 h-8 rounded-full object-cover border border-slate-200 shrink-0"
+                            onError={(e) => {
+                              e.currentTarget.src = DEFAULT_PROFILE_IMAGE;
+                            }}
+                          />
+                          <div className="min-w-0">
+                            <div className="font-bold text-slate-900 truncate">
+                              {report.buyer?.fullName || "Buyer"}
+                            </div>
+                            <div className="text-[11px] text-slate-400 truncate">
+                              {report.buyer?.email}
+                            </div>
+                          </div>
                         </div>
                       </td>
 
@@ -259,9 +271,14 @@ export default function ReportsManagementPage() {
           <div className="relative w-full max-w-lg rounded-2xl bg-white shadow-2xl border border-slate-200 p-6 space-y-5 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100">
               <div className="flex items-center gap-2.5">
-                <div className="p-2 rounded-xl bg-rose-50 text-rose-700">
-                  <AlertOctagon className="w-5 h-5" />
-                </div>
+                <img
+                  src={selectedReport.buyer?.profileImage || DEFAULT_PROFILE_IMAGE}
+                  alt={selectedReport.buyer?.fullName || "Buyer"}
+                  className="w-10 h-10 rounded-full object-cover border border-slate-200 shrink-0"
+                  onError={(e) => {
+                    e.currentTarget.src = DEFAULT_PROFILE_IMAGE;
+                  }}
+                />
                 <div>
                   <h3 className="text-base font-bold text-slate-900">
                     Dispute #{selectedReport.id.slice(-6).toUpperCase()}

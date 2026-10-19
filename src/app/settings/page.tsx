@@ -24,6 +24,7 @@ import {
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { updateProfileData } from "@/redux/features/auth/authSlice";
 import { toast } from "react-toastify";
+import { DEFAULT_PROFILE_IMAGE } from "@/constants";
 
 export default function SettingsPage() {
   const dispatch = useAppDispatch();
@@ -212,7 +213,8 @@ export default function SettingsPage() {
   const activeAvatarSrc =
     previewUrl ||
     serverProfile?.profileImage ||
-    user?.profileImage;
+    user?.profileImage ||
+    DEFAULT_PROFILE_IMAGE;
 
   return (
     <DashboardLayout>
@@ -298,20 +300,17 @@ export default function SettingsPage() {
             <div className="p-5 rounded-2xl bg-slate-50/80 border border-slate-200 flex flex-col sm:flex-row items-center gap-5">
               <div className="relative group shrink-0">
                 <div className="w-24 h-24 rounded-full overflow-hidden bg-slate-900 ring-4 ring-emerald-500/20 shadow-md flex items-center justify-center">
-                  {activeAvatarSrc ? (
-                    <Image
-                      src={activeAvatarSrc}
-                      alt={fullName || "Admin Profile"}
-                      width={96}
-                      height={96}
-                      unoptimized
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <span className="text-2xl font-bold text-emerald-400">
-                      {(fullName || user?.fullName || "A").charAt(0).toUpperCase()}
-                    </span>
-                  )}
+                  <Image
+                    src={activeAvatarSrc}
+                    alt={fullName || "Admin Profile"}
+                    width={96}
+                    height={96}
+                    unoptimized
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).src = DEFAULT_PROFILE_IMAGE;
+                    }}
+                  />
                 </div>
 
                 {/* Camera quick-action overlay */}

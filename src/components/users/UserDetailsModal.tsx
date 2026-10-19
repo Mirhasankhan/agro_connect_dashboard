@@ -11,6 +11,7 @@ import {
   Clock,
   XCircle,
 } from "lucide-react";
+import { DEFAULT_PROFILE_IMAGE } from "@/constants";
 
 interface UserDetailsModalProps {
   isOpen: boolean;
@@ -100,9 +101,14 @@ export default function UserDetailsModal({
         {/* Sticky Header */}
         <div className="sticky top-0 z-10 bg-white/95 backdrop-blur-md px-6 py-4 border-b border-slate-200 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-emerald-100 text-emerald-800 font-bold flex items-center justify-center text-sm">
-              {user.fullName?.charAt(0) || "U"}
-            </div>
+            <img
+              src={user.profileImage || DEFAULT_PROFILE_IMAGE}
+              alt={user.fullName || "User"}
+              className="w-10 h-10 rounded-full object-cover border border-slate-200 shadow-sm"
+              onError={(e) => {
+                e.currentTarget.src = DEFAULT_PROFILE_IMAGE;
+              }}
+            />
             <div>
               <h3 className="text-base font-bold text-slate-900">{user.fullName}</h3>
               <p className="text-xs text-slate-500">{user.email}</p>
